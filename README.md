@@ -35,7 +35,7 @@
 ## Acerca del proyecto
 <br>
 <p align="center">
-<img src="images/">
+<img src="images/Inmomarket.png">
 </p><br>
 
 
