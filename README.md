@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Zenin0/InmoMarket">
-    <img src="images/logo.png" alt="Logo">
+    <img src="images/Inmomarket.png">
   </a>
 
   <h3 align="center">InmoMarket</h3>
@@ -35,7 +35,7 @@
 ## Acerca del proyecto
 <br>
 <p align="center">
-<img src="images/Inmomarket.png">
+
 </p><br>
 
 
