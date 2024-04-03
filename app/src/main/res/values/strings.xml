@@ -23,4 +23,11 @@
     <string name="title_profile">Profile</string>
     <string name="title_messages">Messages</string>
     <string name="title_add">Add</string>
+    <string name="pront_title">Tittle</string>
+    <string name="pront_description">Description</string>
+    <string name="load_images">Load images</string>
+    <string name="prompt_address">Address</string>
+    <string name="save">Save</string>
+    <string name="image">Image</string>
+    <string name="delete">Delete</string>
 </resources>
