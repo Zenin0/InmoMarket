@@ -38,13 +38,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tilEmail">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tiePassword"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/prompt_password"
-            android:inputType="textPassword" />
-
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/tiePassword"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="@string/prompt_password"
+        android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -52,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/common_margin"
-        android:text="@string/action_sign_in_google"
+        android:text="@string/action_register_in_google"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnRegister" />
@@ -63,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/common_margin"
-        android:text="@string/action_sign_in_short"
+        android:text="@string/action_register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tilPassword" />
@@ -73,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/common_margin"
-        android:text="@string/dont_have_account"
+        android:text="@string/already_have_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnSignInGoogle" />

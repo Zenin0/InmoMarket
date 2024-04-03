@@ -16,19 +16,19 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.isanz.inmomarket.databinding.ActivityLoginBinding
+import com.isanz.inmomarket.databinding.ActivityRegisterBinding
 
 
-class LoginActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var mBinding: ActivityLoginBinding
+    private lateinit var mBinding: ActivityRegisterBinding
     private lateinit var startForResult: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        mBinding = ActivityLoginBinding.inflate(layoutInflater)
+        mBinding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         this.auth = InnmoMarket.getAuth()
 
@@ -44,22 +44,24 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             }
+
         setUpButtons()
     }
 
     private fun setUpButtons() {
         setContentView(mBinding.root)
+
         // Register Button
         mBinding.btnRegister.setOnClickListener {
             val email = mBinding.tieEmail.text.toString()
             val password = mBinding.tiePassword.text.toString()
-            signInUserWithEmail(email, password)
+            createUserWithEmail(email, password)
         }
         mBinding.btnSignInGoogle.setOnClickListener {
             signInGoogle()
         }
         mBinding.tvAlreadyHaveAccount.setOnClickListener {
-            goToRegister()
+            goToLogin()
         }
 
     }
@@ -70,49 +72,50 @@ class LoginActivity : AppCompatActivity() {
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build()
         ).signInIntent
-        startForResult.launch(signInIntent)
 
+        startForResult.launch(signInIntent)
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
-            if (task.isSuccessful) {
-                Log.d(TAG, "signInWithCredential:success")
-                val user = auth.currentUser
-                goToMain(user)
-            } else {
-                Log.w(TAG, "signInWithCredential:failure", task.exception)
-                Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                if (task.isSuccessful) {
+                    Log.d(TAG, "signInWithCredential:success")
+                    val user = auth.currentUser
+                    goToMain(user)
+                } else {
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                }
             }
-        }
     }
 
-    private fun signInUserWithEmail(email: String, password: String) {
+    private fun createUserWithEmail(email: String, password: String) {
         val result = checkFields(email, password)
         // Result must be true, if not send to Log the error message and set to false
         if (result.second.not()) {
             Log.i(TAG, result.first)
             return
         } else {
-            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI change activity
-                    Log.d(TAG, "signInUserWithEmail:success")
-                    val user = auth.currentUser
-                    goToMain(user)
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInUserWithEmail:failure", task.exception)
-                    // Display error message
-                    Toast.makeText(
-                        baseContext,
-                        "Authentication failed.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                    goToMain(null)
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI change activity
+                        Log.d(TAG, "createUserWithEmail:success")
+                        val user = auth.currentUser
+                        goToMain(user)
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                        // Display error message
+                        Toast.makeText(
+                            baseContext,
+                            "Authentication failed.",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                        goToMain(null)
+                    }
                 }
-            }
         }
 
     }
@@ -163,8 +166,8 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun goToRegister() {
-        val intent = Intent(this, RegisterActivity::class.java)
+    private fun goToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
     }
