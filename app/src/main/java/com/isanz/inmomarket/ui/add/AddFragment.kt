@@ -1,4 +1,4 @@
-package com.isanz.inmomarket.ui.home
+package com.isanz.inmomarket.ui.add
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.isanz.inmomarket.databinding.FragmentHomeBinding
-import com.isanz.inmomarket.ui.messages.MessagesViewModel
+import com.isanz.inmomarket.databinding.FragmentAddBinding
 
-class HomeFragment : Fragment() {
+class AddFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentAddBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -21,9 +20,9 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val messagesViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        val messagesViewModel = ViewModelProvider(this)[AddViewModel::class.java]
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentAddBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textHome

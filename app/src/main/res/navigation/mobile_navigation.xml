@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.isanz.inmomarket.ui.home.HomeFragment"
+        android:name="com.isanz.inmomarket.ui.messages.MessagesFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
     <fragment
@@ -19,6 +19,16 @@
         android:id="@+id/navigation_search"
         android:name="com.isanz.inmomarket.ui.search.SearchFragment"
         android:label="SearchFragment" />
+
+    <fragment
+        android:id="@+id/navigation_messages"
+        android:name="com.isanz.inmomarket.ui.messages.MessagesFragment"
+        android:label="SearchFragment" />
+    <fragment
+        android:id="@+id/navigation_add"
+        android:name="com.isanz.inmomarket.ui.add.AddFragment"
+        android:label="fragment_add"
+        tools:layout="@layout/fragment_add" />
 
 
 </navigation>
