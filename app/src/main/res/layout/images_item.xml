@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:contentDescription="@string/delete"
-            android:src="@drawable/ic_cancel_black_24dp"
+            android:src="@drawable/ic_cancel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

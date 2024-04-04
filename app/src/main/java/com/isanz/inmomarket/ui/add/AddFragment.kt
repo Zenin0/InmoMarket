@@ -12,10 +12,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentAddBinding
+import com.isanz.inmomarket.ui.home.HomeViewModel
 import com.isanz.inmomarket.ui.rv.imageItem.ImageListAdapter
 import com.isanz.inmomarket.utils.Constants
 import java.util.UUID
@@ -28,13 +30,16 @@ class AddFragment : Fragment() {
 
     private lateinit var db: FirebaseFirestore
 
+    private lateinit var homeViewModel: HomeViewModel
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
         mBinding = FragmentAddBinding.inflate(inflater, container, false)
         val root: View = mBinding.root
-
+        homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
         db = InmoMarket.getDb()
 
         // Initialize the RecyclerView adapter
@@ -48,9 +53,9 @@ class AddFragment : Fragment() {
 
     private fun setUpDrawables() {
         val drawableBath =
-            ContextCompat.getDrawable(requireContext(), R.drawable.ic_bathroom_black_24dp)
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_bathroom)
         val drawableRooms =
-            ContextCompat.getDrawable(requireContext(), R.drawable.ic_bedroom_parent_black_24dp)
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_bedroom)
         mBinding.tieBats.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableBath, null)
         mBinding.tieRooms.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableRooms, null)
     }
@@ -114,6 +119,8 @@ class AddFragment : Fragment() {
                                         "DocumentSnapshot added with ID: ${documentReference.id}"
                                     )
                                     updateUI("Property added successfully")
+                                    homeViewModel.updateParcelas()
+
 
                                 }.addOnFailureListener { e ->
                                     Log.e(TAG, "Error adding document", e)
@@ -182,6 +189,7 @@ class AddFragment : Fragment() {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         mBinding.view.visibility = View.GONE
         mBinding.progressBar.visibility = View.GONE
+
     }
 
     private fun loadImages() {

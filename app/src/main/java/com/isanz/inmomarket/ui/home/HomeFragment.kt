@@ -4,33 +4,41 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.isanz.inmomarket.databinding.FragmentHomeBinding
-import com.isanz.inmomarket.ui.messages.MessagesViewModel
+import com.isanz.inmomarket.ui.rv.parcelaItem.ParcelaListAdapter
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val messagesViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-
+        val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        loadingData()
+        return binding.root
+    }
 
-        val textView: TextView = binding.textHome
-        messagesViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+    private fun loadingData() {
+        // Initialize the RecyclerView adapter
+        val adapter = ParcelaListAdapter()
+        binding.rvHome.adapter = adapter
+
+        // Set the LayoutManager
+        binding.rvHome.layoutManager = LinearLayoutManager(context)
+
+        // Retrieve the data from the ViewModel
+        val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        homeViewModel.listParcelas.observe(viewLifecycleOwner) {
+            // Send the data to the adapter
+            adapter.submitList(it)
         }
-        return root
     }
 
     override fun onDestroyView() {
