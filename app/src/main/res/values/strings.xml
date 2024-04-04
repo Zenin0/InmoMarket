@@ -30,4 +30,6 @@
     <string name="save">Save</string>
     <string name="image">Image</string>
     <string name="delete">Delete</string>
+    <string name="prompt_Baths">Bathrooms</string>
+    <string name="prompt_rooms">Rooms</string>
 </resources>

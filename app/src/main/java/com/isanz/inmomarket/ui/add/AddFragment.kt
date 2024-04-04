@@ -9,61 +9,76 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.isanz.inmomarket.InmoMarket
+import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentAddBinding
 import com.isanz.inmomarket.ui.rv.imageItem.ImageListAdapter
+import com.isanz.inmomarket.utils.Constants
 import java.util.UUID
 
 @Suppress("DEPRECATION")
 class AddFragment : Fragment() {
 
-    companion object {
-        private const val REQUEST_CODE_PICK_IMAGES = 1
-    }
 
-    private var mBinding: FragmentAddBinding? = null
-    private val binding get() = mBinding!!
+    private lateinit var mBinding: FragmentAddBinding
 
     private lateinit var db: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        ViewModelProvider(this)[AddViewModel::class.java]
 
         mBinding = FragmentAddBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        val root: View = mBinding.root
 
         db = InmoMarket.getDb()
 
         // Initialize the RecyclerView adapter
         val adapter = ImageListAdapter()
-        binding.rvImages.adapter = adapter
+        mBinding.rvImages.adapter = adapter
 
         setUpButtons()
+        setUpDrawables()
         return root
     }
 
+    private fun setUpDrawables() {
+        val drawableBath =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_bathroom_black_24dp)
+        val drawableRooms =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_bedroom_parent_black_24dp)
+        mBinding.tieBats.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableBath, null)
+        mBinding.tieRooms.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableRooms, null)
+    }
+
     private fun setUpButtons() {
-        binding.btnLoadImages.setOnClickListener {
+        mBinding.btnLoadImages.setOnClickListener {
             loadImages()
         }
 
-        binding.btnSave.setOnClickListener {
+        mBinding.btnSave.setOnClickListener {
             save()
         }
     }
 
     private fun save() {
-        val tittle = binding.tieTittle.text.toString()
-        val description = binding.tieDescription.text.toString()
-        val location = binding.tieAddress.text.toString()
+        // Disable screen elements and show progress bar
+        mBinding.view.visibility = View.VISIBLE
+        mBinding.progressBar.visibility = View.VISIBLE
+
+
+        val tittle = mBinding.tieTittle.text.toString()
+        val description = mBinding.tieDescription.text.toString()
+        val location = mBinding.tieAddress.text.toString()
+        val baths = mBinding.tieBats.text.toString().toInt()
+        val rooms = mBinding.tieRooms.text.toString().toInt()
 
         // Get the list of images URIs
-        val adapter = (binding.rvImages.adapter as? ImageListAdapter)
+        val adapter = (mBinding.rvImages.adapter as? ImageListAdapter)
         val listImagesUri = adapter?.currentList?.map { it } ?: emptyList()
 
         val storage = InmoMarket.getStorage()
@@ -85,18 +100,22 @@ class AddFragment : Fragment() {
                             "tittle" to tittle,
                             "description" to description,
                             "location" to location,
-                            "listImagesUri" to downloadUrls
+                            "listImagesUri" to downloadUrls,
+                            "baths" to baths,
+                            "rooms" to rooms
                         )
 
                         db.collection("parcelas").add(parcela)
                             .addOnSuccessListener { documentReference ->
                                 Log.i(
-                                    TAG,
-                                    "DocumentSnapshot added with ID: ${documentReference.id}"
+                                    TAG, "DocumentSnapshot added with ID: ${documentReference.id}"
                                 )
+                                updateUI("Property added successfully")
+
                             }.addOnFailureListener { e ->
-                            Log.e(TAG, "Error adding document", e)
-                        }
+                                Log.e(TAG, "Error adding document", e)
+                                updateUI("Error adding property")
+                            }
                     }
                 }
             }.addOnFailureListener { e ->
@@ -105,22 +124,34 @@ class AddFragment : Fragment() {
         }
     }
 
+    private fun updateUI(message: String) {
+        mBinding.tieTittle.text?.clear()
+        mBinding.tieDescription.text?.clear()
+        mBinding.tieAddress.text?.clear()
+        mBinding.tieBats.text?.clear()
+        mBinding.tieRooms.text?.clear()
+        (mBinding.rvImages.adapter as? ImageListAdapter)?.submitList(emptyList())
+        mBinding.rvImages.visibility = View.GONE
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        mBinding.view.visibility = View.GONE
+        mBinding.progressBar.visibility = View.GONE
+    }
+
     private fun loadImages() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "image/*"
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }
-        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGES)
+        startActivityForResult(intent, Constants.REQUEST_CODE_PICK_IMAGES)
     }
-
 
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
+        if (requestCode == Constants.REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
             val clipData = data?.clipData
             val imageUris = mutableListOf<String>()
 
@@ -139,14 +170,9 @@ class AddFragment : Fragment() {
             }
 
             // Load the images into the RecyclerView
-            val adapter = (binding.rvImages.adapter as? ImageListAdapter)
+            val adapter = (mBinding.rvImages.adapter as? ImageListAdapter)
             adapter?.submitList(imageUris)
-            mBinding!!.rvImages.visibility = View.VISIBLE
+            mBinding.rvImages.visibility = View.VISIBLE
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        mBinding = null
     }
 }
