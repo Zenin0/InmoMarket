@@ -74,54 +74,101 @@ class AddFragment : Fragment() {
         val tittle = mBinding.tieTittle.text.toString()
         val description = mBinding.tieDescription.text.toString()
         val location = mBinding.tieAddress.text.toString()
-        val baths = mBinding.tieBats.text.toString().toInt()
-        val rooms = mBinding.tieRooms.text.toString().toInt()
+        val baths = mBinding.tieBats.text.toString().toIntOrNull() ?: 0
+        val rooms = mBinding.tieRooms.text.toString().toIntOrNull() ?: 0
 
-        // Get the list of images URIs
+        if (validateFields(tittle, description, location, baths, rooms)) {
+
+            // Get the list of images URIs
+            val adapter = (mBinding.rvImages.adapter as? ImageListAdapter)
+            val listImagesUri = adapter?.currentList?.map { it } ?: emptyList()
+
+            val storage = InmoMarket.getStorage()
+            val storageRef = storage.reference
+
+            val downloadUrls = mutableListOf<String>()
+
+            for (uri in listImagesUri) {
+                val imageRef = storageRef.child("images/${UUID.randomUUID()}")
+                val uploadTask = imageRef.putFile(Uri.parse(uri))
+
+                uploadTask.addOnSuccessListener {
+                    imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
+                        downloadUrls.add(downloadUri.toString())
+
+                        if (downloadUrls.size == listImagesUri.size) {
+                            val parcela = hashMapOf(
+                                "userId" to InmoMarket.getUserAuth()?.uid,
+                                "tittle" to tittle,
+                                "description" to description,
+                                "location" to location,
+                                "listImagesUri" to downloadUrls,
+                                "baths" to baths,
+                                "rooms" to rooms
+                            )
+
+                            db.collection("parcelas").add(parcela)
+                                .addOnSuccessListener { documentReference ->
+                                    Log.i(
+                                        TAG,
+                                        "DocumentSnapshot added with ID: ${documentReference.id}"
+                                    )
+                                    updateUI("Property added successfully")
+
+                                }.addOnFailureListener { e ->
+                                    Log.e(TAG, "Error adding document", e)
+                                    updateUI("Error adding property")
+                                }
+                        }
+                    }
+                }.addOnFailureListener { e ->
+                    Log.e(TAG, "Error uploading image", e)
+                }
+            }
+        } else {
+            mBinding.view.visibility = View.GONE
+            mBinding.progressBar.visibility = View.GONE
+        }
+    }
+
+    private fun validateFields(
+        tittle: String, description: String, location: String, baths: Int, rooms: Int
+    ): Boolean {
+        if (tittle.isEmpty()) {
+            mBinding.tieTittle.error = "Tittle is required"
+            return false
+        }
+        if (tittle.length < 5) {
+            mBinding.tieTittle.error = "Tittle must be at least 5 characters"
+            return false
+        }
+        if (description.isEmpty()) {
+            mBinding.tieDescription.error = "Description is required"
+            return false
+        }
+        if (description.length < 20) {
+            mBinding.tieDescription.error = "Description must be at least 20 characters"
+            return false
+        }
+        if (location.isEmpty()) {
+            mBinding.tieAddress.error = "Location is required"
+            return false
+        }
+        if (baths == 0) {
+            mBinding.tieBats.error = "Baths is required"
+            return false
+        }
+        if (rooms == 0) {
+            mBinding.tieRooms.error = "Rooms is required"
+            return false
+        }
         val adapter = (mBinding.rvImages.adapter as? ImageListAdapter)
         val listImagesUri = adapter?.currentList?.map { it } ?: emptyList()
-
-        val storage = InmoMarket.getStorage()
-        val storageRef = storage.reference
-
-        val downloadUrls = mutableListOf<String>()
-
-        for (uri in listImagesUri) {
-            val imageRef = storageRef.child("images/${UUID.randomUUID()}")
-            val uploadTask = imageRef.putFile(Uri.parse(uri))
-
-            uploadTask.addOnSuccessListener {
-                imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
-                    downloadUrls.add(downloadUri.toString())
-
-                    if (downloadUrls.size == listImagesUri.size) {
-                        val parcela = hashMapOf(
-                            "userId" to InmoMarket.getUserAuth()?.uid,
-                            "tittle" to tittle,
-                            "description" to description,
-                            "location" to location,
-                            "listImagesUri" to downloadUrls,
-                            "baths" to baths,
-                            "rooms" to rooms
-                        )
-
-                        db.collection("parcelas").add(parcela)
-                            .addOnSuccessListener { documentReference ->
-                                Log.i(
-                                    TAG, "DocumentSnapshot added with ID: ${documentReference.id}"
-                                )
-                                updateUI("Property added successfully")
-
-                            }.addOnFailureListener { e ->
-                                Log.e(TAG, "Error adding document", e)
-                                updateUI("Error adding property")
-                            }
-                    }
-                }
-            }.addOnFailureListener { e ->
-                Log.e(TAG, "Error uploading image", e)
-            }
+        if (listImagesUri.size < 3) {
+            Toast.makeText(context, "At least 3 images are required", Toast.LENGTH_SHORT).show()
+            return false
         }
+        return true
     }
 
     private fun updateUI(message: String) {
