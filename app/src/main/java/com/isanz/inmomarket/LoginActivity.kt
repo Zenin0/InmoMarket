@@ -30,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
         enableEdgeToEdge()
         mBinding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        this.auth = InnmoMarket.getAuth()
+        this.auth = InmoMarket.getAuth()
 
         startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

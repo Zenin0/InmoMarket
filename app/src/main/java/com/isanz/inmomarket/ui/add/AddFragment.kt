@@ -1,16 +1,23 @@
 package com.isanz.inmomarket.ui.add
 
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.firestore.FirebaseFirestore
+import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.databinding.FragmentAddBinding
 import com.isanz.inmomarket.ui.rv.imageItem.ImageListAdapter
+import java.util.UUID
 
+@Suppress("DEPRECATION")
 class AddFragment : Fragment() {
 
     companion object {
@@ -20,6 +27,8 @@ class AddFragment : Fragment() {
     private var mBinding: FragmentAddBinding? = null
     private val binding get() = mBinding!!
 
+    private lateinit var db: FirebaseFirestore
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -27,6 +36,8 @@ class AddFragment : Fragment() {
 
         mBinding = FragmentAddBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        db = InmoMarket.getDb()
 
         // Initialize the RecyclerView adapter
         val adapter = ImageListAdapter()
@@ -40,6 +51,58 @@ class AddFragment : Fragment() {
         binding.btnLoadImages.setOnClickListener {
             loadImages()
         }
+
+        binding.btnSave.setOnClickListener {
+            save()
+        }
+    }
+
+    private fun save() {
+        val tittle = binding.tieTittle.text.toString()
+        val description = binding.tieDescription.text.toString()
+        val location = binding.tieAddress.text.toString()
+
+        // Get the list of images URIs
+        val adapter = (binding.rvImages.adapter as? ImageListAdapter)
+        val listImagesUri = adapter?.currentList?.map { it } ?: emptyList()
+
+        val storage = InmoMarket.getStorage()
+        val storageRef = storage.reference
+
+        val downloadUrls = mutableListOf<String>()
+
+        for (uri in listImagesUri) {
+            val imageRef = storageRef.child("images/${UUID.randomUUID()}")
+            val uploadTask = imageRef.putFile(Uri.parse(uri))
+
+            uploadTask.addOnSuccessListener {
+                imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
+                    downloadUrls.add(downloadUri.toString())
+
+                    if (downloadUrls.size == listImagesUri.size) {
+                        val parcela = hashMapOf(
+                            "userId" to InmoMarket.getUserAuth()?.uid,
+                            "tittle" to tittle,
+                            "description" to description,
+                            "location" to location,
+                            "listImagesUri" to downloadUrls
+                        )
+
+                        db.collection("parcelas").add(parcela)
+                            .addOnSuccessListener { documentReference ->
+                                Log.i(
+                                    TAG,
+                                    "DocumentSnapshot added with ID: ${documentReference.id}"
+                                )
+                            }.addOnFailureListener { e ->
+                            Log.e(TAG, "Error adding document", e)
+                        }
+                    }
+                }
+            }.addOnFailureListener { e ->
+                Log.e(TAG, "Error uploading image", e)
+            }
+        }
     }
 
     private fun loadImages() {
@@ -50,6 +113,8 @@ class AddFragment : Fragment() {
         }
         startActivityForResult(intent, REQUEST_CODE_PICK_IMAGES)
     }
+
+
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
