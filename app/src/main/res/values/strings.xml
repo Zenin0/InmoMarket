@@ -35,4 +35,12 @@
     <string name="parcela_image">Parcela Image</string>
     <string name="favorite">Favorite</string>
     <string name="parcela_name">Name</string>
+    <string name="tittle_is_required">Tittle is required</string>
+    <string name="tittle_must_be_at_least_5_characters">Tittle must be at least 5 characters</string>
+    <string name="description_is_required">Description is required</string>
+    <string name="description_least_20">Description must be at least 20 characters</string>
+    <string name="location_is_required">Location is required</string>
+    <string name="baths_is_required">Baths is required</string>
+    <string name="rooms_is_required">Rooms is required</string>
+    <string name="images_3">At least 3 images are required</string>
 </resources>

@@ -79,12 +79,17 @@ class AddFragment : Fragment() {
             val images = mutableListOf<String>()
             for (uri in listImagesUri) {
                 val imageName = UUID.randomUUID().toString()
-                val ref = InmoMarket.getStorage().reference.child("images/$imageName")
+                val ref =
+                    InmoMarket.getStorage().reference.child("images/${InmoMarket.getAuth().currentUser!!.uid}/$imageName")
                 ref.putFile(Uri.parse(uri)).addOnSuccessListener {
                     ref.downloadUrl.addOnSuccessListener {
                         images.add(it.toString())
                         if (images.size == listImagesUri.size) {
-                            updateUI(addViewModel.save(tittle, description, baths, rooms, location, images))
+                            updateUI(
+                                addViewModel.save(
+                                    tittle, description, baths, rooms, location, images
+                                )
+                            )
                         }
                     }
                 }
@@ -96,37 +101,37 @@ class AddFragment : Fragment() {
         tittle: String, description: String, location: String, baths: Int, rooms: Int
     ): Boolean {
         if (tittle.isEmpty()) {
-            mBinding.tieTittle.error = "Tittle is required"
+            mBinding.tieTittle.error = getString(R.string.tittle_is_required)
             return false
         }
         if (tittle.length < 5) {
-            mBinding.tieTittle.error = "Tittle must be at least 5 characters"
+            mBinding.tieTittle.error = getString(R.string.tittle_must_be_at_least_5_characters)
             return false
         }
         if (description.isEmpty()) {
-            mBinding.tieDescription.error = "Description is required"
+            mBinding.tieDescription.error = getString(R.string.description_is_required)
             return false
         }
         if (description.length < 20) {
-            mBinding.tieDescription.error = "Description must be at least 20 characters"
+            mBinding.tieDescription.error = getString(R.string.description_least_20)
             return false
         }
         if (location.isEmpty()) {
-            mBinding.tieAddress.error = "Location is required"
+            mBinding.tieAddress.error = getString(R.string.location_is_required)
             return false
         }
         if (baths == 0) {
-            mBinding.tieBats.error = "Baths is required"
+            mBinding.tieBats.error = getString(R.string.baths_is_required)
             return false
         }
         if (rooms == 0) {
-            mBinding.tieRooms.error = "Rooms is required"
+            mBinding.tieRooms.error = getString(R.string.rooms_is_required)
             return false
         }
         val adapter = (mBinding.rvImages.adapter as? ImageListAdapter)
         val listImagesUri = adapter?.currentList?.map { it } ?: emptyList()
         if (listImagesUri.size < 3) {
-            Toast.makeText(context, "At least 3 images are required", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.images_3), Toast.LENGTH_SHORT).show()
             return false
         }
         return true
