@@ -5,30 +5,46 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.isanz.inmomarket.InmoMarket
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.FirebaseFirestore
 import com.isanz.inmomarket.utils.entities.Parcela
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeViewModel : ViewModel() {
 
     private val _listParcelas = MutableLiveData<List<Parcela>>()
     val listParcelas: LiveData<List<Parcela>> = _listParcelas
 
+    private val db = FirebaseFirestore.getInstance()
+
     init {
-        updateParcelas()
+        viewModelScope.launch {
+            try {
+                listenForParcelasUpdates()
+            } catch (e: Exception) {
+                Log.w(TAG, "Listen failed.", e)
+            }
+        }
     }
 
-    fun updateParcelas() {
-        val db = InmoMarket.getDb()
-        db.collection("parcelas").get().addOnSuccessListener { result ->
-            val list = mutableListOf<Parcela>()
-            for (document in result) {
-                val parcela = document.toObject(Parcela::class.java)
-                parcela.id = document.id
-                list.add(parcela)
+    private suspend fun listenForParcelasUpdates() = withContext(Dispatchers.IO) {
+        db.collection("propety").addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.w(TAG, "Listen failed.", e)
+                return@addSnapshotListener
             }
-            _listParcelas.value = list
-        }.addOnFailureListener { exception ->
-            Log.w(TAG, "Error getting documents.", exception)
+
+            if (snapshot != null && !snapshot.isEmpty) {
+                val parcelas = snapshot.toObjects(Parcela::class.java)
+                for (parcela in parcelas) {
+                    parcela.id = snapshot.documents[parcelas.indexOf(parcela)].id
+                }
+                _listParcelas.postValue(parcelas)
+            } else {
+                Log.d(TAG, "Current data: null")
+            }
         }
     }
 }

@@ -19,13 +19,13 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        loadingData()
+        val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        setupRecyclerView(homeViewModel)
         return binding.root
     }
 
-    private fun loadingData() {
+    private fun setupRecyclerView(homeViewModel: HomeViewModel) {
         // Initialize the RecyclerView adapter
         val adapter = ParcelaListAdapter()
         binding.rvHome.adapter = adapter
@@ -33,11 +33,10 @@ class HomeFragment : Fragment() {
         // Set the LayoutManager
         binding.rvHome.layoutManager = LinearLayoutManager(context)
 
-        // Retrieve the data from the ViewModel
-        val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-        homeViewModel.listParcelas.observe(viewLifecycleOwner) {
-            // Send the data to the adapter
-            adapter.submitList(it)
+        // Observe the data from the ViewModel
+        homeViewModel.listParcelas.observe(viewLifecycleOwner) { parcelas ->
+            // Update the adapter with the new list of Parcela objects
+            adapter.submitList(parcelas)
         }
     }
 

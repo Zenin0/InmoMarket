@@ -1,11 +1,9 @@
 package com.isanz.inmomarket.ui.add
 
 import android.app.Activity
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +15,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentAddBinding
-import com.isanz.inmomarket.ui.home.HomeViewModel
 import com.isanz.inmomarket.ui.rv.imageItem.ImageListAdapter
 import com.isanz.inmomarket.utils.Constants
 import java.util.UUID
@@ -30,8 +27,6 @@ class AddFragment : Fragment() {
 
     private lateinit var db: FirebaseFirestore
 
-    private lateinit var homeViewModel: HomeViewModel
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -39,7 +34,6 @@ class AddFragment : Fragment() {
 
         mBinding = FragmentAddBinding.inflate(inflater, container, false)
         val root: View = mBinding.root
-        homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
         db = InmoMarket.getDb()
 
         // Initialize the RecyclerView adapter
@@ -52,10 +46,8 @@ class AddFragment : Fragment() {
     }
 
     private fun setUpDrawables() {
-        val drawableBath =
-            ContextCompat.getDrawable(requireContext(), R.drawable.ic_bathroom)
-        val drawableRooms =
-            ContextCompat.getDrawable(requireContext(), R.drawable.ic_bedroom)
+        val drawableBath = ContextCompat.getDrawable(requireContext(), R.drawable.ic_bathroom)
+        val drawableRooms = ContextCompat.getDrawable(requireContext(), R.drawable.ic_bedroom)
         mBinding.tieBats.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableBath, null)
         mBinding.tieRooms.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableRooms, null)
     }
@@ -66,16 +58,11 @@ class AddFragment : Fragment() {
         }
 
         mBinding.btnSave.setOnClickListener {
-            save()
+            save(addViewModel = ViewModelProvider(this)[AddViewModel::class.java])
         }
     }
 
-    private fun save() {
-        // Disable screen elements and show progress bar
-        mBinding.view.visibility = View.VISIBLE
-        mBinding.progressBar.visibility = View.VISIBLE
-
-
+    private fun save(addViewModel: AddViewModel) {
         val tittle = mBinding.tieTittle.text.toString()
         val description = mBinding.tieDescription.text.toString()
         val location = mBinding.tieAddress.text.toString()
@@ -83,58 +70,26 @@ class AddFragment : Fragment() {
         val rooms = mBinding.tieRooms.text.toString().toIntOrNull() ?: 0
 
         if (validateFields(tittle, description, location, baths, rooms)) {
+            mBinding.view.visibility = View.VISIBLE
+            mBinding.progressBar.visibility = View.VISIBLE
 
-            // Get the list of images URIs
             val adapter = (mBinding.rvImages.adapter as? ImageListAdapter)
             val listImagesUri = adapter?.currentList?.map { it } ?: emptyList()
 
-            val storage = InmoMarket.getStorage()
-            val storageRef = storage.reference
-
-            val downloadUrls = mutableListOf<String>()
-
+            val images = mutableListOf<String>()
             for (uri in listImagesUri) {
-                val imageRef = storageRef.child("images/${UUID.randomUUID()}")
-                val uploadTask = imageRef.putFile(Uri.parse(uri))
+                val imageName = UUID.randomUUID().toString()
+                val ref = InmoMarket.getStorage().reference.child("images/$imageName")
+                ref.putFile(Uri.parse(uri)).addOnSuccessListener {
+                    ref.downloadUrl.addOnSuccessListener {
+                        images.add(it.toString())
+                        if (images.size == listImagesUri.size) {
 
-                uploadTask.addOnSuccessListener {
-                    imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
-                        downloadUrls.add(downloadUri.toString())
-
-                        if (downloadUrls.size == listImagesUri.size) {
-                            val parcela = hashMapOf(
-                                "userId" to InmoMarket.getUserAuth()?.uid,
-                                "tittle" to tittle,
-                                "description" to description,
-                                "location" to location,
-                                "listImagesUri" to downloadUrls,
-                                "baths" to baths,
-                                "rooms" to rooms
-                            )
-
-                            db.collection("parcelas").add(parcela)
-                                .addOnSuccessListener { documentReference ->
-                                    Log.i(
-                                        TAG,
-                                        "DocumentSnapshot added with ID: ${documentReference.id}"
-                                    )
-                                    updateUI("Property added successfully")
-                                    homeViewModel.updateParcelas()
-
-
-                                }.addOnFailureListener { e ->
-                                    Log.e(TAG, "Error adding document", e)
-                                    updateUI("Error adding property")
-                                }
+                            updateUI(addViewModel.save(tittle, description, baths, rooms, location, images))
                         }
                     }
-                }.addOnFailureListener { e ->
-                    Log.e(TAG, "Error uploading image", e)
                 }
             }
-        } else {
-            mBinding.view.visibility = View.GONE
-            mBinding.progressBar.visibility = View.GONE
         }
     }
 
