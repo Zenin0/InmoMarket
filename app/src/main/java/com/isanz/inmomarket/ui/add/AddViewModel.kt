@@ -3,6 +3,7 @@ package com.isanz.inmomarket.ui.add
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
+import com.isanz.inmomarket.InmoMarket
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -25,12 +26,13 @@ class AddViewModel : ViewModel() {
             "rooms" to rooms,
             "baths" to baths,
             "location" to location,
-            "listImagesUri" to images
+            "listImagesUri" to images,
+            "userId" to InmoMarket.getAuth().currentUser?.uid
         )
 
         viewModelScope.launch {
             try {
-                db.collection("propety").add(property).addOnSuccessListener{
+                db.collection("properties").add(property).addOnSuccessListener {
                     result = "Property added successfully"
                 }.await().id
             } catch (e: Exception) {

@@ -30,16 +30,20 @@ class HomeViewModel : ViewModel() {
     }
 
     private suspend fun listenForParcelasUpdates() = withContext(Dispatchers.IO) {
-        db.collection("propety").addSnapshotListener { snapshot, e ->
+        db.collection("properties").addSnapshotListener { snapshot, e ->
             if (e != null) {
                 Log.w(TAG, "Listen failed.", e)
                 return@addSnapshotListener
             }
 
-            if (snapshot != null && !snapshot.isEmpty) {
-                val parcelas = snapshot.toObjects(Parcela::class.java)
-                for (parcela in parcelas) {
-                    parcela.id = snapshot.documents[parcelas.indexOf(parcela)].id
+            if (snapshot != null) {
+                val parcelas = mutableListOf<Parcela>()
+                for (document in snapshot.documents) {
+                    if (document.exists()) {
+                        val parcela = document.toObject(Parcela::class.java)
+                        parcela?.id = document.id
+                        parcela?.let { parcelas.add(it) }
+                    }
                 }
                 _listParcelas.postValue(parcelas)
             } else {

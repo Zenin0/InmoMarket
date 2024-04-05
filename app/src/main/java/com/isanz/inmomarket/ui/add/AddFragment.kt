@@ -84,7 +84,6 @@ class AddFragment : Fragment() {
                     ref.downloadUrl.addOnSuccessListener {
                         images.add(it.toString())
                         if (images.size == listImagesUri.size) {
-
                             updateUI(addViewModel.save(tittle, description, baths, rooms, location, images))
                         }
                     }
