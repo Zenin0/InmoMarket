@@ -23,6 +23,10 @@ import com.isanz.inmomarket.utils.entities.Property
 class PropertyListAdapter :
     ListAdapter<Property, PropertyListAdapter.PropertyViewHolder>((PropertyDiffCallback<Property>())) {
 
+
+    private val db = FirebaseFirestore.getInstance()
+    private val user = InmoMarket.getAuth().currentUser
+
     class PropertyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.property_image)
         val tittle: TextView = itemView.findViewById(R.id.tvProperty)
@@ -43,8 +47,6 @@ class PropertyListAdapter :
         val property = getItem(position)
         holder.tittle.text = property.tittle
 
-        val db = FirebaseFirestore.getInstance()
-        val user = InmoMarket.getAuth().currentUser
         if (user != null) {
             val docRef = db.collection("properties").document(property.id!!)
             docRef.get().addOnSuccessListener { document ->
@@ -62,53 +64,7 @@ class PropertyListAdapter :
         }
 
         holder.btnFav.setOnClickListener {
-            if (user != null) {
-                val docRef = db.collection("properties").document(property.id!!)
-                docRef.get().addOnSuccessListener { document ->
-                    if (document != null) {
-                        val favorites = document.get("favorites") as? List<*>
-                        if (favorites != null && favorites.contains(user.uid)) {
-                            // If the user's ID is already in the favorites array, remove it
-                            docRef.update("favorites", FieldValue.arrayRemove(user.uid))
-                                .addOnSuccessListener {
-                                    Log.d(TAG, "DocumentSnapshot successfully updated!")
-                                    Toast.makeText(
-                                        holder.btnFav.context,
-                                        "Removed from favorites!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    holder.btnFav.setImageResource(R.drawable.ic_favorite_border)
-                                }.addOnFailureListener { e ->
-                                    Log.w(TAG, "Error updating document", e)
-                                    Toast.makeText(
-                                        holder.btnFav.context,
-                                        "Error removing from favorites",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                        } else {
-                            // If the user's ID is not in the favorites array, add it
-                            docRef.update("favorites", FieldValue.arrayUnion(user.uid))
-                                .addOnSuccessListener {
-                                    Log.d(TAG, "DocumentSnapshot successfully updated!")
-                                    Toast.makeText(
-                                        holder.btnFav.context,
-                                        "Added to favorites!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    holder.btnFav.setImageResource(R.drawable.ic_favorite)
-                                }.addOnFailureListener { e ->
-                                    Log.w(TAG, "Error updating document", e)
-                                    Toast.makeText(
-                                        holder.btnFav.context,
-                                        "Error adding to favorites",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                        }
-                    }
-                }
-            }
+            alterFavorite(holder, property)
         }
 
         loadExtras(holder, property)
@@ -136,6 +92,44 @@ class PropertyListAdapter :
                 return true
             }
         })
+    }
+
+    private fun alterFavorite(holder: PropertyViewHolder, property: Property?) {
+        val docRef = db.collection("properties").document(property!!.id!!)
+        docRef.get().addOnSuccessListener { document ->
+            val favorites = document.get("favorites") as? List<*>
+            if (favorites != null && favorites.contains(user!!.uid)) {
+                // If the user's ID is already in the favorites array, remove it
+                docRef.update("favorites", FieldValue.arrayRemove(user.uid)).addOnSuccessListener {
+                    Log.d(TAG, "DocumentSnapshot successfully updated!")
+                    Toast.makeText(
+                        holder.btnFav.context, "Removed from favorites!", Toast.LENGTH_SHORT
+                    ).show()
+                    holder.btnFav.setImageResource(R.drawable.ic_favorite_border)
+                }.addOnFailureListener { e ->
+                    Log.w(TAG, "Error updating document", e)
+                    Toast.makeText(
+                        holder.btnFav.context, "Error removing from favorites", Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } else {
+                // If the user's ID is not in the favorites array, add it
+                docRef.update("favorites", FieldValue.arrayUnion(user!!.uid)).addOnSuccessListener {
+                    Log.d(TAG, "DocumentSnapshot successfully updated!")
+                    Toast.makeText(
+                        holder.btnFav.context, "Added to favorites!", Toast.LENGTH_SHORT
+                    ).show()
+                    holder.btnFav.setImageResource(R.drawable.ic_favorite)
+                }.addOnFailureListener { e ->
+                    Log.w(TAG, "Error updating document", e)
+                    Toast.makeText(
+                        holder.btnFav.context, "Error adding to favorites", Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+        }
+
     }
 
     private fun loadExtras(holder: PropertyViewHolder, property: Property?) {
