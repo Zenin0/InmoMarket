@@ -29,6 +29,7 @@ gradle = "8.1.0"
 firebaseCrashlyticsGradle = "2.9.9"
 kotlinxCoroutinesAndroid = "1.8.1-Beta"
 kotlinxCoroutinesPlayServices = "1.8.1-Beta"
+biometric = "1.2.0-alpha05"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -59,6 +60,7 @@ gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "gr
 firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
+androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

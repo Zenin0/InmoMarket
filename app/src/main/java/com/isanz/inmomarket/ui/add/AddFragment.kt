@@ -48,8 +48,16 @@ class AddFragment : Fragment() {
     private fun setUpDrawables() {
         val drawableBath = ContextCompat.getDrawable(requireContext(), R.drawable.ic_bathroom)
         val drawableRooms = ContextCompat.getDrawable(requireContext(), R.drawable.ic_bedroom)
+        val drawableMeters = ContextCompat.getDrawable(requireContext(), R.drawable.ic_square_foot)
+        val drawableFloor = ContextCompat.getDrawable(requireContext(), R.drawable.ic_house_siding)
+        val drawablePrice = ContextCompat.getDrawable(requireContext(), R.drawable.ic_euro_symbol)
         mBinding.tieBats.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableBath, null)
         mBinding.tieRooms.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableRooms, null)
+        mBinding.tieSquareMeters.setCompoundDrawablesWithIntrinsicBounds(
+            null, null, drawableMeters, null
+        )
+        mBinding.tieFloors.setCompoundDrawablesWithIntrinsicBounds(null, null, drawableFloor, null)
+        mBinding.tiePrice.setCompoundDrawablesWithIntrinsicBounds(null, null, drawablePrice, null)
     }
 
     private fun setUpButtons() {
@@ -68,6 +76,9 @@ class AddFragment : Fragment() {
         val location = mBinding.tieAddress.text.toString()
         val baths = mBinding.tieBats.text.toString().toIntOrNull() ?: 0
         val rooms = mBinding.tieRooms.text.toString().toIntOrNull() ?: 0
+        val squareMeters = mBinding.tieSquareMeters.text.toString().toIntOrNull() ?: 0
+        val floors = mBinding.tieFloors.text.toString().toIntOrNull() ?: 0
+        val price = mBinding.tiePrice.text.toString().toIntOrNull() ?: 0
 
         if (validateFields(tittle, description, location, baths, rooms)) {
             mBinding.view.visibility = View.VISIBLE
@@ -81,13 +92,25 @@ class AddFragment : Fragment() {
                 val imageName = UUID.randomUUID().toString()
                 val ref =
                     InmoMarket.getStorage().reference.child("images/${InmoMarket.getAuth().currentUser!!.uid}/$imageName")
+                val extras = hashMapOf(
+                    "rooms" to rooms,
+                    "baths" to baths,
+                    "squareMeters" to squareMeters,
+                    "floors" to floors
+                )
                 ref.putFile(Uri.parse(uri)).addOnSuccessListener {
                     ref.downloadUrl.addOnSuccessListener {
                         images.add(it.toString())
                         if (images.size == listImagesUri.size) {
                             updateUI(
                                 addViewModel.save(
-                                    tittle, description, baths, rooms, location, images
+                                    tittle,
+                                    description,
+                                    location,
+                                    images,
+                                    extras,
+                                    price.toDouble(),
+                                    squareMeters.toDouble()
                                 )
                             )
                         }

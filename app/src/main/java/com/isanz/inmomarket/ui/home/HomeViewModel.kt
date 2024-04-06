@@ -7,15 +7,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
-import com.isanz.inmomarket.utils.entities.Parcela
+import com.isanz.inmomarket.utils.entities.Property
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class HomeViewModel : ViewModel() {
 
-    private val _listParcelas = MutableLiveData<List<Parcela>>()
-    val listParcelas: LiveData<List<Parcela>> = _listParcelas
+    private val _listParcelas = MutableLiveData<List<Property>>()
+    val listParcelas: LiveData<List<Property>> = _listParcelas
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -37,15 +37,16 @@ class HomeViewModel : ViewModel() {
             }
 
             if (snapshot != null) {
-                val parcelas = mutableListOf<Parcela>()
+                val properties = mutableListOf<Property>()
                 for (document in snapshot.documents) {
                     if (document.exists()) {
-                        val parcela = document.toObject(Parcela::class.java)
-                        parcela?.id = document.id
-                        parcela?.let { parcelas.add(it) }
+                        val property = document.toObject(Property::class.java)
+                        property?.id = document.id
+                        Log.i(TAG, "Property: $property")
+                        property?.let { properties.add(it) }
                     }
                 }
-                _listParcelas.postValue(parcelas)
+                _listParcelas.postValue(properties)
             } else {
                 Log.d(TAG, "Current data: null")
             }

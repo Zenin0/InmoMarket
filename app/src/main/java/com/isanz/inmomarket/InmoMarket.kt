@@ -21,10 +21,6 @@ class InmoMarket : Application() {
             return FirebaseFirestore.getInstance()
         }
 
-        fun getUserAuth(): FirebaseUser? {
-            return Firebase.auth.currentUser
-        }
-
         fun getStorage(): FirebaseStorage {
             return FirebaseStorage.getInstance()
         }

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.isanz.inmomarket.InmoMarket
+import com.isanz.inmomarket.utils.entities.Property
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -14,20 +15,23 @@ class AddViewModel : ViewModel() {
     fun save(
         tittle: String,
         description: String,
-        rooms: Int,
-        baths: Int,
         location: String,
-        images: List<String>
+        images: List<String>,
+        extras: HashMap<String, Int>,
+        price: Double,
+        squareMeters: Double
     ): String {
         var result = ""
-        val property = hashMapOf(
-            "tittle" to tittle,
-            "description" to description,
-            "rooms" to rooms,
-            "baths" to baths,
-            "location" to location,
-            "listImagesUri" to images,
-            "userId" to InmoMarket.getAuth().currentUser?.uid
+        val property = Property(
+            tittle = tittle,
+            description = description,
+            location = location,
+            userId = InmoMarket.getAuth().currentUser?.uid ?: "",
+            listImagesUri = images,
+            extras = extras,
+            price = price,
+            squareMeters = squareMeters
+
         )
 
         viewModelScope.launch {

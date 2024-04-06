@@ -43,4 +43,9 @@
     <string name="baths_is_required">Baths is required</string>
     <string name="rooms_is_required">Rooms is required</string>
     <string name="images_3">At least 3 images are required</string>
+    <string name="extra_image">Imagen Extra</string>
+    <string name="extra_cuanty">Extra Cuantity</string>
+    <string name="prompt_square_meters">Meters²</string>
+    <string name="prompt_price">Price</string>
+    <string name="prompt_floors">Floors</string>
 </resources>

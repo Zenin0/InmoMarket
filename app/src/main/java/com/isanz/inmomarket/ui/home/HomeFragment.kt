@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.isanz.inmomarket.databinding.FragmentHomeBinding
-import com.isanz.inmomarket.ui.rv.parcelaItem.ParcelaListAdapter
+import com.isanz.inmomarket.ui.rv.parcelaItem.PropertyListAdapter
 
 class HomeFragment : Fragment() {
 
@@ -27,7 +27,7 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView(homeViewModel: HomeViewModel) {
         // Initialize the RecyclerView adapter
-        val adapter = ParcelaListAdapter()
+        val adapter = PropertyListAdapter()
         binding.rvHome.adapter = adapter
 
         // Set the LayoutManager

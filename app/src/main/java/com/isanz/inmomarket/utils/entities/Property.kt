@@ -1,12 +1,13 @@
 package com.isanz.inmomarket.utils.entities
 
-data class Parcela(
+data class Property(
     var id: String? = null,
     var tittle: String = "",
     var description: String = "",
     var location: String = "",
-    var rooms: Int = 0,
-    var baths: Int = 0,
     var userId: String = "",
-    var listImagesUri: List<String> = listOf()
+    var listImagesUri: List<String> = listOf(),
+    var extras: Map<String, Int> = mapOf(),
+    val price: Double = 0.0,
+    val squareMeters: Double = 0.0
 )

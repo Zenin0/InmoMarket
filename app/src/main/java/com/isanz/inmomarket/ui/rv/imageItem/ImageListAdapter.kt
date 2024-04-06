@@ -25,8 +25,7 @@ class ImageListAdapter :
 
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        val uri = getItem(position)
-        Glide.with(holder.itemView).load(uri).into(holder.image)
+        Glide.with(holder.itemView).load(getItem(position)).into(holder.image)
 
         holder.delButton.setOnClickListener {
             // Get the current position of the item
