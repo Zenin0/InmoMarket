@@ -1,4 +1,4 @@
-package com.isanz.inmomarket.ui.rv.parcelaItem
+package com.isanz.inmomarket.ui.rv.propertyItem
 
 import android.content.ContentValues.TAG
 import android.util.Log
@@ -8,14 +8,11 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
-import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.ui.rv.extraItem.ExtraListAdapter
 import com.isanz.inmomarket.utils.entities.Property
@@ -23,9 +20,9 @@ import com.isanz.inmomarket.utils.entities.Property
 class PropertyListAdapter :
     ListAdapter<Property, PropertyListAdapter.PropertyViewHolder>((PropertyDiffCallback<Property>())) {
 
-
-    private val db = FirebaseFirestore.getInstance()
-    private val user = InmoMarket.getAuth().currentUser
+    private val viewModel: PropertyViewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(PropertyViewModel::class.java)
+    }
 
     class PropertyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.property_image)
@@ -47,28 +44,12 @@ class PropertyListAdapter :
         val property = getItem(position)
         holder.tittle.text = property.tittle
 
-        if (user != null) {
-            val docRef = db.collection("properties").document(property.id!!)
-            docRef.get().addOnSuccessListener { document ->
-                if (document != null) {
-                    val favorites = document.get("favorites") as? List<*>
-                    if (favorites != null && favorites.contains(user.uid)) {
-                        // If the user's ID is already in the favorites array, set the favorite icon
-                        holder.btnFav.setImageResource(R.drawable.ic_favorite)
-                    } else {
-                        // If the user's ID is not in the favorites array, set the non-favorite icon
-                        holder.btnFav.setImageResource(R.drawable.ic_favorite_border)
-                    }
-                }
-            }
-        }
-
-        holder.btnFav.setOnClickListener {
-            alterFavorite(holder, property)
-        }
-
+        setUpButtons(holder, property)
         loadExtras(holder, property)
+        setUpItems(holder, property)
+    }
 
+    private fun setUpItems(holder: PropertyViewHolder, property: Property) {
         holder.view.viewTreeObserver.addOnPreDrawListener(object :
             ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
@@ -94,42 +75,25 @@ class PropertyListAdapter :
         })
     }
 
-    private fun alterFavorite(holder: PropertyViewHolder, property: Property?) {
-        val docRef = db.collection("properties").document(property!!.id!!)
-        docRef.get().addOnSuccessListener { document ->
-            val favorites = document.get("favorites") as? List<*>
-            if (favorites != null && favorites.contains(user!!.uid)) {
-                // If the user's ID is already in the favorites array, remove it
-                docRef.update("favorites", FieldValue.arrayRemove(user.uid)).addOnSuccessListener {
-                    Log.d(TAG, "DocumentSnapshot successfully updated!")
-                    Toast.makeText(
-                        holder.btnFav.context, "Removed from favorites!", Toast.LENGTH_SHORT
-                    ).show()
-                    holder.btnFav.setImageResource(R.drawable.ic_favorite_border)
-                }.addOnFailureListener { e ->
-                    Log.w(TAG, "Error updating document", e)
-                    Toast.makeText(
-                        holder.btnFav.context, "Error removing from favorites", Toast.LENGTH_SHORT
-                    ).show()
-                }
+    private fun setUpButtons(holder: PropertyViewHolder, property: Property) {
+        val updateFavoriteIcon: (Boolean) -> Unit = { isFavorite ->
+            if (isFavorite) {
+                holder.btnFav.setImageResource(R.drawable.ic_favorite)
             } else {
-                // If the user's ID is not in the favorites array, add it
-                docRef.update("favorites", FieldValue.arrayUnion(user!!.uid)).addOnSuccessListener {
-                    Log.d(TAG, "DocumentSnapshot successfully updated!")
-                    Toast.makeText(
-                        holder.btnFav.context, "Added to favorites!", Toast.LENGTH_SHORT
-                    ).show()
-                    holder.btnFav.setImageResource(R.drawable.ic_favorite)
-                }.addOnFailureListener { e ->
-                    Log.w(TAG, "Error updating document", e)
-                    Toast.makeText(
-                        holder.btnFav.context, "Error adding to favorites", Toast.LENGTH_SHORT
-                    ).show()
-                }
+                holder.btnFav.setImageResource(R.drawable.ic_favorite_border)
             }
-
         }
 
+        // Call the getIfFavorite function from the ViewModel
+        viewModel.getIfFavorite(property, updateFavoriteIcon)
+
+        holder.btnFav.setOnClickListener {
+            viewModel.alterFavorite(property)
+        }
+
+        holder.btnFav.setOnClickListener {
+            viewModel.alterFavorite(property)
+        }
     }
 
     private fun loadExtras(holder: PropertyViewHolder, property: Property?) {

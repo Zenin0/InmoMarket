@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.isanz.inmomarket.databinding.FragmentHomeBinding
-import com.isanz.inmomarket.ui.rv.parcelaItem.PropertyListAdapter
+import com.isanz.inmomarket.ui.rv.propertyItem.PropertyListAdapter
 
 class HomeFragment : Fragment() {
 
