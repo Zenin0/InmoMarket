@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.isanz.inmomarket.ChatFragment"
+        android:name="com.isanz.inmomarket.ui.chat.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat" >
         <argument

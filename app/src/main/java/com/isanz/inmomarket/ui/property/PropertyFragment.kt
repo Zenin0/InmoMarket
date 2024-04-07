@@ -39,7 +39,7 @@ class PropertyFragment : Fragment() {
                 putString("idUser", property.userId)
             }
             this.findNavController()
-                .navigate(R.id.action_navigation_home_to_propertyFragment, bundle)
+                .navigate(R.id.action_propertyFragment_to_chatFragment, bundle)
         }
     }
 
