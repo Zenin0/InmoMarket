@@ -1,7 +1,9 @@
 package com.isanz.inmomarket.utils.entities
 
+import com.google.firebase.firestore.Exclude
+
 data class Property(
-    var id: String? = null,
+    @Exclude var id: String? = null,
     var tittle: String = "",
     var description: String = "",
     var location: String = "",

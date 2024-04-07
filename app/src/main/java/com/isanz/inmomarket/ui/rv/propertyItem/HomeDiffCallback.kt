@@ -3,7 +3,7 @@ package com.isanz.inmomarket.ui.rv.propertyItem
 import androidx.recyclerview.widget.DiffUtil
 import com.isanz.inmomarket.utils.entities.Property
 
-class PropertyDiffCallback<T> : DiffUtil.ItemCallback<Property>() {
+class HomeDiffCallback<T> : DiffUtil.ItemCallback<Property>() {
 
     override fun areItemsTheSame(oldItem: Property, newItem: Property): Boolean {
         return oldItem.id == newItem.id

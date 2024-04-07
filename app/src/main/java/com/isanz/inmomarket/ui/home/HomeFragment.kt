@@ -1,16 +1,21 @@
 package com.isanz.inmomarket.ui.home
 
+import android.content.ContentValues
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentHomeBinding
-import com.isanz.inmomarket.ui.rv.propertyItem.PropertyListAdapter
+import com.isanz.inmomarket.ui.rv.propertyItem.HomeListAdapter
+import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), OnItemClickListener {
 
     private var _binding: FragmentHomeBinding? = null
 
@@ -27,7 +32,7 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView(homeViewModel: HomeViewModel) {
         // Initialize the RecyclerView adapter
-        val adapter = PropertyListAdapter()
+        val adapter = HomeListAdapter(this)
         binding.rvHome.adapter = adapter
 
         // Set the LayoutManager
@@ -38,6 +43,14 @@ class HomeFragment : Fragment() {
             // Update the adapter with the new list of Parcela objects
             adapter.submitList(parcelas)
         }
+    }
+
+    override fun onItemClicked(propertyId: String) {
+        Log.i(ContentValues.TAG, "Property clicked: $propertyId")
+        val bundle = Bundle().apply {
+            putString("propertyId", propertyId)
+        }
+        this.findNavController().navigate(R.id.action_navigation_home_to_propertyFragment, bundle)
     }
 
     override fun onDestroyView() {

@@ -37,7 +37,7 @@ class AddViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 db.collection("properties").add(property).addOnSuccessListener {
-                    result = "Property added successfully"
+                    result = "com.isanz.inmomarket.utils.entities.Property added successfully"
                 }.await().id
             } catch (e: Exception) {
                 result = "An error occurred"

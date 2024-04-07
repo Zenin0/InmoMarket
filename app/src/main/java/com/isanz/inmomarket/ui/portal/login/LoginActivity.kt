@@ -1,12 +1,10 @@
-package com.isanz.inmomarket
+package com.isanz.inmomarket.ui.portal.login
 
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
@@ -20,6 +18,10 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.isanz.inmomarket.InmoMarket
+import com.isanz.inmomarket.MainActivity
+import com.isanz.inmomarket.R
+import com.isanz.inmomarket.ui.portal.register.RegisterActivity
 import com.isanz.inmomarket.databinding.ActivityLoginBinding
 
 

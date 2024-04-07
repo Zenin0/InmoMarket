@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.isanz.inmomarket.R
 
-class ExtraListAdapter :
+class ExtraListAdapter(private val fragmentType: String) :
     ListAdapter<Pair<String, Int>, ExtraListAdapter.ExtraViewHolder>(ExtraDiffCallback()) {
 
     class ExtraViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -23,15 +23,17 @@ class ExtraListAdapter :
         return ExtraViewHolder(view)
     }
 
-
     override fun onBindViewHolder(holder: ExtraViewHolder, position: Int) {
         val item = getItem(position)
         holder.cuantity.text = item.second.toString()
-        holder.cuantity.setTextColor(
-            ContextCompat.getColor(
-                holder.cuantity.context, android.R.color.white
-            )
-        )
+
+        val color = when (fragmentType) {
+            "HomeFragment" -> android.R.color.white
+            "PropertyFragment" -> android.R.color.black
+            else -> android.R.color.white
+        }
+
+        holder.cuantity.setTextColor(ContextCompat.getColor(holder.cuantity.context, color))
 
         val layoutParams = holder.icon.layoutParams
         holder.icon.layoutParams = layoutParams
@@ -49,12 +51,6 @@ class ExtraListAdapter :
             holder.icon.setImageResource(R.drawable.ic_square_foot)
         }
 
-        holder.icon.setColorFilter(
-            ContextCompat.getColor(
-                holder.icon.context, android.R.color.white
-            )
-        )
+        holder.icon.setColorFilter(ContextCompat.getColor(holder.icon.context, color))
     }
-
-
 }

@@ -42,7 +42,7 @@ class HomeViewModel : ViewModel() {
                     if (document.exists()) {
                         val property = document.toObject(Property::class.java)
                         property?.id = document.id
-                        Log.i(TAG, "Property: $property")
+                        Log.i(TAG, "com.isanz.inmomarket.utils.entities.Property: $property")
                         property?.let { properties.add(it) }
                     }
                 }

@@ -22,11 +22,11 @@
         android:theme="@style/Theme.InmoMarket"
         tools:targetApi="31">
         <activity
-            android:name=".RegisterActivity"
+            android:name=".ui.portal.register.RegisterActivity"
             android:exported="true"
             android:theme="@style/Theme.InmoMarket.Auth" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.portal.login.LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.InmoMarket.Auth">
             <intent-filter>
