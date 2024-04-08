@@ -1,9 +1,11 @@
 package com.isanz.inmomarket.ui.chat
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.isanz.inmomarket.InmoMarket
@@ -31,6 +33,7 @@ class ChatFragment : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -44,15 +47,20 @@ class ChatFragment : Fragment() {
 
     private fun setUpRecyclerView() {
         val adapter = ChatListAdapter()
+        val layoutManager = LinearLayoutManager(context)
+        mBinding.recyclerView.layoutManager = layoutManager
         mBinding.recyclerView.adapter = adapter
-        mBinding.recyclerView.layoutManager = LinearLayoutManager(context)
         viewModel.messageList.observe(viewLifecycleOwner) { messages ->
-            adapter.submitList(messages)
+            adapter.submitList(messages) {
+                // Scroll to the last position after the list has been updated
+                mBinding.recyclerView.scrollToPosition(0)
+            }
         }
         viewModel.retrieveMessages(idChat)
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setUpButtons() {
         mBinding.fabSendMessage.setOnClickListener {
             val text = mBinding.tieMessage.text.toString()
