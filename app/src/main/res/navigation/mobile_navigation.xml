@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_navigation_home_to_propertyFragment"
-            app:destination="@id/propertyFragment"
+            app:destination="@id/navigation_property"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out" />
     </fragment>
@@ -36,7 +36,7 @@
         android:label="fragment_add"
         tools:layout="@layout/fragment_add" />
     <fragment
-        android:id="@+id/propertyFragment"
+        android:id="@+id/navigation_property"
         android:name="com.isanz.inmomarket.ui.property.PropertyFragment"
         android:label="fragment_property"
         tools:layout="@layout/fragment_property" >
@@ -47,10 +47,10 @@
             android:defaultValue="null" />
         <action
             android:id="@+id/action_propertyFragment_to_chatFragment"
-            app:destination="@id/chatFragment" />
+            app:destination="@id/navigation_chat" />
     </fragment>
     <fragment
-        android:id="@+id/chatFragment"
+        android:id="@+id/navigation_chat"
         android:name="com.isanz.inmomarket.ui.chat.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat" >
