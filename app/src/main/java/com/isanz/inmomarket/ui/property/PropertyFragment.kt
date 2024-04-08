@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentPropertyBinding
 import com.isanz.inmomarket.ui.rv.extraItem.ExtraListAdapter
@@ -35,11 +36,12 @@ class PropertyFragment : Fragment() {
 
     private fun setUpButtons(property: Property) {
         mBinding.btnChat.setOnClickListener {
-            val bundle = Bundle().apply {
-                putString("idUser", property.userId)
+            viewModel.addChat(InmoMarket.getAuth().currentUser!!.uid, property.userId) { chatId ->
+                val bundle = Bundle().apply {
+                    putString("idChat", chatId)
+                }
+                this.findNavController().navigate(R.id.action_propertyFragment_to_chatFragment, bundle)
             }
-            this.findNavController()
-                .navigate(R.id.action_propertyFragment_to_chatFragment, bundle)
         }
     }
 

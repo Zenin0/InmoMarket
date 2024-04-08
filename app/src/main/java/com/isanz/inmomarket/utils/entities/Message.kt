@@ -1,9 +1,13 @@
 package com.isanz.inmomarket.utils.entities
 
+import com.google.firebase.firestore.Exclude
+
+
 data class Message(
-    val id : String = "",
-    val text : String = "",
+    @Exclude val messageId : String = "",
+    val message : String = "",
     val senderId : String = "",
-    val recipientId : String = "",
-    val timestamp : Long = 0
+    val messageDate : String = "",
+    val messageTime : String = ""
+
 )

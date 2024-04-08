@@ -55,7 +55,7 @@
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat" >
         <argument
-            android:name="idUser"
+            android:name="idChat"
             app:argType="string" />
     </fragment>
 

@@ -17,14 +17,14 @@ class ChatFragment : Fragment() {
 
     private lateinit var viewModel: ChatViewModel
 
-    private var senderId: String? = null
+    private var idChat: String? = null
 
     private var recipientId: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        senderId = arguments?.getString("idUser")
+        idChat = arguments?.getString("idChat")
         recipientId = InmoMarket.getAuth().currentUser?.uid
         viewModel = ChatViewModel()
 
@@ -44,11 +44,11 @@ class ChatFragment : Fragment() {
     private fun setUpButtons() {
         mBinding.fabSendMessage.setOnClickListener {
             val text = mBinding.tieMessage.text.toString()
-            if (senderId != null && recipientId != null) {
-                viewModel.sendMessage(text, senderId!!, recipientId!!)
+            if (idChat != null && recipientId != null) {
+                viewModel.sendMessage(text, idChat!!, recipientId!!)
                 mBinding.tieMessage.text?.clear()
             } else {
-                Log.i(TAG, "Error: $senderId, $recipientId")
+                Log.i(TAG, "Error: $idChat, $recipientId")
             }
         }
     }
