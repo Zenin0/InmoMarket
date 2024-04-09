@@ -28,8 +28,12 @@
 
     <fragment
         android:id="@+id/navigation_messages"
-        android:name="com.isanz.inmomarket.ui.messages.MessagesFragment"
-        android:label="SearchFragment" />
+        android:name="com.isanz.inmomarket.ui.conversations.ConversationsFragment"
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_navigation_messages_to_navigation_chat"
+            app:destination="@id/navigation_chat" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_add"
         android:name="com.isanz.inmomarket.ui.add.AddFragment"

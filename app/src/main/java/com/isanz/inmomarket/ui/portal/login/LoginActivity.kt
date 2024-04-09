@@ -21,8 +21,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.MainActivity
 import com.isanz.inmomarket.R
-import com.isanz.inmomarket.ui.portal.register.RegisterActivity
 import com.isanz.inmomarket.databinding.ActivityLoginBinding
+import com.isanz.inmomarket.ui.portal.register.RegisterActivity
 
 
 class LoginActivity : AppCompatActivity() {
@@ -86,8 +86,13 @@ class LoginActivity : AppCompatActivity() {
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    Toast.makeText(applicationContext, "Authentication succeeded!", Toast.LENGTH_SHORT).show()
-                    goToMain(auth.currentUser)
+                    val currentUser = auth.currentUser
+                    if (currentUser != null) {
+                        Toast.makeText(applicationContext, "Authentication succeeded!", Toast.LENGTH_SHORT).show()
+                        goToMain(currentUser)
+                    } else {
+                        Toast.makeText(applicationContext, "No user is currently logged in", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 override fun onAuthenticationFailed() {

@@ -16,6 +16,8 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.MainActivity
 import com.isanz.inmomarket.R
@@ -28,13 +30,15 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var mBinding: ActivityRegisterBinding
     private lateinit var startForResult: ActivityResultLauncher<Intent>
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         mBinding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        this.auth = InmoMarket.getAuth()
+        db = InmoMarket.getDb()
+        auth = InmoMarket.getAuth()
 
         startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -83,15 +87,24 @@ class RegisterActivity : AppCompatActivity() {
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "signInWithCredential:success")
-                    val user = auth.currentUser
-                    goToMain(user)
-                } else {
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
-                }
+            if (task.isSuccessful) {
+                Log.d(TAG, "signInWithCredential:success")
+                val user = auth.currentUser
+                val profileUpdates = UserProfileChangeRequest.Builder()
+                    .setDisplayName(user!!.email.toString().split("@")[0]).build()
+
+                user.updateProfile(profileUpdates).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.d(TAG, "User profile updated.")
+                        }
+                    }
+                saveUserToFirestore(user)
+                goToMain(user)
+            } else {
+                Log.w(TAG, "signInWithCredential:failure", task.exception)
+                Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
             }
+        }
     }
 
     private fun createUserWithEmail(email: String, password: String) {
@@ -107,6 +120,15 @@ class RegisterActivity : AppCompatActivity() {
                         // Sign in success, update UI change activity
                         Log.d(TAG, "createUserWithEmail:success")
                         val user = auth.currentUser
+                        val profileUpdates = UserProfileChangeRequest.Builder()
+                            .setDisplayName(user!!.email.toString().split("@")[0]).build()
+
+                        user.updateProfile(profileUpdates).addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Log.d(TAG, "User profile updated.")
+                            }
+                        }
+                        saveUserToFirestore(user)
                         goToMain(user)
                     } else {
                         // If sign in fails, display a message to the user.
@@ -156,6 +178,19 @@ class RegisterActivity : AppCompatActivity() {
             return "Password must have at least one special character" to false
         }
         return "User created successfully" to true
+    }
+
+    private fun saveUserToFirestore(user: FirebaseUser?) {
+        user?.let {
+            val userMap = hashMapOf(
+                "email" to user.email,
+                "displayName" to user.displayName,
+                "photoUrl" to user.photoUrl
+            )
+            db.collection("users").document(user.uid).set(userMap)
+                .addOnSuccessListener { Log.d(TAG, "User saved to Firestore") }
+                .addOnFailureListener { e -> Log.w(TAG, "Error saving user to Firestore", e) }
+        }
     }
 
     private fun goToMain(user: FirebaseUser?) {
