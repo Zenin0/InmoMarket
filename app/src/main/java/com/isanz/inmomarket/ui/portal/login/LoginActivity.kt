@@ -18,6 +18,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.MainActivity
 import com.isanz.inmomarket.R
@@ -30,6 +31,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var mBinding: ActivityLoginBinding
     private lateinit var startForResult: ActivityResultLauncher<Intent>
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,33 +73,46 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showBiometricPrompt() {
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Biometric login")
+        val promptInfo = BiometricPrompt.PromptInfo.Builder().setTitle("Biometric login")
             .setSubtitle("Log in using your biometric credential")
-            .setNegativeButtonText("Use account password")
-            .build()
+            .setNegativeButtonText("Use account password").build()
 
-        val biometricPrompt = BiometricPrompt(this, ContextCompat.getMainExecutor(this),
+        val biometricPrompt = BiometricPrompt(this,
+            ContextCompat.getMainExecutor(this),
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
-                    Toast.makeText(applicationContext, "Authentication error: $errString", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        applicationContext, "Authentication error: $errString", Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    val currentUser = auth.currentUser
+                    val currentUser = FirebaseAuth.getInstance().currentUser
                     if (currentUser != null) {
-                        Toast.makeText(applicationContext, "Authentication succeeded!", Toast.LENGTH_SHORT).show()
+                        // User is signed in
+                        Log.i(TAG, "FirebaseAuth user: ${currentUser.email}")
+                        Toast.makeText(
+                            applicationContext,
+                            "Authentication succeeded!",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         goToMain(currentUser)
                     } else {
-                        Toast.makeText(applicationContext, "No user is currently logged in", Toast.LENGTH_SHORT).show()
+                        // No user is signed in
+                        Toast.makeText(
+                            applicationContext,
+                            "No user is currently logged in. Please log in first.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
-                    Toast.makeText(applicationContext, "Authentication failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Authentication failed", Toast.LENGTH_SHORT)
+                        .show()
                 }
             })
 
@@ -193,13 +208,23 @@ class LoginActivity : AppCompatActivity() {
 
     private fun goToMain(user: FirebaseUser?) {
         user?.let {
-
-            // Start the new activity (MainActivity)
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-
-            // End the current activity (LoginActivity)
-            finish()
+            it.reload().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // User's data was successfully reloaded, the account exists in Firebase
+                    // Start the new activity (MainActivity)
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    // End the current activity (LoginActivity)
+                    finish()
+                } else {
+                    // An error occurred while reloading the user's data, the account may not exist in Firebase
+                    Toast.makeText(
+                        applicationContext,
+                        "An error occurred. Please log in again.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-package com.isanz.inmomarket.ui.rv.extraItem
+package com.isanz.inmomarket.rv.extraItem
 
 import androidx.recyclerview.widget.DiffUtil
 

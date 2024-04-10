@@ -1,4 +1,4 @@
-package com.isanz.inmomarket.ui.rv.imageItem
+package com.isanz.inmomarket.rv.imageItem
 
 import android.view.LayoutInflater
 import android.view.View

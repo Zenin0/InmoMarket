@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentHomeBinding
-import com.isanz.inmomarket.ui.rv.propertyItem.HomeListAdapter
+import com.isanz.inmomarket.rv.propertyItem.HomeListAdapter
 import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 
 class HomeFragment : Fragment(), OnItemClickListener {

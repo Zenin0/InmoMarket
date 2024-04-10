@@ -15,7 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentAddBinding
-import com.isanz.inmomarket.ui.rv.imageItem.ImageListAdapter
+import com.isanz.inmomarket.rv.imageItem.ImageListAdapter
 import com.isanz.inmomarket.utils.Constants
 import java.util.UUID
 

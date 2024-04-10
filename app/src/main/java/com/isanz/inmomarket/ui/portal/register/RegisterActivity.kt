@@ -94,12 +94,12 @@ class RegisterActivity : AppCompatActivity() {
                     .setDisplayName(user!!.email.toString().split("@")[0]).build()
 
                 user.updateProfile(profileUpdates).addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Log.d(TAG, "User profile updated.")
-                        }
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "User profile updated.")
+                        saveUserToFirestore(user)  // Moved inside the onCompleteListener
+                        goToMain(user)
                     }
-                saveUserToFirestore(user)
-                goToMain(user)
+                }
             } else {
                 Log.w(TAG, "signInWithCredential:failure", task.exception)
                 Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()

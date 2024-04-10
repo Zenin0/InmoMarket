@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.isanz.inmomarket.databinding.FragmentConversationsBinding
-import com.isanz.inmomarket.ui.rv.conversationItem.ConversationListAdapter
+import com.isanz.inmomarket.rv.conversationItem.ConversationListAdapter
 
 class ConversationsFragment : Fragment() {
 

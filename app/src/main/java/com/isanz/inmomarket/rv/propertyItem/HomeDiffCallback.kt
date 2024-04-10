@@ -1,4 +1,4 @@
-package com.isanz.inmomarket.ui.rv.propertyItem
+package com.isanz.inmomarket.rv.propertyItem
 
 import androidx.recyclerview.widget.DiffUtil
 import com.isanz.inmomarket.utils.entities.Property

@@ -1,4 +1,4 @@
-package com.isanz.inmomarket.ui.rv.chatItem
+package com.isanz.inmomarket.rv.chatItem
 
 import androidx.recyclerview.widget.DiffUtil
 import com.isanz.inmomarket.utils.entities.Message

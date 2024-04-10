@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentPropertyBinding
-import com.isanz.inmomarket.ui.rv.extraItem.ExtraListAdapter
+import com.isanz.inmomarket.rv.extraItem.ExtraListAdapter
 import com.isanz.inmomarket.utils.entities.Property
 import kotlinx.coroutines.launch
 

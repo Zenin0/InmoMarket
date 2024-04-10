@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.databinding.FragmentChatBinding
-import com.isanz.inmomarket.ui.rv.chatItem.ChatListAdapter
+import com.isanz.inmomarket.rv.chatItem.ChatListAdapter
 
 class ChatFragment : Fragment() {
 

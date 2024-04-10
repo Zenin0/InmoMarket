@@ -1,4 +1,4 @@
-package com.isanz.inmomarket.ui.rv.propertyItem
+package com.isanz.inmomarket.rv.propertyItem
 
 import android.content.ContentValues.TAG
 import android.util.Log
@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.isanz.inmomarket.R
-import com.isanz.inmomarket.ui.rv.extraItem.ExtraListAdapter
+import com.isanz.inmomarket.rv.extraItem.ExtraListAdapter
 import com.isanz.inmomarket.utils.entities.Property
 import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 

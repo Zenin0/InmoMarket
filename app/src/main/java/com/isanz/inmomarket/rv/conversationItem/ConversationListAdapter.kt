@@ -1,4 +1,4 @@
-package com.isanz.inmomarket.ui.rv.conversationItem
+package com.isanz.inmomarket.rv.conversationItem
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +13,9 @@ import com.bumptech.glide.Glide
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.utils.entities.Conversation
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ConversationListAdapter(private val navController: NavController) :
     ListAdapter<Conversation, ConversationListAdapter.ConversationViewHolder>(ChatDiffCallback()) {
@@ -34,7 +37,13 @@ class ConversationListAdapter(private val navController: NavController) :
 
     override fun onBindViewHolder(holder: ConversationViewHolder, position: Int) {
         val conversation = getItem(position)
-        viewModel.getUsersInConversation(conversation.membersId) { users ->
+
+        // Clear the ViewHolder's data
+        holder.name.text = ""
+        holder.image.setImageDrawable(null)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val users = viewModel.getUsersInConversation(conversation.membersId)
             val myId = InmoMarket.getAuth().currentUser?.uid
             val otherUser = users.find { it.uid != myId }
             if (otherUser != null) {
@@ -58,8 +67,7 @@ class ConversationListAdapter(private val navController: NavController) :
     }
 
 
-
     private fun setImage(view: ImageView, uri: String) {
-        Glide.with(view.context).load(uri).into(view)
+        Glide.with(view.context).load(uri).circleCrop().into(view)
     }
 }

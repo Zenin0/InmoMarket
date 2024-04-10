@@ -1,4 +1,4 @@
-package com.isanz.inmomarket.ui.rv.chatItem
+package com.isanz.inmomarket.rv.chatItem
 
 import android.view.LayoutInflater
 import android.view.View
