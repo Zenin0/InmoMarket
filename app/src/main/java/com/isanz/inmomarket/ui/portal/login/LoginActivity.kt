@@ -5,6 +5,7 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
@@ -12,18 +13,21 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.MainActivity
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.ActivityLoginBinding
 import com.isanz.inmomarket.ui.portal.register.RegisterActivity
+import com.isanz.inmomarket.utils.Constants
 
 
 class LoginActivity : AppCompatActivity() {
@@ -70,6 +74,9 @@ class LoginActivity : AppCompatActivity() {
             goToRegister()
         }
 
+        setImage(
+            mBinding.ivLogo, Constants.LOGIN_IMAGE)
+
     }
 
     private fun showBiometricPrompt() {
@@ -94,9 +101,7 @@ class LoginActivity : AppCompatActivity() {
                         // User is signed in
                         Log.i(TAG, "FirebaseAuth user: ${currentUser.email}")
                         Toast.makeText(
-                            applicationContext,
-                            "Authentication succeeded!",
-                            Toast.LENGTH_SHORT
+                            applicationContext, "Authentication succeeded!", Toast.LENGTH_SHORT
                         ).show()
                         goToMain(currentUser)
                     } else {
@@ -133,9 +138,16 @@ class LoginActivity : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
-                Log.d(TAG, "signInWithCredential:success")
                 val user = auth.currentUser
-                goToMain(user)
+                val profileUpdates = UserProfileChangeRequest.Builder()
+                    .setDisplayName(user!!.email.toString().split("@")[0].substring(0, 8)).build()
+
+                user.updateProfile(profileUpdates).addOnCompleteListener { taskProf ->
+                    if (taskProf.isSuccessful) {
+                        saveUserToFirestore(user)
+                        goToMain(user)
+                    }
+                }
             } else {
                 Log.w(TAG, "signInWithCredential:failure", task.exception)
                 Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
@@ -206,6 +218,19 @@ class LoginActivity : AppCompatActivity() {
         return "User created successfully" to true
     }
 
+    private fun saveUserToFirestore(user: FirebaseUser?) {
+        user?.let {
+            val userMap = hashMapOf(
+                "email" to user.email,
+                "displayName" to user.displayName,
+                "photoUrl" to user.photoUrl
+            )
+            db.collection("users").document(user.uid).set(userMap)
+                .addOnSuccessListener { Log.d(TAG, "User saved to Firestore") }
+                .addOnFailureListener { e -> Log.w(TAG, "Error saving user to Firestore", e) }
+        }
+    }
+
     private fun goToMain(user: FirebaseUser?) {
         user?.let {
             it.reload().addOnCompleteListener { task ->
@@ -228,9 +253,15 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun goToRegister() {
         val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         finish()
+    }
+
+    private fun setImage(view: ImageView, uri: String) {
+        Glide.with(this).load(uri).centerCrop().into(view)
     }
 }

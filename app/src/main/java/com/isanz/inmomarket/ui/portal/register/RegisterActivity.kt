@@ -5,11 +5,14 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
+import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -23,6 +26,7 @@ import com.isanz.inmomarket.MainActivity
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.ActivityRegisterBinding
 import com.isanz.inmomarket.ui.portal.login.LoginActivity
+import com.isanz.inmomarket.utils.Constants
 
 
 class RegisterActivity : AppCompatActivity() {
@@ -71,6 +75,7 @@ class RegisterActivity : AppCompatActivity() {
         mBinding.tvAlreadyHaveAccount.setOnClickListener {
             goToLogin()
         }
+        setImage(mBinding.ivLogo, Constants.REGISTER_IMAGE)
 
     }
 
@@ -91,12 +96,11 @@ class RegisterActivity : AppCompatActivity() {
                 Log.d(TAG, "signInWithCredential:success")
                 val user = auth.currentUser
                 val profileUpdates = UserProfileChangeRequest.Builder()
-                    .setDisplayName(user!!.email.toString().split("@")[0]).build()
+                    .setDisplayName(user!!.email.toString().split("@")[0].substring(0, 8)).build()
 
-                user.updateProfile(profileUpdates).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.d(TAG, "User profile updated.")
-                        saveUserToFirestore(user)  // Moved inside the onCompleteListener
+                user.updateProfile(profileUpdates).addOnCompleteListener { taskProf ->
+                    if (taskProf.isSuccessful) {
+                        saveUserToFirestore(user)
                         goToMain(user)
                     }
                 }
@@ -121,7 +125,9 @@ class RegisterActivity : AppCompatActivity() {
                         Log.d(TAG, "createUserWithEmail:success")
                         val user = auth.currentUser
                         val profileUpdates = UserProfileChangeRequest.Builder()
-                            .setDisplayName(user!!.email.toString().split("@")[0]).build()
+                            .setPhotoUri(Constants.DEFAULT_IMAGE.toUri())
+                            .setDisplayName(user!!.email.toString().split("@")[0].substring(0, 8))
+                            .build()
 
                         user.updateProfile(profileUpdates).addOnCompleteListener { task ->
                             if (task.isSuccessful) {
@@ -205,9 +211,16 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun goToLogin() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
+        overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
+
         finish()
+    }
+
+    private fun setImage(view: ImageView, uri: String) {
+        Glide.with(this).load(uri).centerCrop().into(view)
     }
 }
