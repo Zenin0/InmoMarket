@@ -78,7 +78,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         setImage(
-            mBinding.ivLogo, Constants.LOGIN_IMAGE
+            mBinding.ivLogo
         )
 
     }
@@ -272,7 +272,7 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun setImage(view: ImageView, uri: String) {
-        Glide.with(this).load(uri).centerCrop().into(view)
+    private fun setImage(view: ImageView) {
+        Glide.with(this).load(Constants.LOGIN_IMAGE).centerCrop().into(view)
     }
 }

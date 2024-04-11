@@ -80,7 +80,7 @@ class RegisterActivity : AppCompatActivity() {
         mBinding.tvAlreadyHaveAccount.setOnClickListener {
             goToLogin()
         }
-        setImage(mBinding.ivLogo, Constants.REGISTER_IMAGE)
+        setImage(mBinding.ivLogo)
 
     }
 
@@ -226,7 +226,7 @@ class RegisterActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun setImage(view: ImageView, uri: String) {
-        Glide.with(this).load(uri).centerCrop().into(view)
+    private fun setImage(view: ImageView) {
+        Glide.with(this).load(Constants.REGISTER_IMAGE).centerCrop().into(view)
     }
 }
