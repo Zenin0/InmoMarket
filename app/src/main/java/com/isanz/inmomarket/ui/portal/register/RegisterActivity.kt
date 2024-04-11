@@ -129,8 +129,8 @@ class RegisterActivity : AppCompatActivity() {
                             .setDisplayName(user!!.email.toString().split("@")[0].substring(0, 8))
                             .build()
 
-                        user.updateProfile(profileUpdates).addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
+                        user.updateProfile(profileUpdates).addOnCompleteListener { taskUpdate ->
+                            if (taskUpdate.isSuccessful) {
                                 Log.d(TAG, "User profile updated.")
                             }
                         }
