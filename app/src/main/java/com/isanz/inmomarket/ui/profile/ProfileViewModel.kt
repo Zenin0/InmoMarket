@@ -1,7 +1,5 @@
 package com.isanz.inmomarket.ui.profile
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.utils.entities.User
