@@ -62,7 +62,7 @@ firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
 androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
-androidx-transition = { group = "androidx.transition", name = "transition", version.ref = "transition" }
+androidx-transition = { group = "androidx.transition", name = "transition", version = "1.5.0-rc01" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
