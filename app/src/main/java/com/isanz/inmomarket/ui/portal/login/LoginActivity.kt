@@ -5,6 +5,7 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -65,9 +66,11 @@ class LoginActivity : AppCompatActivity() {
         mBinding.btnRegister.setOnClickListener {
             val email = mBinding.tieEmail.text.toString()
             val password = mBinding.tiePassword.text.toString()
+            mBinding.progressBar.visibility = View.VISIBLE
             signInUserWithEmail(email, password)
         }
         mBinding.btnSignInGoogle.setOnClickListener {
+            mBinding.progressBar.visibility = View.VISIBLE
             signInGoogle()
         }
         mBinding.tvAlreadyHaveAccount.setOnClickListener {
@@ -75,7 +78,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
         setImage(
-            mBinding.ivLogo, Constants.LOGIN_IMAGE)
+            mBinding.ivLogo, Constants.LOGIN_IMAGE
+        )
 
     }
 
@@ -92,6 +96,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(
                         applicationContext, "Authentication error: $errString", Toast.LENGTH_SHORT
                     ).show()
+                    mBinding.progressBar.visibility = View.GONE
                 }
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
@@ -116,6 +121,7 @@ class LoginActivity : AppCompatActivity() {
 
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
+                    mBinding.progressBar.visibility = View.GONE
                     Toast.makeText(applicationContext, "Authentication failed", Toast.LENGTH_SHORT)
                         .show()
                 }
@@ -149,6 +155,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             } else {
+                mBinding.progressBar.visibility = View.GONE
                 Log.w(TAG, "signInWithCredential:failure", task.exception)
                 Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
             }
@@ -177,7 +184,7 @@ class LoginActivity : AppCompatActivity() {
                         "Authentication failed.",
                         Toast.LENGTH_SHORT,
                     ).show()
-                    goToMain(null)
+                    mBinding.progressBar.visibility = View.GONE
                 }
             }
         }
@@ -237,11 +244,13 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // User's data was successfully reloaded, the account exists in Firebase
                     // Start the new activity (MainActivity)
+                    mBinding.progressBar.visibility = View.GONE
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     // End the current activity (LoginActivity)
                     finish()
                 } else {
+                    mBinding.progressBar.visibility = View.GONE
                     // An error occurred while reloading the user's data, the account may not exist in Firebase
                     Toast.makeText(
                         applicationContext,
@@ -249,12 +258,14 @@ class LoginActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+
             }
         }
     }
 
     @Suppress("DEPRECATION")
     private fun goToRegister() {
+        mBinding.progressBar.visibility = View.GONE
         val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)

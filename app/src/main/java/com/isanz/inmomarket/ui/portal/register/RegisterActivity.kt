@@ -5,6 +5,7 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -67,9 +68,13 @@ class RegisterActivity : AppCompatActivity() {
         mBinding.btnRegister.setOnClickListener {
             val email = mBinding.tieEmail.text.toString()
             val password = mBinding.tiePassword.text.toString()
+            mBinding.coverView.visibility = View.VISIBLE
+            mBinding.progressBar.visibility = View.VISIBLE
             createUserWithEmail(email, password)
         }
         mBinding.btnSignInGoogle.setOnClickListener {
+            mBinding.coverView.visibility = View.VISIBLE
+            mBinding.progressBar.visibility = View.VISIBLE
             signInGoogle()
         }
         mBinding.tvAlreadyHaveAccount.setOnClickListener {
@@ -105,6 +110,7 @@ class RegisterActivity : AppCompatActivity() {
                     }
                 }
             } else {
+                mBinding.progressBar.visibility = View.GONE
                 Log.w(TAG, "signInWithCredential:failure", task.exception)
                 Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
             }
@@ -145,7 +151,7 @@ class RegisterActivity : AppCompatActivity() {
                             "Authentication failed.",
                             Toast.LENGTH_SHORT,
                         ).show()
-                        goToMain(null)
+                        mBinding.progressBar.visibility = View.GONE
                     }
                 }
         }

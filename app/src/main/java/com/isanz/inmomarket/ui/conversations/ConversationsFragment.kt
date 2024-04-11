@@ -39,6 +39,7 @@ class ConversationsFragment : Fragment() {
                 // Scroll to the last position after the list has been updated
                 mBinding.recyclerView.scrollToPosition(0)
             }
+            mBinding.progressBar.visibility = View.GONE
         }
 
         viewModel.retrieveConversations()

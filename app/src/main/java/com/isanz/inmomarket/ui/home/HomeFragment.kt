@@ -42,6 +42,7 @@ class HomeFragment : Fragment(), OnItemClickListener {
         homeViewModel.listParcelas.observe(viewLifecycleOwner) { parcelas ->
             // Update the adapter with the new list of Parcela objects
             adapter.submitList(parcelas)
+            binding.progressBar.visibility = View.GONE
         }
     }
 

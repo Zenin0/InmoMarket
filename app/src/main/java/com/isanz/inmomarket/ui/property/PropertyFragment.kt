@@ -67,6 +67,7 @@ class PropertyFragment : Fragment() {
             loadExtras(property)
         }
         setUpButtons(property!!)
+        mBinding.progressBar.visibility = View.GONE
     }
 
     private fun loadExtras(property: Property?) {
