@@ -5,7 +5,6 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -57,7 +56,6 @@ class RegisterActivity : AppCompatActivity() {
                     }
                 }
             }
-
         setUpButtons()
     }
 
@@ -68,14 +66,10 @@ class RegisterActivity : AppCompatActivity() {
         mBinding.btnRegister.setOnClickListener {
             val email = mBinding.tieEmail.text.toString()
             val password = mBinding.tiePassword.text.toString()
-            mBinding.coverView.visibility = View.VISIBLE
-            mBinding.progressBar.visibility = View.VISIBLE
             createUserWithEmail(email, password)
         }
         mBinding.btnSignInGoogle.setOnClickListener {
-            mBinding.coverView.visibility = View.VISIBLE
-            mBinding.progressBar.visibility = View.VISIBLE
-            signInGoogle()
+            registerGoogle()
         }
         mBinding.tvAlreadyHaveAccount.setOnClickListener {
             goToLogin()
@@ -84,7 +78,7 @@ class RegisterActivity : AppCompatActivity() {
 
     }
 
-    private fun signInGoogle() {
+    private fun registerGoogle() {
         val signInIntent = GoogleSignIn.getClient(
             this,
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -95,14 +89,13 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
+        Log.i(TAG, "firebaseAuthWithGoogle: $idToken")
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
-                Log.d(TAG, "signInWithCredential:success")
                 val user = auth.currentUser
                 val profileUpdates = UserProfileChangeRequest.Builder()
                     .setDisplayName(user!!.email.toString().split("@")[0].substring(0, 8)).build()
-
                 user.updateProfile(profileUpdates).addOnCompleteListener { taskProf ->
                     if (taskProf.isSuccessful) {
                         saveUserToFirestore(user)
@@ -110,8 +103,6 @@ class RegisterActivity : AppCompatActivity() {
                     }
                 }
             } else {
-                mBinding.progressBar.visibility = View.GONE
-                Log.w(TAG, "signInWithCredential:failure", task.exception)
                 Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
             }
         }
@@ -128,7 +119,6 @@ class RegisterActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI change activity
-                        Log.d(TAG, "createUserWithEmail:success")
                         val user = auth.currentUser
                         val profileUpdates = UserProfileChangeRequest.Builder()
                             .setPhotoUri(Constants.DEFAULT_IMAGE.toUri())
@@ -137,21 +127,19 @@ class RegisterActivity : AppCompatActivity() {
 
                         user.updateProfile(profileUpdates).addOnCompleteListener { taskUpdate ->
                             if (taskUpdate.isSuccessful) {
-                                Log.d(TAG, "User profile updated.")
+                                saveUserToFirestore(user)
+                                goToMain(user)
                             }
                         }
-                        saveUserToFirestore(user)
-                        goToMain(user)
+
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w(TAG, "createUserWithEmail:failure", task.exception)
                         // Display error message
                         Toast.makeText(
                             baseContext,
                             "Authentication failed.",
                             Toast.LENGTH_SHORT,
                         ).show()
-                        mBinding.progressBar.visibility = View.GONE
                     }
                 }
         }
@@ -196,12 +184,10 @@ class RegisterActivity : AppCompatActivity() {
         user?.let {
             val userMap = hashMapOf(
                 "email" to user.email,
-                "displayName" to user.displayName,
+                "displayName" to user.displayName ,
                 "photoUrl" to user.photoUrl
             )
             db.collection("users").document(user.uid).set(userMap)
-                .addOnSuccessListener { Log.d(TAG, "User saved to Firestore") }
-                .addOnFailureListener { e -> Log.w(TAG, "Error saving user to Firestore", e) }
         }
     }
 
