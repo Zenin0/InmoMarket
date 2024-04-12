@@ -74,8 +74,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/prompt_address"
-                android:inputType="textPostalAddress" />
-
+                android:inputType="textPostalAddress"
+                android:focusable="false"
+                android:editable="false" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
