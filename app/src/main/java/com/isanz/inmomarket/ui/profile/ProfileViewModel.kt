@@ -17,4 +17,8 @@ class ProfileViewModel : ViewModel() {
     fun resetPassword() {
         InmoMarket.getAuth().sendPasswordResetEmail(InmoMarket.getAuth().currentUser!!.email!!)
     }
+
+    fun changeProfilePhoto() {
+
+    }
 }

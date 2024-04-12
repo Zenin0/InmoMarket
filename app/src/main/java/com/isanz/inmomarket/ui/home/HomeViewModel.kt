@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
+import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.utils.entities.Property
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,12 +39,15 @@ class HomeViewModel : ViewModel() {
 
             if (snapshot != null) {
                 val properties = mutableListOf<Property>()
+                val currentUserId = InmoMarket.getAuth().currentUser!!.uid
                 for (document in snapshot.documents) {
                     if (document.exists()) {
                         val property = document.toObject(Property::class.java)
                         property?.id = document.id
                         Log.i(TAG, "com.isanz.inmomarket.utils.entities.Property: $property")
-                        property?.let { properties.add(it) }
+                        if (property?.userId != currentUserId) {
+                            property?.let { properties.add(it) }
+                        }
                     }
                 }
                 _listParcelas.postValue(properties)
