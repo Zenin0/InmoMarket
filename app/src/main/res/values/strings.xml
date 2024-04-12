@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">InmoMarket</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -58,4 +58,5 @@
     <string name="login">Login</string>
     <string name="label_name">Name</string>
     <string name="reset_password">Reset password</string>
+    <string name="google_maps_key" tools:ignore="Typos">AIzaSyCqFDsTiczZy6sYp1Tkr0Jp1pXOaUc4Nls</string>
 </resources>
