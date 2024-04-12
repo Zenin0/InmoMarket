@@ -47,7 +47,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun loadImage(view: ImageView, url: String) {
-        Glide.with(view.context).load(url).centerCrop().into(view)
+        Glide.with(view.context).load(url).circleCrop().into(view)
     }
 
 }
