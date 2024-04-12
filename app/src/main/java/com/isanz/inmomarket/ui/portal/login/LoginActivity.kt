@@ -43,6 +43,7 @@ class LoginActivity : AppCompatActivity() {
         mBinding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         this.auth = InmoMarket.getAuth()
+        this.db = FirebaseFirestore.getInstance()
         showBiometricPrompt()
         startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -156,7 +157,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun signInUserWithEmail(email: String, password: String) {
         val result = checkFields(email, password)
-        // Result must be true, if not send to Log the error message and set to false
+        // com.isanz.inmomarket.utils.retrofit.com.isanz.inmomarket.utils.retrofit.Result must be true, if not send to Log the error message and set to false
         if (result.second.not()) {
             Log.i(TAG, result.first)
             return

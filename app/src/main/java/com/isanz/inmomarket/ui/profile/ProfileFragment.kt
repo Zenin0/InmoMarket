@@ -37,6 +37,9 @@ class ProfileFragment : Fragment() {
         mBinding.btnResetPassword.setOnClickListener {
             profileViewModel.resetPassword()
         }
+        mBinding.ivProfile.setOnClickListener{
+            profileViewModel.changeProfilePhoto()
+        }
     }
 
     private suspend fun setUpView() {

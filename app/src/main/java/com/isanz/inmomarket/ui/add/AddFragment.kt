@@ -44,11 +44,11 @@ class AddFragment : Fragment() {
         val adapter = ImageListAdapter()
         mBinding.rvImages.adapter = adapter
         if (!Places.isInitialized()) {
-            Places.initialize(requireContext(), getString(R.string.google_maps_key))
+            Places.initialize(requireContext(), Constants.API_GOOGLE)
         }
         mBinding.tieAddress.setOnClickListener {
             val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS)
-            val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY , fields)
+            val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
                 .build(requireContext())
             startActivityForResult(intent, Constants.REQUEST_CODE_AUTOCOMPLETE)
         }
@@ -114,17 +114,16 @@ class AddFragment : Fragment() {
                     ref.downloadUrl.addOnSuccessListener {
                         images.add(it.toString())
                         if (images.size == listImagesUri.size) {
-                            updateUI(
-                                addViewModel.save(
-                                    tittle,
-                                    description,
-                                    location,
-                                    images,
-                                    extras,
-                                    price.toDouble(),
-                                    squareMeters.toDouble()
-                                )
+                            addViewModel.save(
+                                tittle,
+                                description,
+                                location,
+                                images,
+                                extras,
+                                price.toDouble(),
+                                squareMeters.toDouble()
                             )
+                            updateUI()
                         }
                     }
                 }
@@ -172,7 +171,7 @@ class AddFragment : Fragment() {
         return true
     }
 
-    private fun updateUI(message: String) {
+    private fun updateUI() {
         mBinding.tieTittle.text?.clear()
         mBinding.tieDescription.text?.clear()
         mBinding.tieAddress.text?.clear()
@@ -180,7 +179,6 @@ class AddFragment : Fragment() {
         mBinding.tieRooms.text?.clear()
         (mBinding.rvImages.adapter as? ImageListAdapter)?.submitList(emptyList())
         mBinding.rvImages.visibility = View.GONE
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         mBinding.view.visibility = View.GONE
         mBinding.progressBar.visibility = View.GONE
 
