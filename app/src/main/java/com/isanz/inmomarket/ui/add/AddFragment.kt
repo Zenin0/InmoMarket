@@ -11,6 +11,10 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.firebase.firestore.FirebaseFirestore
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.R
@@ -39,7 +43,15 @@ class AddFragment : Fragment() {
         // Initialize the RecyclerView adapter
         val adapter = ImageListAdapter()
         mBinding.rvImages.adapter = adapter
-
+        if (!Places.isInitialized()) {
+            Places.initialize(requireContext(), getString(R.string.google_maps_key))
+        }
+        mBinding.tieAddress.setOnClickListener {
+            val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS)
+            val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY , fields)
+                .build(requireContext())
+            startActivityForResult(intent, Constants.REQUEST_CODE_AUTOCOMPLETE)
+        }
         setUpButtons()
         setUpDrawables()
         return root
@@ -210,6 +222,10 @@ class AddFragment : Fragment() {
             val adapter = (mBinding.rvImages.adapter as? ImageListAdapter)
             adapter?.submitList(imageUris)
             mBinding.rvImages.visibility = View.VISIBLE
+        } else if (requestCode == Constants.REQUEST_CODE_AUTOCOMPLETE && resultCode == Activity.RESULT_OK) {
+            val place = Autocomplete.getPlaceFromIntent(data!!)
+            mBinding.tieAddress.setText(place.address)
+
         }
     }
 }
