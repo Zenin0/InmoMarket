@@ -43,7 +43,7 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
 
         // ViewModel
-        searchViewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
+        searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -109,7 +109,7 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun resizeBitmap(): Bitmap {
-        val imageBitmap = BitmapFactory.decodeResource(resources, resources.getIdentifier("house", "drawable", context?.packageName))
+        val imageBitmap = BitmapFactory.decodeResource(resources, R.drawable.house)
         return Bitmap.createScaledBitmap(imageBitmap, 100, 100, false)
     }
 }
