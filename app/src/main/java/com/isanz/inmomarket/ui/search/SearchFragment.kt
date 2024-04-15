@@ -3,10 +3,12 @@ package com.isanz.inmomarket.ui.search
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -98,13 +101,25 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
 
                 searchViewModel.getLatAndLong().observe(viewLifecycleOwner) { locations ->
-                    locations?.forEach { latLngPair ->
-                        val markerLatLng = LatLng(latLngPair.first, latLngPair.second)
+                    locations?.forEach { latLongIdPairs ->
+                        val markerLatLng = LatLng(latLongIdPairs.second , latLongIdPairs.third)
                         val customMarker = BitmapDescriptorFactory.fromBitmap(resizeBitmap())
-                        mMap.addMarker(MarkerOptions().position(markerLatLng).icon(customMarker))
+                        val marker = mMap.addMarker(MarkerOptions().position(markerLatLng).icon(customMarker))
+                        marker?.tag = latLongIdPairs.first  // You can set any object as a tag to identify the marker when it's clicked
                     }
                 }
             }
+        }
+
+        mMap.setOnMarkerClickListener { marker ->
+            // Create a bundle to pass the property ID
+            val args = Bundle()
+            args.putString("propertyId", marker.tag as String)
+
+            // Navigate to the MiniPropertyFragment
+            findNavController().navigate(R.id.miniPropertyFragment, args)
+
+            false // Return false to make the camera move to the marker and an info window to appear
         }
     }
 

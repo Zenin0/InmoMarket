@@ -1,4 +1,4 @@
-package com.isanz.inmomarket.ui.search
+package com.isanz.inmomarket.utils.retrofit
 
 import com.isanz.inmomarket.utils.retrofit.GeocodingResponse
 import retrofit2.Call
