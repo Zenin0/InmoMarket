@@ -22,7 +22,7 @@ class PropertyFragment : Fragment() {
 
     private lateinit var viewModel: PropertyViewModel
 
-    private lateinit var mBinding: FragmentPropertyBinding
+    private var mBinding: FragmentPropertyBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +35,7 @@ class PropertyFragment : Fragment() {
     }
 
     private fun setUpButtons(property: Property) {
-        mBinding.btnChat.setOnClickListener {
+        mBinding?.btnChat?.setOnClickListener {
             viewModel.addChat(InmoMarket.getAuth().currentUser!!.uid, property.userId) { chatId ->
                 val bundle = Bundle().apply {
                     putString("idChat", chatId)
@@ -49,30 +49,34 @@ class PropertyFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         mBinding = FragmentPropertyBinding.inflate(layoutInflater)
+        val binding = mBinding // Introduce a local read-only variable
         val extraAdapter = ExtraListAdapter("PropertyFragment")
-        mBinding.rvExtras.adapter = extraAdapter
+        binding?.rvExtras?.adapter = extraAdapter
 
-        return mBinding.root
+        return binding?.root ?: View(context)
     }
 
     private suspend fun setUp(propertyId: String?) {
         val property = viewModel.retrieveProperty(propertyId!!)
-        if (property != null) {
-            mBinding.tvProperty.text = property.tittle
-            mBinding.tvDescription.text = property.description
-            mBinding.tvAddress.text = property.location
-            "Price: ${property.price} €".also { mBinding.tvPrice.text = it }
-            Glide.with(this).load(property.listImagesUri[0]).into(mBinding.ivProperty)
+        val binding = mBinding // Introduce a local read-only variable
+        if (property != null && binding != null) { // Check if binding is not null
+            binding.tvProperty.text = property.tittle
+            binding.tvDescription.text = property.description
+            binding.tvAddress.text = property.location
+            "Price: ${property.price} €".also { binding.tvPrice.text = it }
+            Glide.with(this).load(property.listImagesUri[0]).into(binding.ivProperty)
             // Load extra rv
             loadExtras(property)
+            setUpButtons(property)
+            binding.progressBar.visibility = View.GONE
         }
-        setUpButtons(property!!)
-        mBinding.progressBar.visibility = View.GONE
     }
+
+
 
     private fun loadExtras(property: Property?) {
         // Get the adapter from the RecyclerView
-        val extraAdapter = mBinding.rvExtras.adapter as ExtraListAdapter
+        val extraAdapter = mBinding?.rvExtras?.adapter as ExtraListAdapter
 
         // Convert the Map to a List of Pairs and submit it to the adapter
         property?.extras?.let { extras ->
@@ -80,4 +84,17 @@ class PropertyFragment : Fragment() {
             extraAdapter.submitList(extrasList)
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            setUp(propertyId)
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mBinding = null // Nullify your view binding
+    }
+
 }

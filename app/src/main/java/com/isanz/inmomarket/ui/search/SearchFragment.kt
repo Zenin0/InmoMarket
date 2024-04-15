@@ -4,6 +4,8 @@ package com.isanz.inmomarket.ui.search
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.utils.Constants
 
+@Suppress("DEPRECATION")
 class SearchFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
@@ -68,7 +71,6 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
         enableUserLocation()
     }
 
-    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -97,11 +99,16 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
                 searchViewModel.getLatAndLong().observe(viewLifecycleOwner) { locations ->
                     locations?.forEach { latLngPair ->
                         val markerLatLng = LatLng(latLngPair.first, latLngPair.second)
-                        val customMarker = BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher_foreground) // use ic_launcher_foreground as marker icon
+                        val customMarker = BitmapDescriptorFactory.fromBitmap(resizeBitmap("house", 100, 100))
                         mMap.addMarker(MarkerOptions().position(markerLatLng).icon(customMarker))
                     }
                 }
             }
         }
+    }
+
+    private fun resizeBitmap(drawableName: String, width: Int, height: Int): Bitmap {
+        val imageBitmap = BitmapFactory.decodeResource(resources, resources.getIdentifier(drawableName, "drawable", context?.packageName))
+        return Bitmap.createScaledBitmap(imageBitmap, width, height, false)
     }
 }
