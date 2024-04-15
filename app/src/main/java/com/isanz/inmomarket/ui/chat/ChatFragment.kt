@@ -12,7 +12,6 @@ import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.databinding.FragmentChatBinding
 import com.isanz.inmomarket.rv.chatItem.ChatListAdapter
 
-@Suppress("DEPRECATION")
 class ChatFragment : Fragment() {
 
 

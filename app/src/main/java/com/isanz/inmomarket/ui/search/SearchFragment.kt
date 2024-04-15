@@ -71,6 +71,7 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
         enableUserLocation()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -99,7 +100,7 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
                 searchViewModel.getLatAndLong().observe(viewLifecycleOwner) { locations ->
                     locations?.forEach { latLngPair ->
                         val markerLatLng = LatLng(latLngPair.first, latLngPair.second)
-                        val customMarker = BitmapDescriptorFactory.fromBitmap(resizeBitmap("house", 100, 100))
+                        val customMarker = BitmapDescriptorFactory.fromBitmap(resizeBitmap())
                         mMap.addMarker(MarkerOptions().position(markerLatLng).icon(customMarker))
                     }
                 }
@@ -107,8 +108,8 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun resizeBitmap(drawableName: String, width: Int, height: Int): Bitmap {
-        val imageBitmap = BitmapFactory.decodeResource(resources, resources.getIdentifier(drawableName, "drawable", context?.packageName))
-        return Bitmap.createScaledBitmap(imageBitmap, width, height, false)
+    private fun resizeBitmap(): Bitmap {
+        val imageBitmap = BitmapFactory.decodeResource(resources, resources.getIdentifier("house", "drawable", context?.packageName))
+        return Bitmap.createScaledBitmap(imageBitmap, 100, 100, false)
     }
 }
