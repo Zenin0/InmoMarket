@@ -4,6 +4,8 @@ package com.isanz.inmomarket.ui.search
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.utils.Constants
 
+@Suppress("DEPRECATION")
 class SearchFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
@@ -40,7 +43,7 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
 
         // ViewModel
-        searchViewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
+        searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -97,11 +100,16 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
                 searchViewModel.getLatAndLong().observe(viewLifecycleOwner) { locations ->
                     locations?.forEach { latLngPair ->
                         val markerLatLng = LatLng(latLngPair.first, latLngPair.second)
-                        val customMarker = BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher_foreground) // use ic_launcher_foreground as marker icon
+                        val customMarker = BitmapDescriptorFactory.fromBitmap(resizeBitmap())
                         mMap.addMarker(MarkerOptions().position(markerLatLng).icon(customMarker))
                     }
                 }
             }
         }
+    }
+
+    private fun resizeBitmap(): Bitmap {
+        val imageBitmap = BitmapFactory.decodeResource(resources, R.drawable.house)
+        return Bitmap.createScaledBitmap(imageBitmap, 100, 100, false)
     }
 }
