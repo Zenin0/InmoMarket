@@ -96,15 +96,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tilPassword" />
 
-    <TextView
-        android:id="@+id/tvAlreadyHaveAccount"
+    <FrameLayout
+        android:id="@+id/flAlreadyHaveAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:layout_margin="@dimen/common_margin"
-        android:text="@string/dont_have_account"
+        android:padding="@dimen/common_padding"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnSignInGoogle" />
+        app:layout_constraintTop_toBottomOf="@id/btnSignInGoogle">
+
+        <TextView
+            android:id="@+id/tvAlreadyHaveAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dont_have_account" />
+
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
