@@ -20,7 +20,7 @@ import com.isanz.inmomarket.utils.entities.Property
 import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 
 class PropertyItemListAdapter(private val listener: OnItemClickListener) :
-    ListAdapter<Property, PropertyItemListAdapter.PropertyViewHolder>((PropertyItemDiffCallback<Property>())) {
+    ListAdapter<Property, PropertyItemListAdapter.PropertyViewHolder>((PropertyItemDiffCallback())) {
 
     private val viewModel: PropertyItemViewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(PropertyItemViewModel::class.java)
