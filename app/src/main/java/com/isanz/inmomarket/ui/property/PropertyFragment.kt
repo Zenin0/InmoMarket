@@ -5,13 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentPropertyBinding
+import com.isanz.inmomarket.rv.CarouselAdapter
 import com.isanz.inmomarket.rv.extraItem.ExtraListAdapter
 import com.isanz.inmomarket.utils.entities.Property
 import kotlinx.coroutines.launch
@@ -86,11 +91,66 @@ class PropertyFragment : Fragment() {
             binding.tvDescription.text = property.description
             binding.tvAddress.text = property.location
             "Price: ${property.price} €".also { binding.tvPrice.text = it }
-            Glide.with(this).load(property.listImagesUri[0]).into(binding.ivProperty)
+            val imageList = property.listImagesUri
+            val adapter = CarouselAdapter(imageList)
+            mBinding?.vpProperty?.adapter = adapter
+
+            setupIndicators(imageList.size)
+
+            mBinding?.vpProperty?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    setCurrentIndicator(position)
+                }
+            })
             // Load extra rv
             loadExtras(property)
             setUpButtons(property)
             binding.progressBar.visibility = View.GONE
+        }
+    }
+
+    private fun setupIndicators(count: Int) {
+        mBinding?.indicatorLayout?.removeAllViews() // Clear existing indicators
+        val indicators = arrayOfNulls<ImageView>(count)
+        val layoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        layoutParams.setMargins(8, 0, 8, 0)
+        for (i in indicators.indices) {
+            indicators[i] = ImageView(context)
+            indicators[i]?.let {
+                it.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_outline_circle
+                    )
+                )
+                it.layoutParams = layoutParams
+                mBinding?.indicatorLayout?.addView(it)
+            }
+        }
+    }
+
+    private fun setCurrentIndicator(index: Int) {
+        val childCount = mBinding?.indicatorLayout?.childCount
+        for (i in 0 until childCount!!) {
+            val imageView = mBinding?.indicatorLayout?.getChildAt(i) as ImageView
+            if (i == index) {
+                imageView.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_circle
+                    )
+                )
+            } else {
+                imageView.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_outline_circle
+                    )
+                )
+            }
         }
     }
 
