@@ -59,6 +59,7 @@
 * ![Maps](https://img.shields.io/badge/Maps-0095D5?style=for-the-badge&logo=google-maps&logoColor=white)
 * ![Gradle](https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white)
 * ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+* ![Gson](https://img.shields.io/badge/Gson-0095D5?style=for-the-badge&logo=gson&logoColor=white)
 
 
 
