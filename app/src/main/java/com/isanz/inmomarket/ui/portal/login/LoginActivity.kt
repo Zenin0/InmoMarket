@@ -29,7 +29,6 @@ import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.ActivityLoginBinding
 import com.isanz.inmomarket.ui.portal.PortalViewModel
 import com.isanz.inmomarket.ui.portal.register.RegisterActivity
-import com.isanz.inmomarket.utils.Constants
 import kotlinx.coroutines.launch
 
 
