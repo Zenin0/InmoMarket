@@ -1,6 +1,6 @@
 package com.isanz.inmomarket
 
-import PropertyViewModel
+import com.isanz.inmomarket.ui.property.PropertyViewModel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

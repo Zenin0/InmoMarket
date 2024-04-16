@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentHomeBinding
-import com.isanz.inmomarket.rv.propertyItem.HomeListAdapter
+import com.isanz.inmomarket.rv.propertyItem.PropertyItemListAdapter
 import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 
 class HomeFragment : Fragment(), OnItemClickListener {
@@ -32,7 +32,7 @@ class HomeFragment : Fragment(), OnItemClickListener {
 
     private fun setupRecyclerView(homeViewModel: HomeViewModel) {
         // Initialize the RecyclerView adapter
-        val adapter = HomeListAdapter(this)
+        val adapter = PropertyItemListAdapter(this)
         binding.rvHome.adapter = adapter
 
         // Set the LayoutManager

@@ -1,10 +1,10 @@
 package com.isanz.inmomarket.ui.property
 
-import PropertyViewModel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -43,6 +43,28 @@ class PropertyFragment : Fragment() {
                 this.findNavController().navigate(R.id.action_propertyFragment_to_chatFragment, bundle)
             }
         }
+
+        val updateFavoriteIcon: (Boolean) -> Unit = { isFavorite ->
+            if (isFavorite) {
+                mBinding?.ibFavorite?.setImageResource(R.drawable.ic_favorite)
+            } else {
+                mBinding?.ibFavorite?.setImageResource(R.drawable.ic_favorite_border)
+            }
+        }
+
+        // Call the getIfFavorite function from the ViewModel
+        viewModel.getIfFavorite(property, updateFavoriteIcon)
+
+        // Load the animation
+        val rotateAnimation = AnimationUtils.loadAnimation(mBinding?.ibFavorite?.context, R.anim.rotate)
+
+        mBinding?.ibFavorite?.setOnClickListener {
+            // Start the animation
+            it.startAnimation(rotateAnimation)
+
+            viewModel.alterFavorite(property, updateFavoriteIcon)
+        }
+
     }
 
     override fun onCreateView(

@@ -12,4 +12,8 @@ data class Property(
     var extras: Map<String, Int> = mapOf(),
     val price: Double = 0.0,
     val squareMeters: Double = 0.0
-)
+) {
+    override fun toString(): String {
+        return "Property(id=$id, tittle='$tittle', description='$description', location='$location', userId='$userId', listImagesUri=$listImagesUri, extras=$extras, price=$price, squareMeters=$squareMeters)"
+    }
+}
