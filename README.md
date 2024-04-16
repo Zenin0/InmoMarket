@@ -25,7 +25,7 @@
         <li><a href="#contruido-con">Contruido con</a></li>
       </ul>
       <ul>
-        <li><a href="#tecnologias- usadas">Tecnologías usadas</a></li>
+        <li><a href="#tecnologias-usadas">Tecnologías usadas</a></li>
       </ul>
     </li>
     <li><a href="#license">Licencia</a></li>
