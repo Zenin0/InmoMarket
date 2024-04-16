@@ -24,6 +24,9 @@
       <ul>
         <li><a href="#built-with">Contruido con</a></li>
       </ul>
+      <ul>
+        <li><a href="#Tecnologías usadas">Tecnologías usadas</a></li>
+      </ul>
     </li>
     <li><a href="#license">Licencia</a></li>
   </ol>
