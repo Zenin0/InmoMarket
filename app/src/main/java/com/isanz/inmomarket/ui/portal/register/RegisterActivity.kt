@@ -12,6 +12,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -25,8 +26,10 @@ import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.MainActivity
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.ActivityRegisterBinding
+import com.isanz.inmomarket.ui.portal.PortalViewModel
 import com.isanz.inmomarket.ui.portal.login.LoginActivity
 import com.isanz.inmomarket.utils.Constants
+import kotlinx.coroutines.launch
 
 
 class RegisterActivity : AppCompatActivity() {
@@ -35,6 +38,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityRegisterBinding
     private lateinit var startForResult: ActivityResultLauncher<Intent>
     private lateinit var db: FirebaseFirestore
+    private lateinit var viewModel: PortalViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +47,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(mBinding.root)
         db = InmoMarket.getDb()
         auth = InmoMarket.getAuth()
-
+        viewModel = PortalViewModel()
         startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
@@ -71,10 +75,12 @@ class RegisterActivity : AppCompatActivity() {
         mBinding.btnSignInGoogle.setOnClickListener {
             registerGoogle()
         }
-        mBinding.tvAlreadyHaveAccount.setOnClickListener {
+        mBinding.flAlreadyHaveAccount.setOnClickListener {
             goToLogin()
         }
-        setImage(mBinding.ivLogo)
+        lifecycleScope.launch {
+            setImage(mBinding.ivLogo)
+        }
 
     }
 
@@ -212,7 +218,7 @@ class RegisterActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun setImage(view: ImageView) {
-        Glide.with(this).load(Constants.REGISTER_IMAGE).centerCrop().into(view)
+    private suspend fun setImage(view: ImageView) {
+        Glide.with(this).load(viewModel.getImageRandom()).centerCrop().into(view)
     }
 }

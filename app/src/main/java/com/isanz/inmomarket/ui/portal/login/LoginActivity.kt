@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -26,8 +27,10 @@ import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.MainActivity
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.ActivityLoginBinding
+import com.isanz.inmomarket.ui.portal.PortalViewModel
 import com.isanz.inmomarket.ui.portal.register.RegisterActivity
 import com.isanz.inmomarket.utils.Constants
+import kotlinx.coroutines.launch
 
 
 class LoginActivity : AppCompatActivity() {
@@ -36,12 +39,14 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityLoginBinding
     private lateinit var startForResult: ActivityResultLauncher<Intent>
     private lateinit var db: FirebaseFirestore
+    private lateinit var viewModel: PortalViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         mBinding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
+        viewModel = PortalViewModel()
         this.auth = InmoMarket.getAuth()
         this.db = FirebaseFirestore.getInstance()
         showBiometricPrompt()
@@ -71,13 +76,13 @@ class LoginActivity : AppCompatActivity() {
         mBinding.btnSignInGoogle.setOnClickListener {
             signInGoogle()
         }
-        mBinding.tvAlreadyHaveAccount.setOnClickListener {
+        mBinding.flAlreadyHaveAccount.setOnClickListener {
             goToRegister()
         }
 
-        setImage(
-            mBinding.ivLogo
-        )
+        lifecycleScope.launch {
+            setImage(mBinding.ivLogo)
+        }
 
     }
 
@@ -257,7 +262,7 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun setImage(view: ImageView) {
-        Glide.with(this).load(Constants.LOGIN_IMAGE).centerCrop().into(view)
+    private suspend fun setImage(view: ImageView) {
+        Glide.with(this).load(viewModel.getImageRandom()).centerCrop().into(view)
     }
 }
