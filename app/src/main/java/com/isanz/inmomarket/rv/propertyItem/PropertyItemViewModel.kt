@@ -8,7 +8,7 @@ import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.utils.entities.Property
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class PropertyItemViewModel : ViewModel() {
 
     private val db = FirebaseFirestore.getInstance()
     private val user = InmoMarket.getAuth().currentUser

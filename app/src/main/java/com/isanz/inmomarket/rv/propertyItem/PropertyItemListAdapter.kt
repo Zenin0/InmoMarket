@@ -19,11 +19,11 @@ import com.isanz.inmomarket.rv.extraItem.ExtraListAdapter
 import com.isanz.inmomarket.utils.entities.Property
 import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 
-class HomeListAdapter(private val listener: OnItemClickListener) :
-    ListAdapter<Property, HomeListAdapter.PropertyViewHolder>((HomeDiffCallback<Property>())) {
+class PropertyItemListAdapter(private val listener: OnItemClickListener) :
+    ListAdapter<Property, PropertyItemListAdapter.PropertyViewHolder>((PropertyItemDiffCallback())) {
 
-    private val viewModel: HomeViewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(HomeViewModel::class.java)
+    private val viewModel: PropertyItemViewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(PropertyItemViewModel::class.java)
     }
 
     class PropertyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
