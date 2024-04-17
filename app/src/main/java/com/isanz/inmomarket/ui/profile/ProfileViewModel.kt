@@ -6,7 +6,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.utils.entities.User
 import kotlinx.coroutines.tasks.await
-import java.util.UUID
 
 class ProfileViewModel : ViewModel() {
 
