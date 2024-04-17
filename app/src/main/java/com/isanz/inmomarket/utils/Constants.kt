@@ -2,6 +2,7 @@ package com.isanz.inmomarket.utils
 
 object Constants {
 
+    const val PICK_IMAGE_REQUEST_CODE = 1
     const val REQUEST_CODE_PICK_IMAGES = 1
     const val REQUEST_CODE_AUTOCOMPLETE = 2
     const val LOCATION_PERMISSION_REQUEST_CODE = 1

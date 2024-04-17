@@ -59,4 +59,6 @@
     <string name="label_name">Name</string>
     <string name="reset_password">Reset password</string>
     <string name="google_maps_key">AIzaSyCqFDsTiczZy6sYp1Tkr0Jp1pXOaUc4Nls</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="close_account">Close Account</string>
 </resources>
