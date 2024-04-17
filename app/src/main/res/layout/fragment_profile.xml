@@ -1,66 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_light_background"
-    tools:context=".ui.profile.ProfileFragment">
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
-    <ImageView
-        android:id="@+id/ivProfile"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:importantForAccessibility="no"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="@dimen/common_margin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/tvName"/>
+    <include
+        android:id="@+id/app_bar_main"
+        layout="@layout/app_bar_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_margin"
-        android:text="@string/label_name"
-        android:textAlignment="center"
-        android:textSize="@dimen/text_tittle"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnResetPassword"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/reset_password"
-        android:layout_margin="@dimen/common_margin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvName"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSignOut"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/sign_out"
-        android:layout_margin="@dimen/common_margin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnResetPassword"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCloseAccount"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/close_account"
-        android:layout_margin="@dimen/common_margin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnSignOut"/>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

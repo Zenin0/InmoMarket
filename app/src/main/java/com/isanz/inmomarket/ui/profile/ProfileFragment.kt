@@ -8,11 +8,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.google.android.material.navigation.NavigationView
+import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentProfileBinding
+import com.isanz.inmomarket.databinding.NavHeaderMainBinding
 import com.isanz.inmomarket.ui.portal.login.LoginActivity
 import com.isanz.inmomarket.utils.Constants
 import kotlinx.coroutines.launch
@@ -20,6 +25,15 @@ import kotlinx.coroutines.launch
 class ProfileFragment : Fragment() {
 
     private lateinit var mBinding: FragmentProfileBinding
+
+    private lateinit var navView: NavigationView
+
+    private lateinit var headerBinding: NavHeaderMainBinding
+
+    private lateinit var headerView: View
+
+    private lateinit var drawerLayout: DrawerLayout
+
 
 
     private val profileViewModel: ProfileViewModel by lazy {
@@ -31,22 +45,37 @@ class ProfileFragment : Fragment() {
     ): View {
 
         mBinding = FragmentProfileBinding.inflate(inflater, container, false)
+        navView = mBinding.navView
+        headerBinding = NavHeaderMainBinding.inflate(layoutInflater)
+        drawerLayout = mBinding.drawerLayout
+        headerView = headerBinding.root
+        navView.addHeaderView(headerView)
         lifecycleScope.launch {
             setUpView()
         }
         setUpButtons()
+        setUpDrawer()
         return mBinding.root
     }
 
+    private fun setUpDrawer() {
+        navView.setNavigationItemSelectedListener { menuItem ->
+            // Handle navigation view item clicks here.
+
+            drawerLayout.closeDrawer(GravityCompat.START)
+            true
+        }
+    }
+
     private fun setUpButtons() {
-        mBinding.btnResetPassword.setOnClickListener {
+        headerBinding.btnResetPassword.setOnClickListener {
             profileViewModel.resetPassword()
         }
-        mBinding.ivProfile.setOnClickListener {
+        mBinding.appBarMain.ivProfile.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, Constants.PICK_IMAGE_REQUEST_CODE)
         }
-        mBinding.btnSignOut.setOnClickListener {
+        headerBinding.btnSignOut.setOnClickListener {
             val isSignedOut = profileViewModel.signOut()
             if (isSignedOut) {
                 val intent = Intent(activity, LoginActivity::class.java)
@@ -54,7 +83,7 @@ class ProfileFragment : Fragment() {
                 activity?.finish()
             }
         }
-        mBinding.btnCloseAccount.setOnClickListener {
+        headerBinding.btnCloseAccount.setOnClickListener {
             profileViewModel.closeAccount()
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
@@ -70,15 +99,15 @@ class ProfileFragment : Fragment() {
         if (requestCode == Constants.PICK_IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
             val imageUri = data.data
             profileViewModel.uploadImageToFirebase(imageUri!!) { imageUrl ->
-                Glide.with(this).load(imageUrl).circleCrop().into(mBinding.ivProfile)
+                Glide.with(this).load(imageUrl).circleCrop().into(mBinding.appBarMain.ivProfile)
             }
         }
     }
 
     private suspend fun setUpView() {
         val user = profileViewModel.retrieveProfile()
-        loadImage(mBinding.ivProfile, user.photoUrl!!)
-        mBinding.tvName.text = user.displayName
+        loadImage(mBinding.appBarMain.ivProfile, user.photoUrl!!)
+        mBinding.appBarMain.tvName.text = user.displayName
 
     }
 
