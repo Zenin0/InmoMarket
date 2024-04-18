@@ -15,10 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
-import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentProfileBinding
-import com.isanz.inmomarket.databinding.NavHeaderMainBinding
-import com.isanz.inmomarket.ui.portal.login.LoginActivity
 import com.isanz.inmomarket.utils.Constants
 import kotlinx.coroutines.launch
 
@@ -28,9 +25,6 @@ class ProfileFragment : Fragment() {
 
     private lateinit var navView: NavigationView
 
-    private lateinit var headerBinding: NavHeaderMainBinding
-
-    private lateinit var headerView: View
 
     private lateinit var drawerLayout: DrawerLayout
 
@@ -46,10 +40,7 @@ class ProfileFragment : Fragment() {
 
         mBinding = FragmentProfileBinding.inflate(inflater, container, false)
         navView = mBinding.navView
-        headerBinding = NavHeaderMainBinding.inflate(layoutInflater)
         drawerLayout = mBinding.drawerLayout
-        headerView = headerBinding.root
-        navView.addHeaderView(headerView)
         lifecycleScope.launch {
             setUpView()
         }
@@ -59,7 +50,11 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setUpDrawer() {
-        navView.setNavigationItemSelectedListener { menuItem ->
+        mBinding.appBarMain.ibDrawer.setOnClickListener {
+            mBinding.drawerLayout.openDrawer(GravityCompat.START)
+        }
+
+        navView.setNavigationItemSelectedListener {
             // Handle navigation view item clicks here.
 
             drawerLayout.closeDrawer(GravityCompat.START)
@@ -68,26 +63,10 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setUpButtons() {
-        headerBinding.btnResetPassword.setOnClickListener {
-            profileViewModel.resetPassword()
-        }
+
         mBinding.appBarMain.ivProfile.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, Constants.PICK_IMAGE_REQUEST_CODE)
-        }
-        headerBinding.btnSignOut.setOnClickListener {
-            val isSignedOut = profileViewModel.signOut()
-            if (isSignedOut) {
-                val intent = Intent(activity, LoginActivity::class.java)
-                startActivity(intent)
-                activity?.finish()
-            }
-        }
-        headerBinding.btnCloseAccount.setOnClickListener {
-            profileViewModel.closeAccount()
-            val intent = Intent(activity, LoginActivity::class.java)
-            startActivity(intent)
-            activity?.finish()
         }
     }
 

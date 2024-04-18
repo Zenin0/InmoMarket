@@ -4,21 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-
     android:background="@color/md_theme_light_background"
+
+    android:orientation="vertical"
     tools:context=".ui.profile.ProfileFragment">
 
     <ImageView
         android:id="@+id/ivProfile"
         android:layout_width="128dp"
         android:layout_height="128dp"
-        android:importantForAccessibility="no"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="@dimen/common_margin"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="@id/tvName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/tvName"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ibDrawer"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="@dimen/common_margin"
+        android:background="@drawable/ic_menu"
+        android:importantForAccessibility="no"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/tvName"
@@ -29,10 +39,10 @@
         android:textAlignment="center"
         android:textSize="@dimen/text_tittle"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
