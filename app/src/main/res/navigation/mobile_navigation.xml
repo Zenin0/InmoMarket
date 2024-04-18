@@ -20,7 +20,11 @@
         android:id="@+id/navigation_profile"
         android:name="com.isanz.inmomarket.ui.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_navigation_profile_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_search"
         android:name="com.isanz.inmomarket.ui.search.SearchFragment"
@@ -80,6 +84,11 @@
             android:id="@+id/action_miniPropertyFragment_to_navigation_property"
             app:destination="@id/navigation_property" />
     </dialog>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.isanz.inmomarket.ui.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 
 
 </navigation>

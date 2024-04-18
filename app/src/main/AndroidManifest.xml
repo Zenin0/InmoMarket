@@ -32,11 +32,13 @@
         <activity
             android:name=".ui.portal.register.RegisterActivity"
             android:exported="true"
-            android:theme="@style/Theme.InmoMarket.Auth" />
+            android:theme="@style/Theme.InmoMarket.Auth"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.portal.login.LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.InmoMarket.Auth">
+            android:theme="@style/Theme.InmoMarket.Auth"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -45,7 +47,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
