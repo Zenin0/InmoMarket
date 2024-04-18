@@ -2,6 +2,7 @@ package com.isanz.inmomarket.ui.portal.login
 
 import android.app.Activity
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -48,7 +49,10 @@ class LoginActivity : AppCompatActivity() {
         viewModel = PortalViewModel()
         this.auth = InmoMarket.getAuth()
         this.db = FirebaseFirestore.getInstance()
-        showBiometricPrompt()
+        val sharedPref = this.getSharedPreferences("settings_preferences", Context.MODE_PRIVATE)
+        if (sharedPref.getBoolean("biometricLogin", false)) {
+            showBiometricPrompt()
+        }
         startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
