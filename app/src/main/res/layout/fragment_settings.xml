@@ -1,26 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/common_margin"
-    android:orientation="vertical"
     tools:context=".ui.settings.SettingsFragment">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/llSettingsTittle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/settings"
-        android:textStyle="bold"
-        android:textSize="@dimen/text_tittle"
-        android:layout_margin="@dimen/common_margin" />
+        android:layout_margin="@dimen/common_margin"
+        android:orientation="horizontal">
 
+        <ImageButton
+            android:id="@+id/ibBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|start"
+            android:layout_marginEnd="@dimen/common_margin"
+            android:background="@color/fui_transparent"
+            android:contentDescription="@string/go_back"
+            android:src="@drawable/ic_arrow_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/settings"
+            android:textSize="@dimen/text_tittle"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
     <com.google.android.material.materialswitch.MaterialSwitch
-        android:id="@+id/switch_biometric_login"
+        android:id="@+id/sBiometricalLogin"
         android:layout_width="wrap_content"
-        android:layout_margin="@dimen/common_margin"
         android:layout_height="wrap_content"
+        android:layout_below="@id/llSettingsTittle"
+        android:layout_margin="@dimen/common_margin"
         android:text="@string/biometric_login_settings" />
 
-</LinearLayout>
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/sAllowUbication"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sBiometricalLogin"
+        android:layout_margin="@dimen/common_margin"
+        android:text="@string/ubication_settings" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnChangePassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sAllowUbication"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_margin="@dimen/common_margin"
+        android:text="@string/change_password" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCloseAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnChangePassword"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/common_margin"
+        android:text="@string/close_account" />
+
+</RelativeLayout>

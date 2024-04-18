@@ -23,7 +23,7 @@
         tools:layout="@layout/fragment_profile" >
         <action
             android:id="@+id/action_navigation_profile_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            app:destination="@id/navigation_settings" />
     </fragment>
     <fragment
         android:id="@+id/navigation_search"
@@ -31,7 +31,7 @@
         android:label="SearchFragment" >
         <action
             android:id="@+id/action_navigation_search_to_miniPropertyFragment"
-            app:destination="@id/miniPropertyFragment" />
+            app:destination="@id/navigation_mini_property" />
     </fragment>
 
     <fragment
@@ -74,7 +74,7 @@
             app:destination="@id/navigation_messages" />
     </fragment>
     <dialog
-        android:id="@+id/miniPropertyFragment"
+        android:id="@+id/navigation_mini_property"
         android:name="com.isanz.inmomarket.MiniPropertyFragment"
         android:label="MiniPropertyFragment" >
         <argument
@@ -85,10 +85,14 @@
             app:destination="@id/navigation_property" />
     </dialog>
     <fragment
-        android:id="@+id/settingsFragment"
+        android:id="@+id/navigation_settings"
         android:name="com.isanz.inmomarket.ui.settings.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
+    </fragment>
 
 
 </navigation>

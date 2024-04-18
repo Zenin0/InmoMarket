@@ -9,6 +9,34 @@
     android:orientation="vertical"
     tools:context=".ui.profile.ProfileFragment">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/ibDrawer"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="@dimen/common_margin"
+            android:background="@drawable/ic_menu"
+            android:importantForAccessibility="no"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_margin"
+            android:text="@string/title_profile"
+            android:textSize="@dimen/text_tittle"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/ibDrawer"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/ivProfile"
         android:layout_width="128dp"
@@ -20,15 +48,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/ibDrawer"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_margin="@dimen/common_margin"
-        android:background="@drawable/ic_menu"
-        android:importantForAccessibility="no"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/tvName"
