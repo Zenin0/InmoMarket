@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.isanz.inmomarket.InmoMarket
+import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
@@ -50,7 +52,7 @@ class SettingsFragment : Fragment() {
             }
         }
         mBinding.ibBack.setOnClickListener {
-            requireActivity().onBackPressed()
+            this.findNavController().navigate(R.id.action_navigation_settings_to_navigation_profile,)
         }
         mBinding.btnCloseAccount.setOnClickListener{
             mViewModel.closeAccount()
