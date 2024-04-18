@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">InmoMarket</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
