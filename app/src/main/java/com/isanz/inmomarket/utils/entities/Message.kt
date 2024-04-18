@@ -1,6 +1,6 @@
 package com.isanz.inmomarket.utils.entities
 
-import com.google.firebase.firestore.Exclude
+import com.google.firebase.database.Exclude
 
 
 data class Message(
