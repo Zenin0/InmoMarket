@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,7 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/common_margin"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/ibBack"
@@ -33,41 +36,60 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/common_margin"
+        android:text="@string/biometric_login_settings"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/sBiometricalLogin" />
+
     <com.google.android.material.materialswitch.MaterialSwitch
         android:id="@+id/sBiometricalLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/llSettingsTittle"
         android:layout_margin="@dimen/common_margin"
-        android:text="@string/biometric_login_settings" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llSettingsTittle" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/common_margin"
+        android:text="@string/ubication_settings"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/sAllowUbication" />
+
 
     <com.google.android.material.materialswitch.MaterialSwitch
         android:id="@+id/sAllowUbication"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/sBiometricalLogin"
         android:layout_margin="@dimen/common_margin"
-        android:text="@string/ubication_settings" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sBiometricalLogin" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnChangePassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/sAllowUbication"
-        android:layout_gravity="center"
-        android:layout_centerInParent="true"
         android:layout_margin="@dimen/common_margin"
-        android:text="@string/change_password" />
+        android:text="@string/change_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sAllowUbication" />
 
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCloseAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btnChangePassword"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
         android:layout_margin="@dimen/common_margin"
-        android:text="@string/close_account" />
+        android:text="@string/close_account"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnChangePassword" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

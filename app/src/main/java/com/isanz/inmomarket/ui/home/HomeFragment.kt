@@ -40,6 +40,11 @@ class HomeFragment : Fragment(), OnItemClickListener {
         homeViewModel.listParcelas.observe(viewLifecycleOwner) { parcelas ->
             // Update the adapter with the new list of Parcela objects
             adapter.submitList(parcelas)
+            if (parcelas.isEmpty()) {
+                binding.tvNoHomeitems.visibility = View.VISIBLE
+            } else {
+                binding.tvNoHomeitems.visibility = View.GONE
+            }
             binding.progressBar.visibility = View.GONE
         }
     }
