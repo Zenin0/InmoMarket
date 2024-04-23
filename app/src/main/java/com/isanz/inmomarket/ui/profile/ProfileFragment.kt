@@ -1,6 +1,7 @@
 package com.isanz.inmomarket.ui.profile
 
 import ViewPagerAdapter
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -20,6 +21,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentProfileBinding
 import com.isanz.inmomarket.ui.portal.login.LoginActivity
+import com.isanz.inmomarket.utils.Constants
 import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
@@ -43,12 +45,33 @@ class ProfileFragment : Fragment() {
         }
         setUpDrawer()
         setUpTabs()
+        setUpButtons()
         return mBinding.root
     }
 
+    private fun setUpButtons() {
+        mBinding.profileLayout.ivProfile.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, Constants.REQUEST_CODE_PICK_IMAGES)
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == Constants.REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK && data != null) {
+            val imageUri = data.data
+            loadImage(mBinding.profileLayout.ivProfile, imageUri.toString())
+            if (imageUri != null) {
+                profileViewModel.updateUserProfilePhoto(imageUri)
+            }
+        }
+    }
+
     private fun setUpTabs() {
-        val tabLayout = mBinding.appBarMain.tabLayout
-        val viewPager = mBinding.appBarMain.viewPager
+        val tabLayout = mBinding.profileLayout.tabLayout
+        val viewPager = mBinding.profileLayout.viewPager
 
 
         val adapter = ViewPagerAdapter(requireActivity())
@@ -65,7 +88,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setUpDrawer() {
-        mBinding.appBarMain.ibDrawer.setOnClickListener {
+        mBinding.profileLayout.ibDrawer.setOnClickListener {
             mBinding.drawerLayout.openDrawer(GravityCompat.START)
         }
 
@@ -101,8 +124,8 @@ class ProfileFragment : Fragment() {
         navView = mBinding.navView
         drawerLayout = mBinding.drawerLayout
         val user = profileViewModel.retrieveProfile()
-        loadImage(mBinding.appBarMain.ivProfile, user.photoUrl!!)
-        mBinding.appBarMain.tvName.text = user.displayName
+        loadImage(mBinding.profileLayout.ivProfile, user.photoUrl!!)
+        mBinding.profileLayout.tvName.text = user.displayName
 
     }
 
