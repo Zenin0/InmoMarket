@@ -10,6 +10,7 @@
     tools:context=".ui.profile.ProfileFragment">
 
     <LinearLayout
+        android:id="@+id/llTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -37,17 +38,6 @@
             app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/ivProfile"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:layout_margin="@dimen/common_margin"
-        android:importantForAccessibility="no"
-        app:layout_constraintBottom_toBottomOf="@id/tvName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <TextView
         android:id="@+id/tvName"
@@ -58,10 +48,47 @@
         android:textAlignment="center"
         android:textSize="@dimen/text_tittle"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@id/ivProfile"
+        app:layout_constraintStart_toEndOf="@id/ivProfile"
+        app:layout_constraintTop_toTopOf="@id/ivProfile" />
 
+    <ImageView
+        android:id="@+id/ivProfile"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_margin="@dimen/common_margin"
+        android:importantForAccessibility="no"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llTitle"
+        app:layout_constraintVertical_bias="0" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_margin"
+        app:layout_constraintBottom_toTopOf="@id/viewPager"
+        app:layout_constraintTop_toBottomOf="@id/ivProfile" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_margin"
+        app:layout_constraintTop_toBottomOf="@id/ivProfile"
+        app:layout_constraintBottom_toTopOf="@id/viewPager"
+        app:tabMode="fixed">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_your_uploads" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_favorites" />
+
+    </com.google.android.material.tabs.TabLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
