@@ -75,18 +75,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/common_margin"
-        app:layout_constraintTop_toBottomOf="@id/ivProfile"
-        app:layout_constraintBottom_toTopOf="@id/viewPager"
-        app:tabMode="fixed">
+        app:layout_constraintTop_toBottomOf="@id/ivProfile">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/tab_your_uploads" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/tab_favorites" />
 
     </com.google.android.material.tabs.TabLayout>

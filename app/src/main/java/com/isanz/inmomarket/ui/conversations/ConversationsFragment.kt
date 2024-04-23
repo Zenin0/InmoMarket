@@ -40,9 +40,9 @@ class ConversationsFragment : Fragment() {
                 mBinding.recyclerView.scrollToPosition(0)
             }
             if (conversations.isEmpty()) {
-                mBinding.tvNoConversations.visibility = View.VISIBLE
+                mBinding.emptyTextView.visibility = View.VISIBLE
             } else {
-                mBinding.tvNoConversations .visibility = View.GONE
+                mBinding.emptyTextView.visibility = View.GONE
             }
             mBinding.progressBar.visibility = View.GONE
         }

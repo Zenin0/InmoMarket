@@ -51,9 +51,9 @@ class FavoritesProfileFragment : Fragment(), OnItemClickListener {
             // Update the adapter with the new list of Parcela objects
             adapter.submitList(parcelas)
             if (parcelas.isEmpty()) {
-                mBinging.favoritesEmptyTextView.visibility = View.VISIBLE
+                mBinging.emptyTextView.visibility = View.VISIBLE
             } else {
-                mBinging.favoritesEmptyTextView.visibility = View.GONE
+                mBinging.emptyTextView.visibility = View.GONE
             }
             mBinging.favoritesProgressBar.visibility = View.GONE
         }
