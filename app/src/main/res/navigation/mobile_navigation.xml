@@ -23,15 +23,15 @@
         tools:layout="@layout/fragment_profile" >
         <action
             android:id="@+id/action_navigation_profile_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            app:destination="@id/navigation_settings" />
     </fragment>
     <fragment
         android:id="@+id/navigation_search"
         android:name="com.isanz.inmomarket.ui.search.SearchFragment"
         android:label="SearchFragment" >
         <action
-            android:id="@+id/action_navigation_search_to_miniPropertyFragment"
-            app:destination="@id/miniPropertyFragment" />
+            android:id="@+id/action_navigation_search_to_navigation_mini_property"
+            app:destination="@id/navigation_mini_property" />
     </fragment>
 
     <fragment
@@ -58,7 +58,7 @@
             app:nullable="true"
             android:defaultValue="null" />
         <action
-            android:id="@+id/action_propertyFragment_to_chatFragment"
+            android:id="@+id/action_navigation_property_to_chatFragment"
             app:destination="@id/navigation_chat" />
     </fragment>
     <fragment
@@ -74,21 +74,25 @@
             app:destination="@id/navigation_messages" />
     </fragment>
     <dialog
-        android:id="@+id/miniPropertyFragment"
+        android:id="@+id/navigation_mini_property"
         android:name="com.isanz.inmomarket.MiniPropertyFragment"
         android:label="MiniPropertyFragment" >
         <argument
             android:name="propertyId"
             app:argType="string" />
         <action
-            android:id="@+id/action_miniPropertyFragment_to_navigation_property"
+            android:id="@+id/action_navigation_mini_property_to_navigation_property"
             app:destination="@id/navigation_property" />
     </dialog>
     <fragment
-        android:id="@+id/settingsFragment"
+        android:id="@+id/navigation_settings"
         android:name="com.isanz.inmomarket.ui.settings.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_navigation_settings_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
+    </fragment>
 
 
 </navigation>

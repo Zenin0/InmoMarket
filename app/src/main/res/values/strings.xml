@@ -66,5 +66,8 @@
     <string name="about">About</string>
     <string name="help">Help</string>
     <string name="share">Share</string>
-    <string name="biometric_login_settings">Login with biometrical</string>
+    <string name="biometric_login_settings">Login with biometrical data</string>
+    <string name="go_back">Go Back</string>
+    <string name="ubication_settings">Allow ubication</string>
+    <string name="change_password">Change password</string>
 </resources>

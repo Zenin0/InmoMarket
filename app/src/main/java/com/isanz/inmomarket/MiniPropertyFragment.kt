@@ -1,6 +1,5 @@
 package com.isanz.inmomarket
 
-import com.isanz.inmomarket.ui.property.PropertyViewModel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.isanz.inmomarket.databinding.FragmentMiniPropertyBinding
+import com.isanz.inmomarket.ui.property.PropertyViewModel
 import kotlinx.coroutines.launch
 
 class MiniPropertyFragment : DialogFragment() {
@@ -50,7 +50,7 @@ class MiniPropertyFragment : DialogFragment() {
             val bundle = Bundle().apply {
                 putString("propertyId", propertyId)
             }
-            this.findNavController().navigate(R.id.action_miniPropertyFragment_to_navigation_property, bundle)
+            this.findNavController().navigate(R.id.action_navigation_mini_property_to_navigation_property, bundle)
         }
     }
 

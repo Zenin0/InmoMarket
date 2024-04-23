@@ -44,7 +44,7 @@ class PropertyFragment : Fragment() {
                 val bundle = Bundle().apply {
                     putString("idChat", chatId)
                 }
-                this.findNavController().navigate(R.id.action_propertyFragment_to_chatFragment, bundle)
+                this.findNavController().navigate(R.id.action_navigation_property_to_chatFragment, bundle)
             }
         }
 
