@@ -11,10 +11,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-
-
-
-
     <application
         android:name=".InmoMarket"
         android:allowBackup="true"
@@ -29,6 +25,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-6042452064546418~3210724257"/>
         <activity
             android:name=".ui.portal.register.RegisterActivity"
             android:exported="true"

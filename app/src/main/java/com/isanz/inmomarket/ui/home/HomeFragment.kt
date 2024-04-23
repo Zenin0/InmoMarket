@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentHomeBinding
 import com.isanz.inmomarket.rv.propertyItem.PropertyItemListAdapter
@@ -19,13 +21,25 @@ class HomeFragment : Fragment(), OnItemClickListener {
 
     private val binding get() = _binding!!
 
+    private val homeViewModel: HomeViewModel by lazy {
+        ViewModelProvider(this)[HomeViewModel::class.java]
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-        setupRecyclerView(homeViewModel)
+        setUpView()
         return binding.root
+    }
+
+    private fun setUpView() {
+        MobileAds.initialize(requireContext()) {}
+
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+
+        setupRecyclerView(homeViewModel)
     }
 
     private fun setupRecyclerView(homeViewModel: HomeViewModel) {

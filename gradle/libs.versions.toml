@@ -1,7 +1,7 @@
 [versions]
 agp = "8.3.2"
 kotlin = "1.9.0"
-coreKtx = "1.12.0"
+coreKtx = "1.13.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
@@ -13,10 +13,10 @@ lifecycleViewmodelKtx = "2.7.0"
 navigationFragmentKtx = "2.7.7"
 navigationUiKtx = "2.7.7"
 googleServices = "4.4.1"
-firebaseFirestore = "24.11.0"
+firebaseFirestore = "24.11.1"
 annotation = "1.7.1"
 firebaseUiAuth = "8.0.2"
-activity = "1.8.2"
+activity = "1.9.0"
 firebaseAuth = "22.3.1"
 firebaseDatabase = "20.3.1"
 legacySupportV4 = "1.0.0"
@@ -24,7 +24,7 @@ fragmentKtx = "1.6.2"
 glide = "5.0.0-rc01"
 firebaseStorageKtx = "20.3.0"
 firebaseStorage = "20.3.0"
-firebaseCrashlytics = "18.6.3"
+firebaseCrashlytics = "18.6.4"
 gradle = "8.1.4"
 firebaseCrashlyticsGradle = "2.9.9"
 kotlinxCoroutinesAndroid = "1.8.1-Beta"
@@ -35,6 +35,7 @@ playServicesMaps = "18.2.0"
 retrofit = "2.11.0"
 gson = "2.10.1"
 converterGson = "2.11.0"
+playServicesAds = "23.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -66,12 +67,13 @@ firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
 androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
-androidx-transition = { group = "androidx.transition", name = "transition", version = "1.5.0-rc01" }
+androidx-transition = { group = "androidx.transition", name = "transition", version = "1.5.0-rc02" }
 places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
+play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "playServicesAds" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
