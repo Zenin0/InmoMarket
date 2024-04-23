@@ -113,6 +113,17 @@ class ProfileFragment : Fragment() {
                     this.findNavController()
                         .navigate(R.id.action_navigation_profile_to_settingsFragment)
                 }
+
+                R.id.nav_share -> {
+                    val sendIntent: Intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, "https://github.com/Zenin0/InmoMarket")
+                        type = "text/plain"
+                    }
+
+                    val shareIntent = Intent.createChooser(sendIntent, null)
+                    startActivity(shareIntent)
+                }
             }
 
             drawerLayout.closeDrawer(GravityCompat.START)
