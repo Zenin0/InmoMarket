@@ -31,6 +31,11 @@ class FavoritesProfileFragment : Fragment(), OnItemClickListener {
         return mBinging.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        setupRecyclerView()
+    }
+
     override fun onItemClicked(propertyId: String) {
         val bundle = Bundle().apply {
             putString("propertyId", propertyId)
