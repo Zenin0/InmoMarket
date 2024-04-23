@@ -39,6 +39,11 @@ class ConversationsFragment : Fragment() {
                 // Scroll to the last position after the list has been updated
                 mBinding.recyclerView.scrollToPosition(0)
             }
+            if (conversations.isEmpty()) {
+                mBinding.tvNoConversations.visibility = View.VISIBLE
+            } else {
+                mBinding.tvNoConversations .visibility = View.GONE
+            }
             mBinding.progressBar.visibility = View.GONE
         }
 
