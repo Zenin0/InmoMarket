@@ -12,10 +12,23 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.isanz.inmomarket.InmoMarket
+import com.isanz.inmomarket.utils.entities.Chat
 import com.isanz.inmomarket.utils.entities.Message
+import com.isanz.inmomarket.utils.entities.User
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.tasks.await
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class ChatViewModel : ViewModel() {
     private val database: FirebaseDatabase = Firebase.database
@@ -34,6 +47,42 @@ class ChatViewModel : ViewModel() {
             messageTime = current.format(timeFormatter)
         )
         database.getReference("chatMessages").child(chatId).push().setValue(message)
+    }
+
+
+    fun getUsersInConversation(chatId: String): Deferred<List<User>> {
+        return CoroutineScope(Dispatchers.IO).async {
+            try {
+                val chatRef = FirebaseDatabase.getInstance().getReference("chats").child(chatId)
+                val chatSnapshot = suspendCoroutine<DataSnapshot> { continuation ->
+                    chatRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            continuation.resume(snapshot)
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            continuation.resumeWithException(error.toException())
+                        }
+                    })
+                }
+                val chat = chatSnapshot.getValue(Chat::class.java)
+                Log.i(TAG, "Chat: $chat")
+
+                val deferreds = chat?.membersId?.map { id ->
+                    async {
+                        val userDocument = Firebase.firestore.collection("users").document(id).get().await()
+                        userDocument.toObject(User::class.java)?.also { user ->
+                            user.uid = id
+                        }
+                    }
+                }
+
+                deferreds?.awaitAll()?.filterNotNull() ?: emptyList()
+            } catch (e: Exception) {
+                Log.e(TAG, "Error getting users in conversation", e)
+                emptyList<User>()
+            }
+        }
     }
 
     fun retrieveMessages(chatId: String) {

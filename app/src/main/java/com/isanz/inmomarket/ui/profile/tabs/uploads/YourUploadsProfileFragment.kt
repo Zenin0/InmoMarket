@@ -1,4 +1,4 @@
-package com.isanz.inmomarket.ui.profile.tabs
+package com.isanz.inmomarket.ui.profile.tabs.uploads
 
 import android.os.Bundle
 import android.view.LayoutInflater
