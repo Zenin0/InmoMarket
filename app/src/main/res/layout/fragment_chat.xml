@@ -16,6 +16,44 @@
         android:background="@color/md_theme_light_primary"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageButton
+            android:id="@+id/ibBack"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="@dimen/common_margin"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="@dimen/common_margin"
+            android:tint="@color/md_theme_light_background"
+            android:background="@color/fui_transparent"
+            android:contentDescription="@string/go_back"
+            android:src="@drawable/ic_arrow_back" />
+
+        <ImageView
+            android:id="@+id/ivProfileChat"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="@dimen/common_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ibBack"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="Profile User" />
+
+        <TextView
+            android:id="@+id/tvNameChat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_margin"
+            android:text="@string/chat"
+            android:textSize="@dimen/text_tittle"
+            android:textStyle="bold"
+            android:textColor="@color/md_theme_light_background"
+            app:layout_constraintStart_toEndOf="@id/ivProfileChat"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

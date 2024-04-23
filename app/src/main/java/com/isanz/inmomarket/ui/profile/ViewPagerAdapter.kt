@@ -1,8 +1,8 @@
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.isanz.inmomarket.ui.profile.tabs.FavoritesProfileFragment
-import com.isanz.inmomarket.ui.profile.tabs.YourUploadsProfileFragment
+import com.isanz.inmomarket.ui.profile.tabs.favorites.FavoritesProfileFragment
+import com.isanz.inmomarket.ui.profile.tabs.uploads.YourUploadsProfileFragment
 
 class ViewPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
 

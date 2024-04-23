@@ -2,15 +2,22 @@ package com.isanz.inmomarket.ui.chat
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.isanz.inmomarket.InmoMarket
+import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentChatBinding
 import com.isanz.inmomarket.rv.chatItem.ChatListAdapter
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 
 class ChatFragment : Fragment() {
 
@@ -39,10 +46,22 @@ class ChatFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         mBinding = FragmentChatBinding.inflate(inflater, container, false)
-        setUpButtons()
-        setUpRecyclerView()
+        setUpView()
+
         return mBinding.root
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setUpView() {
+        lifecycleScope.launch {
+            val users = viewModel.getUsersInConversation(idChat).await()
+            val otherUser = users.find { it.uid != recipientId }
+            mBinding.tvNameChat.text = otherUser?.displayName
+            otherUser?.photoUrl?.let { loadImage(it) }
+        }
+        setUpButtons()
+        setUpRecyclerView()
     }
 
     private fun setUpRecyclerView() {
@@ -59,6 +78,12 @@ class ChatFragment : Fragment() {
         viewModel.retrieveMessages(idChat)
     }
 
+    private fun loadImage(imageUri: String){
+        Glide.with(this)
+            .load(imageUri)
+            .circleCrop()
+            .into(mBinding.ivProfileChat)
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setUpButtons() {
@@ -66,6 +91,9 @@ class ChatFragment : Fragment() {
             val text = mBinding.tieMessage.text.toString()
             viewModel.sendMessage(text, idChat, recipientId)
             mBinding.tieMessage.text?.clear()
+        }
+        mBinding.ibBack.setOnClickListener {
+            findNavController().navigate(R.id.action_navigation_chat_to_navigation_messages)
         }
     }
 }
