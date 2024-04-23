@@ -1,7 +1,5 @@
 package com.isanz.inmomarket.rv.conversationItem
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.utils.entities.User
@@ -16,7 +14,6 @@ class ConversationViewModel : ViewModel() {
     suspend fun getUsersInConversation(idUsuarios: List<String>): List<User> {
         val deferreds = idUsuarios.map { id ->
             CoroutineScope(Dispatchers.IO).async {
-                Log.i(TAG, "Getting user with ID $id")
                 val document = InmoMarket.getDb().collection("users").document(id).get().await()
                 document.toObject(User::class.java)?.also { user ->
                     user.uid = id

@@ -27,7 +27,6 @@ class PropertyViewModel : ViewModel() {
     private val user = InmoMarket.getAuth().currentUser
 
     fun getIfFavorite(property: Property, callback: (Boolean) -> Unit) {
-        Log.i("TAG", property.toString())
         val docRef = db.collection("properties").document(property.id!!)
         docRef.get().addOnSuccessListener { document ->
             val favorites = document.get("favorites") as? List<*>

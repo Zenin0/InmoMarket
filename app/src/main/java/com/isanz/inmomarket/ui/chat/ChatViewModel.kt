@@ -14,7 +14,6 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.utils.entities.Chat
 import com.isanz.inmomarket.utils.entities.Message
 import com.isanz.inmomarket.utils.entities.User
@@ -54,7 +53,7 @@ class ChatViewModel : ViewModel() {
         return CoroutineScope(Dispatchers.IO).async {
             try {
                 val chatRef = FirebaseDatabase.getInstance().getReference("chats").child(chatId)
-                val chatSnapshot = suspendCoroutine<DataSnapshot> { continuation ->
+                val chatSnapshot = suspendCoroutine { continuation ->
                     chatRef.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             continuation.resume(snapshot)
@@ -66,7 +65,6 @@ class ChatViewModel : ViewModel() {
                     })
                 }
                 val chat = chatSnapshot.getValue(Chat::class.java)
-                Log.i(TAG, "Chat: $chat")
 
                 val deferreds = chat?.membersId?.map { id ->
                     async {
@@ -80,7 +78,7 @@ class ChatViewModel : ViewModel() {
                 deferreds?.awaitAll()?.filterNotNull() ?: emptyList()
             } catch (e: Exception) {
                 Log.e(TAG, "Error getting users in conversation", e)
-                emptyList<User>()
+                emptyList()
             }
         }
     }

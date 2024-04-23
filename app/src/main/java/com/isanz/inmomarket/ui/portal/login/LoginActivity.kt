@@ -167,7 +167,6 @@ class LoginActivity : AppCompatActivity() {
         val result = checkFields(email, password)
         // com.isanz.inmomarket.utils.retrofit.com.isanz.inmomarket.utils.retrofit.Result must be true, if not send to Log the error message and set to false
         if (result.second.not()) {
-            Log.i(TAG, result.first)
             return
         } else {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->

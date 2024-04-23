@@ -1,7 +1,5 @@
 package com.isanz.inmomarket.rv.propertyItem
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,21 +55,12 @@ class PropertyItemListAdapter(private val listener: OnItemClickListener) :
             override fun onPreDraw(): Boolean {
                 // Remove the listener to ensure it's only called once
                 holder.view.viewTreeObserver.removeOnPreDrawListener(this)
-
-                // Now the sizes are available
-                Log.i(
-                    TAG,
-                    holder.view.measuredWidth.toString() + " : " + holder.view.measuredHeight.toString()
-                )
-
                 val radiusInDp = 16
                 val scale = holder.image.context.resources.displayMetrics.density
                 val radiusInPx = (radiusInDp * scale + 0.5f).toInt()
-
                 Glide.with(holder.image.context).load(property.listImagesUri[0])
                     .override(holder.view.measuredWidth, holder.view.measuredHeight)
                     .transform(RoundedCorners(radiusInPx)).into(holder.image)
-
                 return true
             }
         })

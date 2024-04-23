@@ -95,7 +95,6 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
-        Log.i(TAG, "firebaseAuthWithGoogle: $idToken")
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
@@ -118,7 +117,6 @@ class RegisterActivity : AppCompatActivity() {
         val result = checkFields(email, password)
         // com.isanz.inmomarket.utils.retrofit.com.isanz.inmomarket.utils.retrofit.Result must be true, if not send to Log the error message and set to false
         if (result.second.not()) {
-            Log.i(TAG, result.first)
             return
         } else {
             auth.createUserWithEmailAndPassword(email, password)

@@ -44,7 +44,6 @@ class HomeViewModel : ViewModel() {
                     if (document.exists()) {
                         val property = document.toObject(Property::class.java)
                         property?.id = document.id
-                        Log.i(TAG, "com.isanz.inmomarket.utils.entities.Property: $property")
                         if (property?.userId != currentUserId) {
                             property?.let { properties.add(it) }
                         }
