@@ -110,12 +110,4 @@ class ProfileFragment : Fragment() {
         Glide.with(view.context).load(url).circleCrop().into(view)
     }
 
-    override fun onResume() {
-        super.onResume()
-        lifecycleScope.launch {
-            setUpView()
-        }
-        setUpDrawer()
-    }
-
 }

@@ -32,9 +32,6 @@ class PropertyFragment : Fragment() {
         super.onCreate(savedInstanceState)
         propertyId = arguments?.getString("propertyId")
         viewModel = PropertyViewModel()
-        lifecycleScope.launch {
-            setUp(propertyId)
-        }
 
     }
 

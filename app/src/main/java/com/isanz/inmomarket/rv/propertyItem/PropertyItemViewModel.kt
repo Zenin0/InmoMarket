@@ -55,4 +55,8 @@ class PropertyItemViewModel : ViewModel() {
             }
         }
     }
+
+    fun deleteProperty(property: Property) {
+        db.collection("properties").document(property.id!!).delete()
+    }
 }
