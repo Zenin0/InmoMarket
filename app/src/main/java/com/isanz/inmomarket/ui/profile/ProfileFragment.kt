@@ -1,5 +1,6 @@
 package com.isanz.inmomarket.ui.profile
 
+import ViewPagerAdapter
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -15,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.tabs.TabLayoutMediator
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentProfileBinding
 import com.isanz.inmomarket.ui.portal.login.LoginActivity
@@ -40,7 +42,26 @@ class ProfileFragment : Fragment() {
             setUpView()
         }
         setUpDrawer()
+        setUpTabs()
         return mBinding.root
+    }
+
+    private fun setUpTabs() {
+        val tabLayout = mBinding.appBarMain.tabLayout
+        val viewPager = mBinding.appBarMain.viewPager
+
+
+        val adapter = ViewPagerAdapter(requireActivity())
+        viewPager.adapter = adapter
+
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            when (position) {
+                0 -> tab.text = getString(R.string.tab_favorites)
+                1 -> tab.text = getString(R.string.tab_your_uploads)
+                else -> throw IllegalStateException("Invalid position")
+            }
+        }.attach()
     }
 
     private fun setUpDrawer() {
@@ -57,14 +78,17 @@ class ProfileFragment : Fragment() {
                         activity?.finish()
                     }
                 }
+
                 R.id.nav_about -> {
                     val url = "https://github.com/Zenin0/InmoMarket" // replace with your URL
                     val intent = Intent(Intent.ACTION_VIEW)
                     intent.data = Uri.parse(url)
                     startActivity(intent)
                 }
+
                 R.id.nav_settings -> {
-                    this.findNavController().navigate(R.id.action_navigation_profile_to_settingsFragment,)
+                    this.findNavController()
+                        .navigate(R.id.action_navigation_profile_to_settingsFragment)
                 }
             }
 
