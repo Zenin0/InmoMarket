@@ -65,27 +65,27 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_margin"
-        app:layout_constraintBottom_toTopOf="@id/viewPager"
-        app:layout_constraintTop_toBottomOf="@id/ivProfile" />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout"/>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/common_margin"
-        app:layout_constraintTop_toBottomOf="@id/ivProfile"
-        app:layout_constraintBottom_toTopOf="@id/viewPager">
+        app:layout_constraintTop_toBottomOf="@id/ivProfile">
 
         <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:tabMode="scrollable"
             android:text="@string/tab_your_uploads" />
 
         <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:tabMode="scrollable"
             android:text="@string/tab_favorites" />
 
     </com.google.android.material.tabs.TabLayout>
