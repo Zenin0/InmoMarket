@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentPropertyBinding
@@ -37,8 +38,7 @@ class PropertyFragment : Fragment() {
     private fun setUpButtons(property: Property) {
         mBinding.btnChat.setOnClickListener {
             viewModel.createChat(
-                InmoMarket.getAuth().currentUser!!.uid,
-                property.userId
+                InmoMarket.getAuth().currentUser!!.uid, property.userId
             ) { chatId ->
                 val bundle = Bundle().apply {
                     putString("idChat", chatId)
@@ -46,6 +46,10 @@ class PropertyFragment : Fragment() {
                 this.findNavController()
                     .navigate(R.id.action_navigation_property_to_chatFragment, bundle)
             }
+        }
+
+        mBinding.ibBack.setOnClickListener {
+            this.findNavController().popBackStack()
         }
 
         val updateFavoriteIcon: (Boolean) -> Unit = { isFavorite ->
@@ -75,13 +79,18 @@ class PropertyFragment : Fragment() {
         return mBinding.root
     }
 
-    private suspend fun setUp(propertyId: String?) {
+    private suspend fun setUpView(propertyId: String?) {
         val property = viewModel.retrieveProperty(propertyId!!)
         if (property != null) {
             mBinding.tvProperty.text = property.tittle
             mBinding.tvDescription.text = property.description
-            mBinding.tvAddress.text = property.location
-            "Price: ${property.price} €".also { mBinding.tvPrice.text = it }
+            "${property.location.split(",")[0]}, ${property.location.split(",")[1]}, ${
+                property.location.split(
+                    ","
+                )[2].split(" ")[1]
+            }".also { mBinding.tvAddress.text = it }
+
+            (property.price.toInt().toString() + "€").also { mBinding.tvPrice.text = it }
             val imageList = property.listImagesUri
             val adapter = CarouselAdapter(imageList)
             this.mBinding.vpProperty.adapter = adapter
@@ -95,6 +104,9 @@ class PropertyFragment : Fragment() {
                     setCurrentIndicator(position)
                 }
             })
+            val user = viewModel.retrieveProfile(property.userId)
+            mBinding.tvProfile.text = user.displayName
+            Glide.with(this).load(user.photoUrl).circleCrop().into(mBinding.ivProfile)
             loadExtras(property)
             setUpButtons(property)
             mBinding.progressBar.visibility = View.GONE
@@ -107,7 +119,6 @@ class PropertyFragment : Fragment() {
         val layoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
         )
-        layoutParams.setMargins(8, 0, 8, 0)
         for (i in indicators.indices) {
             indicators[i] = ImageView(context)
             indicators[i]?.let {
@@ -142,7 +153,6 @@ class PropertyFragment : Fragment() {
         }
     }
 
-
     private fun loadExtras(property: Property?) {
         val extraAdapter = mBinding.rvExtras.adapter as ExtraListAdapter
 
@@ -155,7 +165,7 @@ class PropertyFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch {
-            setUp(propertyId)
+            setUpView(propertyId)
         }
     }
 

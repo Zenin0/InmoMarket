@@ -144,8 +144,12 @@ class AddFragment : Fragment() {
             mBinding.tieDescription.error = getString(R.string.description_is_required)
             return false
         }
-        if (description.length < 20) {
-            mBinding.tieDescription.error = getString(R.string.description_least_20)
+        if (description.length < 100) {
+            mBinding.tieDescription.error = getString(R.string.description_least_100)
+            return false
+        }
+        if (description.length > 300) {
+            mBinding.tieDescription.error = getString(R.string.description_most_300)
             return false
         }
         if (location.isEmpty()) {

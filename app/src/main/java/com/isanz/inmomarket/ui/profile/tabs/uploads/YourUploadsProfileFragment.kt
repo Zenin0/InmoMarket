@@ -1,7 +1,6 @@
 package com.isanz.inmomarket.ui.profile.tabs.uploads
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,7 +51,6 @@ class YourUploadsProfileFragment : Fragment(), OnItemClickListener {
         mBinging.favoritesRecyclerView.layoutManager = LinearLayoutManager(context)
         favoritesProfileViewModel.listParcelas.observe(viewLifecycleOwner) { parcelas ->
             adapter.submitList(parcelas)
-            Log.i("FavoritesProfileFragment", "Parcelas: $parcelas")
             if (parcelas.isEmpty()) {
                 mBinging.emptyTextView.visibility = View.VISIBLE
             } else {

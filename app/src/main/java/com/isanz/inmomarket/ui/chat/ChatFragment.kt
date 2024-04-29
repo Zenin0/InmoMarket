@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.isanz.inmomarket.InmoMarket
-import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentChatBinding
 import com.isanz.inmomarket.rv.chatItem.ChatListAdapter
 import kotlinx.coroutines.launch
@@ -53,7 +52,7 @@ class ChatFragment : Fragment() {
     private fun setUpView() {
         lifecycleScope.launch {
             val users = viewModel.getUsersInConversation(idChat).await()
-            val otherUser = users.find { it.uid != recipientId }
+            val otherUser = users.find { it.uid != InmoMarket.getAuth().currentUser!!.uid }
             mBinding.tvNameChat.text = otherUser?.displayName
             otherUser?.photoUrl?.let { loadImage(it) }
         }
@@ -89,7 +88,7 @@ class ChatFragment : Fragment() {
             mBinding.tieMessage.text?.clear()
         }
         mBinding.ibBack.setOnClickListener {
-            findNavController().navigate(R.id.action_navigation_chat_to_navigation_messages)
+            this.findNavController().popBackStack()
         }
     }
 }

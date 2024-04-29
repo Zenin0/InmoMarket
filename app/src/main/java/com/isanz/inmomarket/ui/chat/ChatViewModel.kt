@@ -21,7 +21,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -54,7 +53,7 @@ class ChatViewModel : ViewModel() {
         return CoroutineScope(Dispatchers.IO).async {
             try {
                 val chatRef = FirebaseDatabase.getInstance().getReference("chats").child(chatId)
-                val chatSnapshot = suspendCoroutine { continuation ->
+                val chatSnapshot = suspendCoroutine<DataSnapshot> { continuation ->
                     chatRef.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             continuation.resume(snapshot)
@@ -67,19 +66,21 @@ class ChatViewModel : ViewModel() {
                 }
                 val chat = chatSnapshot.getValue(Chat::class.java)
 
-                val deferreds = chat?.membersId?.map { id ->
-                    async {
-                        val userDocument = Firebase.firestore.collection("users").document(id).get().await()
-                        userDocument.toObject(User::class.java)?.also { user ->
-                            user.uid = id
-                        }
+                val users = emptyList<User>().toMutableList()
+                for (memberId in chat?.membersId ?: emptyList()) {
+                    val userRef = Firebase.firestore.collection("users").document(memberId)
+                    val userSnapshot = userRef.get().await()
+                    val user = userSnapshot.toObject(User::class.java)
+                    if (user != null) {
+                        user.uid = userSnapshot.id
+                        users.add(user)
                     }
                 }
 
-                deferreds?.awaitAll()?.filterNotNull() ?: emptyList()
+                users.toList()
             } catch (e: Exception) {
                 Log.e(TAG, "Error getting users in conversation", e)
-                emptyList()
+                emptyList<User>()
             }
         }
     }

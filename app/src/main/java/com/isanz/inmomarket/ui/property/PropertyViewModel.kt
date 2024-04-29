@@ -14,6 +14,7 @@ import com.google.firebase.ktx.Firebase
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.utils.entities.Chat
 import com.isanz.inmomarket.utils.entities.Property
+import com.isanz.inmomarket.utils.entities.User
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -75,6 +76,12 @@ class PropertyViewModel : ViewModel() {
             )
             null
         }
+    }
+
+    suspend fun retrieveProfile(userId: String): User {
+        val user =
+            db.collection("users").document(userId).get().await()
+        return user.toObject(User::class.java)!!
     }
 
     fun createChat(senderId: String, recipientId: String, callback: (String) -> Unit) {
