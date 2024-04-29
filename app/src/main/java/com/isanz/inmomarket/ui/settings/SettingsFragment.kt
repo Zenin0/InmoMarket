@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.isanz.inmomarket.InmoMarket
-import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
@@ -51,8 +50,7 @@ class SettingsFragment : Fragment() {
             }
         }
         mBinding.ibBack.setOnClickListener {
-            this.findNavController()
-                .navigate(R.id.action_navigation_settings_to_navigation_profile)
+            this.findNavController().popBackStack()
         }
         mBinding.btnCloseAccount.setOnClickListener {
             mViewModel.closeAccount()

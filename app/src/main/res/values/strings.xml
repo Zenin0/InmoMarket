@@ -38,7 +38,8 @@
     <string name="tittle_is_required">Tittle is required</string>
     <string name="tittle_must_be_at_least_5_characters">Tittle must be at least 5 characters</string>
     <string name="description_is_required">Description is required</string>
-    <string name="description_least_20">Description must be at least 20 characters</string>
+    <string name="description_least_100">Description must be at least 100 characters</string>
+    <string name="description_most_300">Description can\'t be more than 300 characters</string>
     <string name="location_is_required">Location is required</string>
     <string name="baths_is_required">Baths is required</string>
     <string name="rooms_is_required">Rooms is required</string>
@@ -51,7 +52,7 @@
     <string name="username">Username</string>
     <string name="message">Message</string>
     <string name="time">16:55</string>
-    <string name="chat">Chat</string>
+    <string name="chat">Start a Chat</string>
     <string name="prompt_message">Message</string>
     <string name="send_message">Send message</string>
     <string name="lorem_ipsum">Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen.</string>
