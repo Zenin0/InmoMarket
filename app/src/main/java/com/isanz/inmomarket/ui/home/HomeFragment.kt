@@ -1,5 +1,6 @@
 package com.isanz.inmomarket.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.google.android.gms.ads.MobileAds
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentHomeBinding
 import com.isanz.inmomarket.rv.propertyItem.PropertyItemListAdapter
+import com.isanz.inmomarket.ui.dialog.SettingsDialogFragment
 import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 
 class HomeFragment : Fragment(), OnItemClickListener {
@@ -36,6 +38,12 @@ class HomeFragment : Fragment(), OnItemClickListener {
 
         val adRequest = AdRequest.Builder().build()
         mBinding.adView.loadAd(adRequest)
+        val sharedPref =
+            requireContext().getSharedPreferences("settings_preferences", Context.MODE_PRIVATE)
+        if (sharedPref.getBoolean("biometricLoginPopUp", true)) {
+            SettingsDialogFragment().show(childFragmentManager, "SettingsDialogFragment")
+            sharedPref.edit().putBoolean("biometricLoginPopUp", false).apply()
+        }
 
         setupRecyclerView(homeViewModel)
     }

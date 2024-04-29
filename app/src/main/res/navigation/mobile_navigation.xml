@@ -15,6 +15,9 @@
             app:destination="@id/navigation_property"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_settings"
+            app:destination="@id/navigation_settings" />
     </fragment>
     <fragment
         android:id="@+id/navigation_profile"
