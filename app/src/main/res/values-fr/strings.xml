@@ -54,7 +54,7 @@
     <string name="chat">Commencer un chat</string>
     <string name="prompt_message">Message</string>
     <string name="send_message">Envoyer le message</string>
-    <string name="lorem_ipsum">Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un peintre anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.</string>
+    <string name="lorem_ipsum">Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l\'imprimerie depuis les années 1500, quand un peintre anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.</string>
     <string name="login">Connexion</string>
     <string name="label_name">Nom</string>
     <string name="reset_password">Réinitialiser le mot de passe</string>
@@ -77,8 +77,8 @@
     <string name="no_home_items">Aucun élément trouvé</string>
     <string name="self_empty">Aucune propriété trouvée</string>
     <string name="profile_user">Profil utilisateur</string>
-    <string name="edit_profile_image">Modifier l'image de profil</string>
-    <string name="bimetric_pop_up_dialog">La connexion biométrique est disponible ! Voulez-vous l'activer ?</string>
-    <string name="bring_me_there">M'y emmener !</string>
+    <string name="edit_profile_image">Modifier l\'image de profil</string>
+    <string name="bimetric_pop_up_dialog">La connexion biométrique est disponible ! Voulez-vous l\'activer ?</string>
+    <string name="bring_me_there">M\'y emmener !</string>
     <string name="cancel">Annuler</string>
 </resources>

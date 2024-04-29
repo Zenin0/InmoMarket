@@ -78,7 +78,7 @@
     <string name="self_empty">Nessuna proprietà trovata</string>
     <string name="profile_user">Profilo utente</string>
     <string name="edit_profile_image">Modifica immagine del profilo</string>
-    <string name="bimetric_pop_up_dialog">L'accesso biometrico è disponibile! Vuoi abilitarlo?</string>
+    <string name="bimetric_pop_up_dialog">L\'accesso biometrico è disponibile! Vuoi abilitarlo?</string>
     <string name="bring_me_there">Portami lì!</string>
     <string name="cancel">Annulla</string>
 </resources>
