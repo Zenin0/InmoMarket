@@ -50,7 +50,7 @@ class RegisterActivity : AppCompatActivity() {
         viewModel = PortalViewModel()
         startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
+                if (result.resultCode == 0 || result.resultCode == Activity.RESULT_OK) {
                     val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                     try {
                         val account = task.getResult(ApiException::class.java)!!
