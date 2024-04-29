@@ -27,6 +27,7 @@ class ConversationListAdapter(private val navController: NavController) :
         val image: ImageView = itemView.findViewById(R.id.profile_image)
         val name: TextView = itemView.findViewById(R.id.username)
         val lastMessage: TextView = itemView.findViewById(R.id.message)
+        val time: TextView = itemView.findViewById(R.id.tvTime)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConversationViewHolder {
@@ -37,10 +38,6 @@ class ConversationListAdapter(private val navController: NavController) :
 
     override fun onBindViewHolder(holder: ConversationViewHolder, position: Int) {
         val conversation = getItem(position)
-
-        holder.name.text = ""
-        holder.image.setImageDrawable(null)
-
         CoroutineScope(Dispatchers.Main).launch {
             val users = viewModel.getUsersInConversation(conversation.membersId)
             val myId = InmoMarket.getAuth().currentUser?.uid
@@ -57,6 +54,8 @@ class ConversationListAdapter(private val navController: NavController) :
             }
         }
         holder.lastMessage.text = conversation.lastMessage.message
+        val trimmedTime = conversation.lastMessage.messageTime.substring(0, 5)
+        holder.time.text = trimmedTime
         holder.itemView.setOnClickListener {
             val bundle = Bundle().apply {
                 putString("idChat", conversation.chatId)

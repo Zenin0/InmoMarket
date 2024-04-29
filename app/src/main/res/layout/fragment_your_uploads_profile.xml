@@ -6,12 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.profile.tabs.favorites.FavoritesProfileFragment">
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favoritesRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/home_item"
-        android:layout_margin="@dimen/common_margin" />
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/common_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/home_item" />
 
     <ProgressBar
         android:id="@+id/favoritesProgressBar"
@@ -26,7 +29,7 @@
         android:id="@+id/emptyTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/self_empty"
+        android:text="@string/favorites_empty"
         android:textSize="@dimen/text_tittle"
         android:textStyle="bold"
         android:visibility="gone"
@@ -35,5 +38,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -120,9 +120,12 @@ class RegisterActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         val user = auth.currentUser
+                        val username = user!!.email.toString().split("@")[0]
+                        val displayName = if (username.length >= 8) username.substring(0, 8) else username
+
                         val profileUpdates = UserProfileChangeRequest.Builder()
                             .setPhotoUri(Constants.DEFAULT_IMAGE.toUri())
-                            .setDisplayName(user!!.email.toString().split("@")[0].substring(0, 8))
+                            .setDisplayName(displayName)
                             .build()
                         user.updateProfile(profileUpdates).addOnCompleteListener { taskUpdate ->
                             if (taskUpdate.isSuccessful) {
