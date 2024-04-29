@@ -76,4 +76,5 @@
     <string name="no_conversations">No conversations found</string>
     <string name="no_home_items">No item found</string>
     <string name="self_empty">No self properties found</string>
+    <string name="profile_user">Profile User</string>
 </resources>
