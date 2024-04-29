@@ -32,34 +32,26 @@ import com.isanz.inmomarket.utils.Constants
 class SearchFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
-
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
     private lateinit var searchViewModel: SearchViewModel
-
     private var allowUbication: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_search, container, false)
-
-        // ViewModel
         searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
+        setUpMap()
+        return view
+    }
 
+    private fun setUpMap() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
-        // Initialize fusedLocationClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-
-        // Retrieve the value from SharedPreferences
         val sharedPref =
             requireActivity().getSharedPreferences("settings_preferences", Context.MODE_PRIVATE)
         allowUbication = sharedPref.getBoolean("allowUbication", false)
-
-        return view
     }
 
 
@@ -88,22 +80,18 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
     ) {
         if (requestCode == Constants.LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission was granted, enable user location
                 enableUserLocation()
             } else {
-                // Permission was denied. Disable the functionality that depends on this permission.
                 Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    @SuppressLint("MissingPermission") // Cuando lleguemos ya sabremos si tenemos permisos o no
+    @SuppressLint("MissingPermission")
     private fun enableUserLocation() {
         if (allowUbication) {
             mMap.isMyLocationEnabled = true
-
             mMap.isMyLocationEnabled = true
-
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
                     val currentLatLng = LatLng(location.latitude, location.longitude)
@@ -116,8 +104,7 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
                             val marker = mMap.addMarker(
                                 MarkerOptions().position(markerLatLng).icon(customMarker)
                             )
-                            marker?.tag =
-                                latLongIdPairs.first  // You can set any object as a tag to identify the marker when it's clicked
+                            marker?.tag = latLongIdPairs.first
                         }
                     }
                 }
@@ -127,14 +114,10 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
         }
 
         mMap.setOnMarkerClickListener { marker ->
-            // Create a bundle to pass the property ID
             val args = Bundle()
             args.putString("propertyId", marker.tag as String)
-
-            // Navigate to the MiniPropertyFragment
             findNavController().navigate(R.id.navigation_mini_property, args)
-
-            false // Return false to make the camera move to the marker and an info window to appear
+            false
         }
 
     }

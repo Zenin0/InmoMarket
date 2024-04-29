@@ -65,8 +65,6 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun setUpButtons() {
         setContentView(mBinding.root)
-
-        // Register Button
         mBinding.btnRegister.setOnClickListener {
             val email = mBinding.tieEmail.text.toString()
             val password = mBinding.tiePassword.text.toString()
@@ -115,20 +113,17 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun createUserWithEmail(email: String, password: String) {
         val result = checkFields(email, password)
-        // com.isanz.inmomarket.utils.retrofit.com.isanz.inmomarket.utils.retrofit.Result must be true, if not send to Log the error message and set to false
         if (result.second.not()) {
             return
         } else {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        // Sign in success, update UI change activity
                         val user = auth.currentUser
                         val profileUpdates = UserProfileChangeRequest.Builder()
                             .setPhotoUri(Constants.DEFAULT_IMAGE.toUri())
                             .setDisplayName(user!!.email.toString().split("@")[0].substring(0, 8))
                             .build()
-
                         user.updateProfile(profileUpdates).addOnCompleteListener { taskUpdate ->
                             if (taskUpdate.isSuccessful) {
                                 saveUserToFirestore(user)
@@ -137,8 +132,6 @@ class RegisterActivity : AppCompatActivity() {
                         }
 
                     } else {
-                        // If sign in fails, display a message to the user.
-                        // Display error message
                         Toast.makeText(
                             baseContext,
                             "Authentication failed.",
@@ -151,32 +144,26 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun checkFields(email: String, password: String): Pair<String, Boolean> {
-        // Check if the email is empty
         if (email.isEmpty()) {
             mBinding.tieEmail.error = "Email is required"
             return "Email is empty" to false
         }
-        // Check if the email is valid
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             mBinding.tieEmail.error = "Email is not valid address"
             return "Email is not valid $email" to false
         }
-        // Check if the password is empty
         if (password.isEmpty()) {
             mBinding.tiePassword.error = "Password is required"
             return "Password is empty" to false
         }
-        // Check if the password is less than 6 characters
         if (password.length < 6) {
             mBinding.tiePassword.error = "Password must be at least 6 characters"
             return "Password is less than 6 characters" to false
         }
-        // Check if the password has at least one digit
         if (!password.matches(".*\\d.*".toRegex())) {
             mBinding.tiePassword.error = "Password must have at least one digit"
             return "Password must have at least one digit" to false
         }
-        // Check if the password has at least one special character
         if (!password.matches(".*[!@#\$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*".toRegex())) {
             mBinding.tiePassword.error = "Password must have at least one special character"
             return "Password must have at least one special character" to false
@@ -197,12 +184,8 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun goToMain(user: FirebaseUser?) {
         user?.let {
-
-            // Start the new activity (MainActivity)
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-
-            // End the current activity (LoginActivity)
             finish()
         }
     }

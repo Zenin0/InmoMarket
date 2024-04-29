@@ -15,9 +15,7 @@ import kotlinx.coroutines.withContext
 class FavoritesProfileViewModel : ViewModel() {
 
     val db = InmoMarket.getDb()
-
     private val _listfavorites = MutableLiveData<MutableList<Property>>()
-
     val listFavorites: LiveData<MutableList<Property>> = _listfavorites
 
     init {

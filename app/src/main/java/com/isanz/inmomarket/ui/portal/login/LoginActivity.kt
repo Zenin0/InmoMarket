@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
         }
         startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
+                if (result.resultCode == 0 || result.resultCode == Activity.RESULT_OK) {
                     val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                     try {
                         val account = task.getResult(ApiException::class.java)!!
@@ -63,6 +63,9 @@ class LoginActivity : AppCompatActivity() {
                     } catch (e: ApiException) {
                         Log.w(TAG, "Google sign in failed", e)
                     }
+                } else {
+                    // Handle the case where the result code is not RESULT_OK
+                    Toast.makeText(this, "Google sign in was not completed.", Toast.LENGTH_SHORT).show()
                 }
             }
         setUpButtons()
@@ -70,7 +73,6 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setUpButtons() {
         setContentView(mBinding.root)
-        // Register Button
         mBinding.btnRegister.setOnClickListener {
             val email = mBinding.tieEmail.text.toString()
             val password = mBinding.tiePassword.text.toString()
@@ -108,13 +110,11 @@ class LoginActivity : AppCompatActivity() {
                     super.onAuthenticationSucceeded(result)
                     val currentUser = FirebaseAuth.getInstance().currentUser
                     if (currentUser != null) {
-                        // User is signed in
                         Toast.makeText(
                             applicationContext, "Authentication succeeded!", Toast.LENGTH_SHORT
                         ).show()
                         goToMain(currentUser)
                     } else {
-                        // No user is signed in
                         Toast.makeText(
                             applicationContext,
                             "No user is currently logged in. Please log in first.",
@@ -144,9 +144,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
+        Log.d(TAG, "ID Token: $idToken")
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
+                Log.d(TAG, "signInWithCredential:success")
                 val user = auth.currentUser
                 val profileUpdates = UserProfileChangeRequest.Builder()
                     .setDisplayName(user!!.email.toString().split("@")[0].substring(0, 8)).build()
@@ -158,6 +160,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             } else {
+                Log.w(TAG, "signInWithCredential:failure", task.exception)
                 Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
             }
         }
@@ -165,18 +168,14 @@ class LoginActivity : AppCompatActivity() {
 
     private fun signInUserWithEmail(email: String, password: String) {
         val result = checkFields(email, password)
-        // com.isanz.inmomarket.utils.retrofit.com.isanz.inmomarket.utils.retrofit.Result must be true, if not send to Log the error message and set to false
         if (result.second.not()) {
             return
         } else {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI change activity
                     val user = auth.currentUser
                     goToMain(user)
                 } else {
-                    // If sign in fails, display a message to the user.
-                    // Display error message
                     Toast.makeText(
                         baseContext,
                         "Authentication failed.",
@@ -189,32 +188,26 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun checkFields(email: String, password: String): Pair<String, Boolean> {
-        // Check if the email is empty
         if (email.isEmpty()) {
             mBinding.tieEmail.error = "Email is required"
             return "Email is empty" to false
         }
-        // Check if the email is valid
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             mBinding.tieEmail.error = "Email is not valid address"
             return "Email is not valid $email" to false
         }
-        // Check if the password is empty
         if (password.isEmpty()) {
             mBinding.tiePassword.error = "Password is required"
             return "Password is empty" to false
         }
-        // Check if the password is less than 6 characters
         if (password.length < 6) {
             mBinding.tiePassword.error = "Password must be at least 6 characters"
             return "Password is less than 6 characters" to false
         }
-        // Check if the password has at least one digit
         if (!password.matches(".*\\d.*".toRegex())) {
             mBinding.tiePassword.error = "Password must have at least one digit"
             return "Password must have at least one digit" to false
         }
-        // Check if the password has at least one special character
         if (!password.matches(".*[!@#\$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*".toRegex())) {
             mBinding.tiePassword.error = "Password must have at least one special character"
             return "Password must have at least one special character" to false
@@ -237,14 +230,10 @@ class LoginActivity : AppCompatActivity() {
         user?.let {
             it.reload().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // User's data was successfully reloaded, the account exists in Firebase
-                    // Start the new activity (MainActivity)
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
-                    // End the current activity (LoginActivity)
                     finish()
                 } else {
-                    // An error occurred while reloading the user's data, the account may not exist in Firebase
                     Toast.makeText(
                         applicationContext,
                         "An error occurred. Please log in again.",

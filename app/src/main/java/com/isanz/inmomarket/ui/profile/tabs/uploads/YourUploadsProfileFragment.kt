@@ -9,10 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.isanz.inmomarket.R
-import com.isanz.inmomarket.databinding.FragmentFavoritesProfileBinding
 import com.isanz.inmomarket.databinding.FragmentYourUploadsProfileBinding
 import com.isanz.inmomarket.rv.propertyItem.PropertyItemListAdapter
-import com.isanz.inmomarket.ui.profile.tabs.favorites.FavoritesProfileViewModel
 import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 
 
@@ -27,7 +25,6 @@ class YourUploadsProfileFragment : Fragment(), OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         mBinging = FragmentYourUploadsProfileBinding.inflate(inflater, container, false)
         favoritesProfileViewModel = YourUploadsProfileViewModel()
         return mBinging.root
@@ -42,7 +39,9 @@ class YourUploadsProfileFragment : Fragment(), OnItemClickListener {
         val bundle = Bundle().apply {
             putString("propertyId", propertyId)
         }
-        this.findNavController().navigate(R.id.action_navigation_profile_to_navigation_property, bundle)
+        this.findNavController().navigate(R.id.action_navigation_profile_to_navigation_property,
+            bundle
+        )
     }
 
 
@@ -50,13 +49,8 @@ class YourUploadsProfileFragment : Fragment(), OnItemClickListener {
         val adapter = PropertyItemListAdapter(this)
         mBinging.favoritesRecyclerView.adapter = adapter
         adapter.attachToRecyclerView(mBinging.favoritesRecyclerView)
-
-        // Set the LayoutManager
         mBinging.favoritesRecyclerView.layoutManager = LinearLayoutManager(context)
-
-        // Observe the data from the ViewModel
         favoritesProfileViewModel.listParcelas.observe(viewLifecycleOwner) { parcelas ->
-            // Update the adapter with the new list of Parcela objects
             adapter.submitList(parcelas)
             Log.i("FavoritesProfileFragment", "Parcelas: $parcelas")
             if (parcelas.isEmpty()) {

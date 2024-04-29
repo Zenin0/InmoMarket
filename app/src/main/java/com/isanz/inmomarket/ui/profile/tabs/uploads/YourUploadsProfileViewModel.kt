@@ -17,7 +17,6 @@ class YourUploadsProfileViewModel : ViewModel() {
 
     private val _listParcelas = MutableLiveData<List<Property>>()
     val listParcelas: LiveData<List<Property>> = _listParcelas
-
     private val db = FirebaseFirestore.getInstance()
 
     init {

@@ -36,7 +36,6 @@ class ConversationsFragment : Fragment() {
 
         viewModel.listConversations.observe(viewLifecycleOwner) { conversations ->
             adapter.submitList(conversations) {
-                // Scroll to the last position after the list has been updated
                 mBinding.recyclerView.scrollToPosition(0)
             }
             if (conversations.isEmpty()) {

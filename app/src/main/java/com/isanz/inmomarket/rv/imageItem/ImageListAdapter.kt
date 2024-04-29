@@ -28,12 +28,9 @@ class ImageListAdapter :
         Glide.with(holder.itemView).load(getItem(position)).into(holder.image)
 
         holder.delButton.setOnClickListener {
-            // Get the current position of the item
             val currentPosition = holder.adapterPosition
 
-            // Check if the position is valid
             if (currentPosition != RecyclerView.NO_POSITION) {
-                // Remove the item from the list
                 submitList(currentList.filterIndexed { index, _ -> index != currentPosition })
             }
         }

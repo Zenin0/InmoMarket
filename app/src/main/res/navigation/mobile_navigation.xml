@@ -90,7 +90,7 @@
     </fragment>
     <dialog
         android:id="@+id/navigation_mini_property"
-        android:name="com.isanz.inmomarket.MiniPropertyFragment"
+        android:name="com.isanz.inmomarket.ui.property.MiniPropertyFragment"
         android:label="MiniPropertyFragment" >
         <argument
             android:name="propertyId"

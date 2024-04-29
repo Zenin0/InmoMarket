@@ -21,7 +21,6 @@ class SearchViewModel : ViewModel() {
     private val db = InmoMarket.getDb()
     private val retrofit = Retrofit.Builder().baseUrl("https://maps.googleapis.com/")
         .addConverterFactory(GsonConverterFactory.create()).build()
-
     private val geocodingService = retrofit.create(GeocodingService::class.java)
 
     private fun getAllAdresses(): LiveData<List<Pair<String, String>>> {
@@ -30,9 +29,12 @@ class SearchViewModel : ViewModel() {
 
         db.collection("properties").get().addOnSuccessListener { result ->
             val addressesList = result.documents.mapNotNull { document ->
-                val userId = document.getString("userId") // replace "userId" with the actual field name in your Firestore documents
-                val location = document.getString("location") // replace "location" with the actual field name in your Firestore documents
-                if (userId != currentUserId && location != null) Pair(document.id, location) else null
+                val userId = document.getString("userId")
+                val location = document.getString("location")
+                if (userId != currentUserId && location != null) Pair(
+                    document.id,
+                    location
+                ) else null
             }
             addressesLiveData.value = addressesList
         }.addOnFailureListener { exception ->
@@ -44,7 +46,8 @@ class SearchViewModel : ViewModel() {
 
     fun getLatAndLong(): LiveData<List<Triple<String, Double, Double>>> {
         val locationsLiveData = MutableLiveData<List<Triple<String, Double, Double>>>()
-        val locationsList = Collections.synchronizedList(ArrayList<Triple<String, Double, Double>>())
+        val locationsList =
+            Collections.synchronizedList(ArrayList<Triple<String, Double, Double>>())
 
         getAllAdresses().observeForever { addresses ->
             addresses?.forEach { (id, address) ->
@@ -55,7 +58,8 @@ class SearchViewModel : ViewModel() {
                         ) {
                             if (response.isSuccessful) {
                                 val geocodingResponse = response.body()
-                                val location = geocodingResponse?.results?.get(0)?.geometry?.location
+                                val location =
+                                    geocodingResponse?.results?.get(0)?.geometry?.location
                                 if (location != null) {
                                     locationsList.add(Triple(id, location.lat, location.lng))
                                     locationsLiveData.value = locationsList

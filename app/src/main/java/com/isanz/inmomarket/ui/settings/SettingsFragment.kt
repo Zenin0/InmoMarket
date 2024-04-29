@@ -33,8 +33,8 @@ class SettingsFragment : Fragment() {
     }
 
     private fun retrieveSettings() {
-        // Retrieve the value from SharedPreferences
-        val sharedPref = requireActivity().getSharedPreferences("settings_preferences", Context.MODE_PRIVATE)
+        val sharedPref =
+            requireActivity().getSharedPreferences("settings_preferences", Context.MODE_PRIVATE)
         val biometricLogin = sharedPref.getBoolean("biometricLogin", false)
         val allowUbication = sharedPref.getBoolean("allowUbication", false)
         mBinding.sBiometricalLogin.isChecked = biometricLogin
@@ -42,8 +42,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setUpButtons() {
-        mBinding.sBiometricalLogin .setOnCheckedChangeListener { _, isChecked ->
-            // Save the value in SharedPreferences
+        mBinding.sBiometricalLogin.setOnCheckedChangeListener { _, isChecked ->
             val sharedPref =
                 requireActivity().getSharedPreferences("settings_preferences", Context.MODE_PRIVATE)
             with(sharedPref.edit()) {
@@ -52,14 +51,14 @@ class SettingsFragment : Fragment() {
             }
         }
         mBinding.ibBack.setOnClickListener {
-            this.findNavController().navigate(R.id.action_navigation_settings_to_navigation_profile,)
+            this.findNavController()
+                .navigate(R.id.action_navigation_settings_to_navigation_profile)
         }
-        mBinding.btnCloseAccount.setOnClickListener{
+        mBinding.btnCloseAccount.setOnClickListener {
             mViewModel.closeAccount()
         }
 
-        mBinding.sAllowUbication.setOnClickListener{
-            // Save the value in SharedPreferences
+        mBinding.sAllowUbication.setOnClickListener {
             val sharedPref =
                 requireActivity().getSharedPreferences("settings_preferences", Context.MODE_PRIVATE)
             with(sharedPref.edit()) {

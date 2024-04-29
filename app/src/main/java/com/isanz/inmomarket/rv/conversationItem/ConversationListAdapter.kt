@@ -38,7 +38,6 @@ class ConversationListAdapter(private val navController: NavController) :
     override fun onBindViewHolder(holder: ConversationViewHolder, position: Int) {
         val conversation = getItem(position)
 
-        // Clear the ViewHolder's data
         holder.name.text = ""
         holder.image.setImageDrawable(null)
 
@@ -57,7 +56,7 @@ class ConversationListAdapter(private val navController: NavController) :
                 }
             }
         }
-        holder.lastMessage.text = conversation.lastMessage
+        holder.lastMessage.text = conversation.lastMessage.message
         holder.itemView.setOnClickListener {
             val bundle = Bundle().apply {
                 putString("idChat", conversation.chatId)

@@ -40,7 +40,6 @@ class AddFragment : Fragment() {
         val root: View = mBinding.root
         db = InmoMarket.getDb()
 
-        // Initialize the RecyclerView adapter
         val adapter = ImageListAdapter()
         mBinding.rvImages.adapter = adapter
         if (!Places.isInitialized()) {
@@ -120,8 +119,7 @@ class AddFragment : Fragment() {
                                 location,
                                 images,
                                 extras,
-                                price.toDouble(),
-                                squareMeters.toDouble()
+                                price.toDouble()
                             )
                             updateUI()
                         }
@@ -203,20 +201,16 @@ class AddFragment : Fragment() {
             val imageUris = mutableListOf<String>()
 
             if (clipData != null) {
-                // Multiple images were selected
                 for (i in 0 until clipData.itemCount) {
                     val uri = clipData.getItemAt(i).uri
                     imageUris.add(uri.toString())
                 }
             } else {
-                // Single image was selected
                 val uri = data?.data
                 if (uri != null) {
                     imageUris.add(uri.toString())
                 }
             }
-
-            // Load the images into the RecyclerView
             val adapter = (mBinding.rvImages.adapter as? ImageListAdapter)
             adapter?.submitList(imageUris)
             mBinding.rvImages.visibility = View.VISIBLE
