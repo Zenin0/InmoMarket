@@ -1,6 +1,5 @@
 package com.isanz.inmomarket.ui.profile
 
-import ViewPagerAdapter
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -37,16 +36,18 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-
         mBinding = FragmentProfileBinding.inflate(inflater, container, false)
+        setUp()
+        return mBinding.root
+    }
 
+    private fun setUp() {
         lifecycleScope.launch {
             setUpView()
         }
         setUpDrawer()
         setUpTabs()
         setUpButtons()
-        return mBinding.root
     }
 
     private fun setUpButtons() {
@@ -103,7 +104,7 @@ class ProfileFragment : Fragment() {
                 }
 
                 R.id.nav_about -> {
-                    val url = "https://github.com/Zenin0/InmoMarket" // replace with your URL
+                    val url = "https://github.com/Zenin0/InmoMarket"
                     val intent = Intent(Intent.ACTION_VIEW)
                     intent.data = Uri.parse(url)
                     startActivity(intent)

@@ -38,7 +38,6 @@ class ConversationListAdapter(private val navController: NavController) :
 
     override fun onBindViewHolder(holder: ConversationViewHolder, position: Int) {
         val conversation = getItem(position)
-
         CoroutineScope(Dispatchers.Main).launch {
             val users = viewModel.getUsersInConversation(conversation.membersId)
             val myId = InmoMarket.getAuth().currentUser?.uid

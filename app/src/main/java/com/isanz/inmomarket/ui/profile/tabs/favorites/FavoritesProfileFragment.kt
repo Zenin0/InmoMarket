@@ -17,14 +17,11 @@ class FavoritesProfileFragment : Fragment(), OnItemClickListener {
 
 
     private lateinit var mBinging: FragmentFavoritesProfileBinding
-
     private lateinit var favoritesProfileViewModel: FavoritesProfileViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         mBinging = FragmentFavoritesProfileBinding.inflate(inflater, container, false)
         favoritesProfileViewModel = FavoritesProfileViewModel()
         setupRecyclerView()
@@ -40,20 +37,16 @@ class FavoritesProfileFragment : Fragment(), OnItemClickListener {
         val bundle = Bundle().apply {
             putString("propertyId", propertyId)
         }
-        this.findNavController().navigate(R.id.action_navigation_profile_to_navigation_property, bundle)
+        this.findNavController()
+            .navigate(R.id.action_navigation_profile_to_navigation_property, bundle)
     }
 
 
     private fun setupRecyclerView() {
         val adapter = PropertyItemListAdapter(this)
         mBinging.favoritesRecyclerView.adapter = adapter
-
-        // Set the LayoutManager
         mBinging.favoritesRecyclerView.layoutManager = LinearLayoutManager(context)
-
-        // Observe the data from the ViewModel
         favoritesProfileViewModel.listFavorites.observe(viewLifecycleOwner) { parcelas ->
-            // Update the adapter with the new list of Parcela objects
             adapter.submitList(parcelas)
             if (parcelas.isEmpty()) {
                 mBinging.emptyTextView.visibility = View.VISIBLE

@@ -59,7 +59,6 @@ class PropertyItemListAdapter(private val listener: OnItemClickListener) :
         holder.view.viewTreeObserver.addOnPreDrawListener(object :
             ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
-                // Remove the listener to ensure it's only called once
                 holder.view.viewTreeObserver.removeOnPreDrawListener(this)
                 val radiusInDp = 16
                 val scale = holder.image.context.resources.displayMetrics.density
@@ -83,16 +82,10 @@ class PropertyItemListAdapter(private val listener: OnItemClickListener) :
             }
         }
 
-        // Call the getIfFavorite function from the ViewModel
         viewModel.getIfFavorite(property, updateFavoriteIcon)
-
-        // Load the animation
         val rotateAnimation = AnimationUtils.loadAnimation(holder.btnFav.context, R.anim.rotate)
-
         holder.btnFav.setOnClickListener {
-            // Start the animation
             it.startAnimation(rotateAnimation)
-
             viewModel.alterFavorite(property, updateFavoriteIcon)
         }
 
@@ -104,11 +97,11 @@ class PropertyItemListAdapter(private val listener: OnItemClickListener) :
 
     fun attachToRecyclerView(recyclerView: RecyclerView) {
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            private val icon: Drawable? = ContextCompat.getDrawable(recyclerView.context, R.drawable.ic_delete_forever) // replace with your delete icon
+            private val icon: Drawable? = ContextCompat.getDrawable(recyclerView.context, R.drawable.ic_delete_forever)
             private val background = ColorDrawable(Color.argb(128, 255, 200, 200))
 
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-                return false // we are not implementing move functionality here
+                return false
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -123,13 +116,13 @@ class PropertyItemListAdapter(private val listener: OnItemClickListener) :
                 val itemView = viewHolder.itemView
                 val iconMargin = (itemView.height - icon!!.intrinsicHeight) / 2
 
-                if (dX < 0) { // swiping to the left
+                if (dX < 0) {
                     background.setBounds(itemView.right + dX.toInt(), itemView.top, itemView.right, itemView.bottom)
                     background.draw(c)
 
                     icon.setBounds(itemView.right - iconMargin - icon.intrinsicWidth, itemView.top + iconMargin, itemView.right - iconMargin, itemView.bottom - iconMargin)
                     icon.draw(c)
-                } else { // view is unSwiped
+                } else {
                     background.setBounds(0, 0, 0, 0)
                     icon.setBounds(0, 0, 0, 0)
                 }
@@ -141,11 +134,8 @@ class PropertyItemListAdapter(private val listener: OnItemClickListener) :
 
 
     private fun loadExtras(holder: PropertyViewHolder, property: Property?) {
-        // Create and set the adapter for the inner RecyclerView
         val extraAdapter = ExtraListAdapter("HomeFragment")
         holder.rvExtras.adapter = extraAdapter
-
-        // Convert the Map to a List of Pairs and submit it to the adapter
         property?.extras?.let { extras ->
             val extrasList = extras.toList()
             extraAdapter.submitList(extrasList)

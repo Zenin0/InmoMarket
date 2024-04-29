@@ -21,9 +21,7 @@ import kotlinx.coroutines.tasks.await
 class PropertyViewModel : ViewModel() {
 
     private val db = FirebaseFirestore.getInstance()
-
     private val database: FirebaseDatabase = Firebase.database
-
     private val user = InmoMarket.getAuth().currentUser
 
     fun getIfFavorite(property: Property, callback: (Boolean) -> Unit) {
@@ -45,23 +43,15 @@ class PropertyViewModel : ViewModel() {
             docRef.get().addOnSuccessListener { document ->
                 val favorites = document.get("favorites") as? List<*>
                 if (favorites != null && favorites.contains(user!!.uid)) {
-                    // Optimistically update the UI
                     updateFavoriteIcon(false)
-
-                    // If the user's ID is already in the favorites array, remove it
                     docRef.update("favorites", FieldValue.arrayRemove(user.uid))
                         .addOnFailureListener {
-                            // If the update fails, revert the UI change
                             updateFavoriteIcon(true)
                         }
                 } else {
-                    // Optimistically update the UI
                     updateFavoriteIcon(true)
-
-                    // If the user's ID is not in the favorites array, add it
                     docRef.update("favorites", FieldValue.arrayUnion(user!!.uid))
                         .addOnFailureListener {
-                            // If the update fails, revert the UI change
                             updateFavoriteIcon(false)
                         }
                 }
@@ -80,27 +70,41 @@ class PropertyViewModel : ViewModel() {
                 null
             }
         } catch (e: Exception) {
-            Log.e("com.isanz.inmomarket.ui.property.PropertyViewModel", "Error retrieving property", e)
+            Log.e(
+                "com.isanz.inmomarket.ui.property.PropertyViewModel", "Error retrieving property", e
+            )
             null
         }
     }
 
-    fun addChat(senderId: String, recipientId: String, callback: (String) -> Unit) {
+    fun createChat(senderId: String, recipientId: String, callback: (String) -> Unit) {
         val chatRef = database.getReference("chats")
         chatRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 var chatId: String? = null
                 for (snapshot in dataSnapshot.children) {
                     val chat = snapshot.getValue(Chat::class.java)
-                    if (chat?.membersId?.containsAll(listOf(senderId, recipientId)) == true ||
-                        chat?.membersId?.containsAll(listOf(recipientId, senderId)) == true) {
+                    if (chat?.membersId?.containsAll(
+                            listOf(
+                                senderId, recipientId
+                            )
+                        ) == true || chat?.membersId?.containsAll(
+                            listOf(
+                                recipientId, senderId
+                            )
+                        ) == true
+                    ) {
                         chatId = snapshot.key
                         break
                     }
                 }
                 if (chatId == null) {
                     chatId = chatRef.push().key!!
-                    chatRef.child(chatId).setValue(Chat(chatId = chatId, membersId = mutableListOf(senderId, recipientId)))
+                    chatRef.child(chatId).setValue(
+                        Chat(
+                            chatId = chatId, membersId = mutableListOf(senderId, recipientId)
+                        )
+                    )
                 }
                 callback(chatId)
             }

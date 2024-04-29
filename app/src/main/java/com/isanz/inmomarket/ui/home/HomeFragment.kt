@@ -17,9 +17,7 @@ import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 
 class HomeFragment : Fragment(), OnItemClickListener {
 
-    private var _binding: FragmentHomeBinding? = null
-
-    private val binding get() = _binding!!
+    private lateinit var mBinding: FragmentHomeBinding
 
     private val homeViewModel: HomeViewModel by lazy {
         ViewModelProvider(this)[HomeViewModel::class.java]
@@ -28,38 +26,32 @@ class HomeFragment : Fragment(), OnItemClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        mBinding = FragmentHomeBinding.inflate(inflater, container, false)
         setUpView()
-        return binding.root
+        return mBinding.root
     }
 
     private fun setUpView() {
         MobileAds.initialize(requireContext()) {}
 
         val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
+        mBinding.adView.loadAd(adRequest)
 
         setupRecyclerView(homeViewModel)
     }
 
     private fun setupRecyclerView(homeViewModel: HomeViewModel) {
-        // Initialize the RecyclerView adapter
         val adapter = PropertyItemListAdapter(this)
-        binding.rvHome.adapter = adapter
-
-        // Set the LayoutManager
-        binding.rvHome.layoutManager = LinearLayoutManager(context)
-
-        // Observe the data from the ViewModel
+        mBinding.rvHome.adapter = adapter
+        mBinding.rvHome.layoutManager = LinearLayoutManager(context)
         homeViewModel.listParcelas.observe(viewLifecycleOwner) { parcelas ->
-            // Update the adapter with the new list of Parcela objects
             adapter.submitList(parcelas)
             if (parcelas.isEmpty()) {
-                binding.emptyTextView.visibility = View.VISIBLE
+                mBinding.emptyTextView.visibility = View.VISIBLE
             } else {
-                binding.emptyTextView.visibility = View.GONE
+                mBinding.emptyTextView.visibility = View.GONE
             }
-            binding.progressBar.visibility = View.GONE
+            mBinding.progressBar.visibility = View.GONE
         }
     }
 
@@ -68,10 +60,5 @@ class HomeFragment : Fragment(), OnItemClickListener {
             putString("propertyId", propertyId)
         }
         this.findNavController().navigate(R.id.action_navigation_home_to_propertyFragment, bundle)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

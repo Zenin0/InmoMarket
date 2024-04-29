@@ -46,6 +46,7 @@ class ChatViewModel : ViewModel() {
             messageTime = current.format(timeFormatter)
         )
         database.getReference("chatMessages").child(chatId).push().setValue(message)
+        database.getReference("chats").child(chatId).child("lastMessage").setValue(message)
     }
 
 

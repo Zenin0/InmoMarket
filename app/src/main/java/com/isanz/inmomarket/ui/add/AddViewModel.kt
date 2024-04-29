@@ -19,7 +19,6 @@ class AddViewModel : ViewModel() {
         images: List<String>,
         extras: HashMap<String, Int>,
         price: Double,
-        squareMeters: Double
     ): String {
         var result = ""
         val property = Property(
@@ -30,7 +29,6 @@ class AddViewModel : ViewModel() {
             listImagesUri = images,
             extras = extras,
             price = price,
-            squareMeters = squareMeters
 
         )
 

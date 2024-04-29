@@ -2,7 +2,6 @@ package com.isanz.inmomarket.ui.chat
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentChatBinding
 import com.isanz.inmomarket.rv.chatItem.ChatListAdapter
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.plus
 
 class ChatFragment : Fragment() {
 
@@ -44,7 +42,6 @@ class ChatFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         mBinding = FragmentChatBinding.inflate(inflater, container, false)
         setUpView()
 
@@ -71,7 +68,6 @@ class ChatFragment : Fragment() {
         mBinding.recyclerView.adapter = adapter
         viewModel.messageList.observe(viewLifecycleOwner) { messages ->
             adapter.submitList(messages) {
-                // Scroll to the last position after the list has been updated
                 mBinding.recyclerView.scrollToPosition(0)
             }
         }
