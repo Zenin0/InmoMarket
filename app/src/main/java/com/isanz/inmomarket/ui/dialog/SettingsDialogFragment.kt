@@ -12,12 +12,14 @@ class SettingsDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = MaterialAlertDialogBuilder(it)
-            builder.setMessage("Biometric login is available?")
-                .setPositiveButton("Want to enable it?"
+            builder.setMessage(getString(R.string.bimetric_pop_up_dialog))
+                .setPositiveButton(
+                    getString(R.string.bring_me_there)
                 ) { _, _ ->
                     findNavController().navigate(R.id.action_navigation_home_to_navigation_settings)
                 }
-                .setNegativeButton("Cancel"
+                .setNegativeButton(
+                    getString(R.string.cancel)
                 ) { dialog, _ ->
                     dialog.dismiss()
                 }
