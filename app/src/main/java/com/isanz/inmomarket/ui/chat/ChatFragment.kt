@@ -67,7 +67,10 @@ class ChatFragment : Fragment() {
     private fun observeMessages(adapter: ChatListAdapter) {
         viewModel.messageList.observe(viewLifecycleOwner) { messages ->
             adapter.submitList(messages) {
-                mBinding.recyclerView.scrollToPosition(0)
+                val lastPosition = messages.size - 1
+                if (lastPosition >= 0) {
+                    mBinding.recyclerView.scrollToPosition(lastPosition)
+                }
             }
         }
     }
