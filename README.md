@@ -41,43 +41,43 @@
 
 ### Home Screen
 
-![Home Screen](images/home_screen.png)
+<img src="images/home_screen.png" width="300" height="600">
 
 ### Property detail Screen
 
-![Detalle de la propiedad](images/property_screen.png)
+<img src="images/property_screen.png" width="300" height="600">
 
 ### Chat Screen
 
-![Chat Screen](images/chat_screen.png)
+<img src="images/chat_screen.png" width="300" height="600">
 
 ### Messages Screen
 
-![Messages Screen](images/conversations_screen.png)
+<img src="images/conversations_screen.png" width="300" height="600">
 
 ### Search Screen
 
-![Search Screen](images/search_before_screen.png)
+<img src="images/search_before_screen.png" width="300" height="600">
 
-![Search Screen](images/search_after_screen.png)
+<img src="images/search_after_screen.png" width="300" height="600">
 
 ### Add Property Screen
 
-![Add Property Screen](images/add_screen.png)
+<img src="images/add_screen.png" width="300" height="600">
 
 ### Profile Screen
 
-![Profile Screen](images/profile_favorites_screen.png)
+<img src="images/profile_favorites_screen.png" width="300" height="600">
 
-![Profile Screen](images/profile_uploads_screen.png)
+<img src="images/profile_uploads_screen.png" width="300" height="600">
 
 ### Drawer Screen
 
-![Drawer Screen](images/drawer_screen.png)
+<img src="images/drawer_screen.png" width="300" height="600">
 
 ### Settings Screen
 
-![Settings Screen](images/settings_screen.png)
+<img src="images/settings_screen.png" width="300" height="600">
 
 
 </p><br>
