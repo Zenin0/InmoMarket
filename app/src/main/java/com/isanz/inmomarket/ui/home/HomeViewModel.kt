@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.utils.entities.Property
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +18,6 @@ class HomeViewModel : ViewModel() {
 
     private val _listParcelas = MutableLiveData<List<Property>>()
     val listParcelas: LiveData<List<Property>> = _listParcelas
-
     private val db = FirebaseFirestore.getInstance()
 
     init {
@@ -25,34 +25,42 @@ class HomeViewModel : ViewModel() {
             try {
                 listenForParcelasUpdates()
             } catch (e: Exception) {
-                Log.w(TAG, "Listen failed.", e)
+                logError(e)
             }
         }
+    }
+
+    private fun logError(e: Exception) {
+        Log.w(TAG, "Listen failed.", e)
     }
 
     private suspend fun listenForParcelasUpdates() = withContext(Dispatchers.IO) {
         db.collection("properties").addSnapshotListener { snapshot, e ->
             if (e != null) {
-                Log.w(TAG, "Listen failed.", e)
+                logError(e)
                 return@addSnapshotListener
             }
 
             if (snapshot != null) {
-                val properties = mutableListOf<Property>()
-                val currentUserId = InmoMarket.getAuth().currentUser!!.uid
-                for (document in snapshot.documents) {
-                    if (document.exists()) {
-                        val property = document.toObject(Property::class.java)
-                        property?.id = document.id
-                        if (property?.userId != currentUserId) {
-                            property?.let { properties.add(it) }
-                        }
-                    }
-                }
-                _listParcelas.postValue(properties)
+                processSnapshot(snapshot)
             } else {
                 Log.d(TAG, "Current data: null")
             }
         }
+    }
+
+    private fun processSnapshot(snapshot: QuerySnapshot) {
+        val properties = mutableListOf<Property>()
+        val currentUserId = InmoMarket.getAuth().currentUser!!.uid
+        for (document in snapshot.documents) {
+            if (document.exists()) {
+                val property = document.toObject(Property::class.java)
+                property?.id = document.id
+                if (property?.userId != currentUserId && property != null) {
+                    properties.add(property)
+                }
+            }
+        }
+        _listParcelas.postValue(properties)
     }
 }

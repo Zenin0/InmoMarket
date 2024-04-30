@@ -8,10 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentConversationsBinding
 import com.isanz.inmomarket.rv.conversationItem.ConversationListAdapter
+import com.isanz.inmomarket.utils.entities.Conversation
+import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 
-class ConversationsFragment : Fragment() {
+class ConversationsFragment : Fragment(), OnItemClickListener {
 
     private lateinit var mBinding: FragmentConversationsBinding
     private val viewModel: ConversationsViewModel by viewModels()
@@ -26,26 +29,50 @@ class ConversationsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
+        viewModel.retrieveConversations()
     }
 
     private fun setUpRecyclerView() {
-        val adapter = ConversationListAdapter(findNavController())
+        val adapter = ConversationListAdapter(this)
+        setupLayoutManager()
+        mBinding.recyclerView.adapter = adapter
+        observeConversations(adapter)
+    }
+
+    private fun setupLayoutManager() {
         val layoutManager = LinearLayoutManager(context)
         mBinding.recyclerView.layoutManager = layoutManager
-        mBinding.recyclerView.adapter = adapter
+    }
 
+    private fun observeConversations(adapter: ConversationListAdapter) {
         viewModel.listConversations.observe(viewLifecycleOwner) { conversations ->
-            adapter.submitList(conversations) {
-                mBinding.recyclerView.scrollToPosition(0)
-            }
-            if (conversations.isEmpty()) {
-                mBinding.emptyTextView.visibility = View.VISIBLE
-            } else {
-                mBinding.emptyTextView.visibility = View.GONE
-            }
-            mBinding.progressBar.visibility = View.GONE
+            updateRecyclerView(conversations, adapter)
         }
+    }
 
-        viewModel.retrieveConversations()
+    private fun updateRecyclerView(
+        conversations: List<Conversation>,
+        adapter: ConversationListAdapter
+    ) {
+        adapter.submitList(conversations) {
+            mBinding.recyclerView.scrollToPosition(0)
+        }
+        updateVisibilityBasedOnContent(conversations)
+    }
+
+    private fun updateVisibilityBasedOnContent(conversations: List<Conversation>) {
+        if (conversations.isEmpty()) {
+            mBinding.emptyTextView.visibility = View.VISIBLE
+        } else {
+            mBinding.emptyTextView.visibility = View.GONE
+        }
+        mBinding.progressBar.visibility = View.GONE
+    }
+
+    override fun onItemClicked(propertyId: String) {
+        val bundle = Bundle().apply {
+            putString("idChat", propertyId)
+        }
+        findNavController().navigate(R.id.action_navigation_messages_to_navigation_chat, bundle)
     }
 }

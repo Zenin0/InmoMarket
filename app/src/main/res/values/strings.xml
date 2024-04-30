@@ -81,4 +81,5 @@
     <string name="bimetric_pop_up_dialog">Biometric login is available! Do you want to enable it?</string>
     <string name="bring_me_there">Bring me there!</string>
     <string name="cancel">Cancel</string>
+    <string name="date" translatable="false">Monday 25 of 4</string>
 </resources>

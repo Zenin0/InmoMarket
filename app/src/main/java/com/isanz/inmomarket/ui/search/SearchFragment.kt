@@ -46,17 +46,32 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setUpMap() {
+        initializeMapFragment()
+        initializeFusedLocationClient()
+        retrieveUbicationSetting()
+    }
+
+    private fun initializeMapFragment() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+    }
+
+    private fun initializeFusedLocationClient() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+    }
+
+    private fun retrieveUbicationSetting() {
         val sharedPref =
             requireActivity().getSharedPreferences("settings_preferences", Context.MODE_PRIVATE)
         allowUbication = sharedPref.getBoolean("allowUbication", false)
     }
 
-
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        checkLocationPermission()
+    }
+
+    private fun checkLocationPermission() {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
@@ -92,34 +107,41 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
         if (allowUbication) {
             mMap.isMyLocationEnabled = true
             mMap.isMyLocationEnabled = true
-            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                if (location != null) {
-                    val currentLatLng = LatLng(location.latitude, location.longitude)
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
-
-                    searchViewModel.getLatAndLong().observe(viewLifecycleOwner) { locations ->
-                        locations?.forEach { latLongIdPairs ->
-                            val markerLatLng = LatLng(latLongIdPairs.second, latLongIdPairs.third)
-                            val customMarker = BitmapDescriptorFactory.fromBitmap(resizeBitmap())
-                            val marker = mMap.addMarker(
-                                MarkerOptions().position(markerLatLng).icon(customMarker)
-                            )
-                            marker?.tag = latLongIdPairs.first
-                        }
-                    }
-                }
-            }
+            setMapLocationToUserLocation()
         } else {
             Toast.makeText(requireContext(), "Ubication not allowed", Toast.LENGTH_SHORT).show()
         }
 
+        setMarkerClickListener()
+    }
+
+    private fun setMapLocationToUserLocation() {
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            if (location != null) {
+                val currentLatLng = LatLng(location.latitude, location.longitude)
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
+
+                searchViewModel.getLatAndLong().observe(viewLifecycleOwner) { locations ->
+                    locations?.forEach { latLongIdPairs ->
+                        val markerLatLng = LatLng(latLongIdPairs.second, latLongIdPairs.third)
+                        val customMarker = BitmapDescriptorFactory.fromBitmap(resizeBitmap())
+                        val marker = mMap.addMarker(
+                            MarkerOptions().position(markerLatLng).icon(customMarker)
+                        )
+                        marker?.tag = latLongIdPairs.first
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setMarkerClickListener() {
         mMap.setOnMarkerClickListener { marker ->
             val args = Bundle()
             args.putString("propertyId", marker.tag as String)
             findNavController().navigate(R.id.navigation_mini_property, args)
             false
         }
-
     }
 
     private fun resizeBitmap(): Bitmap {

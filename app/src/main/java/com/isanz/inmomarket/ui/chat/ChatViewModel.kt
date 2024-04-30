@@ -14,7 +14,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.isanz.inmomarket.utils.entities.Chat
+import com.isanz.inmomarket.utils.entities.Conversation
 import com.isanz.inmomarket.utils.entities.Message
 import com.isanz.inmomarket.utils.entities.User
 import kotlinx.coroutines.CoroutineScope
@@ -29,74 +29,76 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class ChatViewModel : ViewModel() {
+
     private val database: FirebaseDatabase = Firebase.database
     private val _messageList = MutableLiveData<List<Message>>()
     val messageList: LiveData<List<Message>> get() = _messageList
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun sendMessage(text: String, chatId: String, senderId: String) {
+        val message = createMessage(text, senderId)
+        database.getReference("chatMessages").child(chatId).push().setValue(message)
+        database.getReference("chats").child(chatId).child("lastMessage").setValue(message)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createMessage(text: String, senderId: String): Message {
         val current = LocalDateTime.now()
         val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-        val message = Message(
+        return Message(
             message = text,
             senderId = senderId,
             messageDate = current.format(dateFormatter),
             messageTime = current.format(timeFormatter)
         )
-        database.getReference("chatMessages").child(chatId).push().setValue(message)
-        database.getReference("chats").child(chatId).child("lastMessage").setValue(message)
     }
-
 
     fun getUsersInConversation(chatId: String): Deferred<List<User>> {
         return CoroutineScope(Dispatchers.IO).async {
             try {
-                val chatRef = FirebaseDatabase.getInstance().getReference("chats").child(chatId)
-                val chatSnapshot = suspendCoroutine<DataSnapshot> { continuation ->
-                    chatRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            continuation.resume(snapshot)
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            continuation.resumeWithException(error.toException())
-                        }
-                    })
-                }
-                val chat = chatSnapshot.getValue(Chat::class.java)
-
-                val users = emptyList<User>().toMutableList()
-                for (memberId in chat?.membersId ?: emptyList()) {
-                    val userRef = Firebase.firestore.collection("users").document(memberId)
-                    val userSnapshot = userRef.get().await()
-                    val user = userSnapshot.toObject(User::class.java)
-                    if (user != null) {
-                        user.uid = userSnapshot.id
-                        users.add(user)
-                    }
-                }
-
-                users.toList()
+                val chatSnapshot = getChatSnapshot(chatId)
+                val chat = chatSnapshot.getValue(Conversation::class.java)
+                getUsersFromChat(chat)
             } catch (e: Exception) {
                 Log.e(TAG, "Error getting users in conversation", e)
-                emptyList<User>()
+                emptyList()
             }
         }
+    }
+
+    private suspend fun getChatSnapshot(chatId: String) = suspendCoroutine { continuation ->
+        val chatRef = FirebaseDatabase.getInstance().getReference("chats").child(chatId)
+        chatRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                continuation.resume(snapshot)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                continuation.resumeWithException(error.toException())
+            }
+        })
+    }
+
+    private suspend fun getUsersFromChat(chat: Conversation?): List<User> {
+        val users = emptyList<User>().toMutableList()
+        for (memberId in chat?.membersId ?: emptyList()) {
+            val userRef = Firebase.firestore.collection("users").document(memberId)
+            val userSnapshot = userRef.get().await()
+            val user = userSnapshot.toObject(User::class.java)
+            if (user != null) {
+                user.uid = userSnapshot.id
+                users.add(user)
+            }
+        }
+        return users.toList()
     }
 
     fun retrieveMessages(chatId: String) {
         val messageRef = database.getReference("chatMessages").child(chatId)
         val messageListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val tempList = mutableListOf<Message>()
-                for (messageSnapshot in dataSnapshot.children) {
-                    val message = messageSnapshot.getValue(Message::class.java)
-                    if (message != null) {
-                        tempList.add(message)
-                    }
-                }
-                _messageList.value = tempList
+                updateMessageList(dataSnapshot)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -104,5 +106,16 @@ class ChatViewModel : ViewModel() {
             }
         }
         messageRef.addValueEventListener(messageListener)
+    }
+
+    private fun updateMessageList(dataSnapshot: DataSnapshot) {
+        val tempList = mutableListOf<Message>()
+        for (messageSnapshot in dataSnapshot.children) {
+            val message = messageSnapshot.getValue(Message::class.java)
+            if (message != null) {
+                tempList.add(message)
+            }
+        }
+        _messageList.value = tempList
     }
 }

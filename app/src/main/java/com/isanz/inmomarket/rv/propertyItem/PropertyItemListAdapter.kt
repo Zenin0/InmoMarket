@@ -52,23 +52,27 @@ class PropertyItemListAdapter(private val listener: OnItemClickListener) :
 
         setUpButtons(holder, property)
         loadExtras(holder, property)
-        setUpItems(holder, property)
+        setUpImage(holder, property)
     }
 
-    private fun setUpItems(holder: PropertyViewHolder, property: Property) {
+    private fun setUpImage(holder: PropertyViewHolder, property: Property) {
         holder.view.viewTreeObserver.addOnPreDrawListener(object :
             ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
                 holder.view.viewTreeObserver.removeOnPreDrawListener(this)
-                val radiusInDp = 16
-                val scale = holder.image.context.resources.displayMetrics.density
-                val radiusInPx = (radiusInDp * scale + 0.5f).toInt()
-                Glide.with(holder.image.context).load(property.listImagesUri[0])
-                    .override(holder.view.measuredWidth, holder.view.measuredHeight)
-                    .transform(RoundedCorners(radiusInPx)).into(holder.image)
+                loadImage(holder, property)
                 return true
             }
         })
+    }
+
+    private fun loadImage(holder: PropertyViewHolder, property: Property) {
+        val radiusInDp = 16
+        val scale = holder.image.context.resources.displayMetrics.density
+        val radiusInPx = (radiusInDp * scale + 0.5f).toInt()
+        Glide.with(holder.image.context).load(property.listImagesUri[0])
+            .override(holder.view.measuredWidth, holder.view.measuredHeight)
+            .transform(RoundedCorners(radiusInPx)).into(holder.image)
     }
 
 
