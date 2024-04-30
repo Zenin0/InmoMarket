@@ -18,7 +18,6 @@ import java.time.format.DateTimeFormatter
 class ChatListAdapter : ListAdapter<Message, ChatListAdapter.ChatViewHolder>(ChatDiffCallback()) {
 
     private val selfId = InmoMarket.getAuth().currentUser!!.uid
-    private var lastDate: LocalDate? = null
 
     class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val text: TextView = itemView.findViewById(R.id.tvTextMessage)
@@ -50,10 +49,15 @@ class ChatListAdapter : ListAdapter<Message, ChatListAdapter.ChatViewHolder>(Cha
         "$part1:$part2".also { holder.time.text = it }
 
         val messageDate = LocalDate.parse(message.messageDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        if (position == 0 || messageDate != lastDate) {
+        val previousMessageDate = if (position > 0) {
+            LocalDate.parse(getItem(position - 1).messageDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        } else {
+            null
+        }
+
+        if (messageDate != previousMessageDate) {
             holder.cvDate.visibility = View.VISIBLE
             holder.tvDate.text = messageDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
-            lastDate = messageDate
         } else {
             holder.cvDate.visibility = View.GONE
         }
