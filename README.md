@@ -39,6 +39,47 @@
 <br>
 <p align="center">
 
+### Home Screen
+
+![Home Screen](images/home_screen.png)
+
+### Property detail Screen
+
+![Detalle de la propiedad](images/property_screen.png)
+
+### Chat Screen
+
+![Chat Screen](images/chat_screen.png)
+
+### Messages Screen
+
+![Messages Screen](images/conversations_screen.png)
+
+### Search Screen
+
+![Search Screen](images/search_before_screen.png)
+
+![Search Screen](images/search_after_screen.png)
+
+### Add Property Screen
+
+![Add Property Screen](images/add_screen.png)
+
+### Profile Screen
+
+![Profile Screen](images/profile_favorites_screen.png)
+
+![Profile Screen](images/profile_uploads_screen.png)
+
+### Drawer Screen
+
+![Drawer Screen](images/drawer_screen.png)
+
+### Settings Screen
+
+![Settings Screen](images/settings_screen.png)
+
+
 </p><br>
 
 
