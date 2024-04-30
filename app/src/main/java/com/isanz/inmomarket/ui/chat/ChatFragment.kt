@@ -20,11 +20,8 @@ class ChatFragment : Fragment() {
 
 
     private lateinit var mBinding: FragmentChatBinding
-
     private lateinit var viewModel: ChatViewModel
-
     private lateinit var idChat: String
-
     private lateinit var recipientId: String
 
 
@@ -33,8 +30,6 @@ class ChatFragment : Fragment() {
         idChat = requireArguments().getString("idChat")!!
         recipientId = InmoMarket.getAuth().currentUser?.uid!!
         viewModel = ChatViewModel()
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -43,21 +38,21 @@ class ChatFragment : Fragment() {
     ): View {
         mBinding = FragmentChatBinding.inflate(inflater, container, false)
         setUpView()
-
         return mBinding.root
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setUpView() {
-        lifecycleScope.launch {
-            val users = viewModel.getUsersInConversation(idChat).await()
-            val otherUser = users.find { it.uid != InmoMarket.getAuth().currentUser!!.uid }
-            mBinding.tvNameChat.text = otherUser?.displayName
-            otherUser?.photoUrl?.let { loadImage(it) }
-        }
+        setUpOtherUser()
         setUpButtons()
         setUpRecyclerView()
+    }
+
+    private fun setUpOtherUser() = lifecycleScope.launch {
+        val users = viewModel.getUsersInConversation(idChat).await()
+        val otherUser = users.find { it.uid != InmoMarket.getAuth().currentUser!!.uid }
+        mBinding.tvNameChat.text = otherUser?.displayName
+        otherUser?.photoUrl?.let { loadImage(it) }
     }
 
     private fun setUpRecyclerView() {
@@ -65,30 +60,40 @@ class ChatFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         mBinding.recyclerView.layoutManager = layoutManager
         mBinding.recyclerView.adapter = adapter
+        observeMessages(adapter)
+        viewModel.retrieveMessages(idChat)
+    }
+
+    private fun observeMessages(adapter: ChatListAdapter) {
         viewModel.messageList.observe(viewLifecycleOwner) { messages ->
             adapter.submitList(messages) {
                 mBinding.recyclerView.scrollToPosition(0)
             }
         }
-        viewModel.retrieveMessages(idChat)
     }
 
-    private fun loadImage(imageUri: String){
-        Glide.with(this)
-            .load(imageUri)
-            .circleCrop()
-            .into(mBinding.ivProfileChat)
+    private fun loadImage(imageUri: String) {
+        Glide.with(this).load(imageUri).circleCrop().into(mBinding.ivProfileChat)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setUpButtons() {
         mBinding.fabSendMessage.setOnClickListener {
-            val text = mBinding.tieMessage.text.toString()
-            viewModel.sendMessage(text, idChat, recipientId)
-            mBinding.tieMessage.text?.clear()
+            sendMessage()
         }
         mBinding.ibBack.setOnClickListener {
-            this.findNavController().popBackStack()
+            navigateBack()
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun sendMessage() {
+        val text = mBinding.tieMessage.text.toString()
+        viewModel.sendMessage(text, idChat, recipientId)
+        mBinding.tieMessage.text?.clear()
+    }
+
+    private fun navigateBack() {
+        this.findNavController().popBackStack()
     }
 }

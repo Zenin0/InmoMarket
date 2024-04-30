@@ -15,14 +15,25 @@ class SettingsViewModel : ViewModel() {
 
     fun closeAccount() {
         val userId = InmoMarket.getAuth().currentUser!!.uid
+        deleteUserAccount(userId)
+        deleteUserData(userId)
+        deleteChats(userId)
+    }
+
+    private fun deleteUserAccount(userId: String) {
         InmoMarket.getAuth().currentUser!!.delete()
         db.collection("users").document(userId).delete()
+    }
+
+    private fun deleteUserData(userId: String) {
         db.collection("properties").whereEqualTo("userId", userId).get().addOnSuccessListener {
             for (document in it.documents) {
                 document.reference.delete()
             }
         }
+    }
 
+    private fun deleteChats(userId: String) {
         val chatRef = rd.getReference("chats")
         chatRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {

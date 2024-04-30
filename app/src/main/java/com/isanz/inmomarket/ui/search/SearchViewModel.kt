@@ -19,9 +19,17 @@ import java.util.Collections
 class SearchViewModel : ViewModel() {
 
     private val db = InmoMarket.getDb()
-    private val retrofit = Retrofit.Builder().baseUrl("https://maps.googleapis.com/")
-        .addConverterFactory(GsonConverterFactory.create()).build()
-    private val geocodingService = retrofit.create(GeocodingService::class.java)
+    private val retrofit = createRetrofit()
+    private val geocodingService = createGeocodingService()
+
+    private fun createRetrofit(): Retrofit {
+        return Retrofit.Builder().baseUrl("https://maps.googleapis.com/")
+            .addConverterFactory(GsonConverterFactory.create()).build()
+    }
+
+    private fun createGeocodingService(): GeocodingService {
+        return retrofit.create(GeocodingService::class.java)
+    }
 
     private fun getAllAdresses(): LiveData<List<Pair<String, String>>> {
         val addressesLiveData = MutableLiveData<List<Pair<String, String>>>()
@@ -46,34 +54,41 @@ class SearchViewModel : ViewModel() {
 
     fun getLatAndLong(): LiveData<List<Triple<String, Double, Double>>> {
         val locationsLiveData = MutableLiveData<List<Triple<String, Double, Double>>>()
-        val locationsList =
-            Collections.synchronizedList(ArrayList<Triple<String, Double, Double>>())
+        val locationsList = Collections.synchronizedList(ArrayList<Triple<String, Double, Double>>())
 
         getAllAdresses().observeForever { addresses ->
             addresses?.forEach { (id, address) ->
-                geocodingService.getLatLng(address, Constants.API_GOOGLE)
-                    .enqueue(object : Callback<GeocodingResponse> {
-                        override fun onResponse(
-                            call: Call<GeocodingResponse>, response: Response<GeocodingResponse>
-                        ) {
-                            if (response.isSuccessful) {
-                                val geocodingResponse = response.body()
-                                val location =
-                                    geocodingResponse?.results?.get(0)?.geometry?.location
-                                if (location != null) {
-                                    locationsList.add(Triple(id, location.lat, location.lng))
-                                    locationsLiveData.value = locationsList
-                                }
-                            }
-                        }
-
-                        override fun onFailure(call: Call<GeocodingResponse>, t: Throwable) {
-                            Log.w(TAG, "Error getting location for address $address.", t)
-                        }
-                    })
+                getLatLngForAddress(id, address, locationsList, locationsLiveData)
             }
         }
 
         return locationsLiveData
+    }
+
+    private fun getLatLngForAddress(
+        id: String,
+        address: String,
+        locationsList: MutableList<Triple<String, Double, Double>>,
+        locationsLiveData: MutableLiveData<List<Triple<String, Double, Double>>>
+    ) {
+        geocodingService.getLatLng(address, Constants.API_GOOGLE)
+            .enqueue(object : Callback<GeocodingResponse> {
+                override fun onResponse(
+                    call: Call<GeocodingResponse>, response: Response<GeocodingResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val geocodingResponse = response.body()
+                        val location = geocodingResponse?.results?.get(0)?.geometry?.location
+                        if (location != null) {
+                            locationsList.add(Triple(id, location.lat, location.lng))
+                            locationsLiveData.value = locationsList
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<GeocodingResponse>, t: Throwable) {
+                    Log.w(TAG, "Error getting location for address $address.", t)
+                }
+            })
     }
 }

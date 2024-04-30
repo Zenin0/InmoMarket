@@ -23,6 +23,7 @@
         android:layout_marginStart="8dp"
         android:text="@string/username"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/profile_image"
         app:layout_constraintTop_toTopOf="parent" />

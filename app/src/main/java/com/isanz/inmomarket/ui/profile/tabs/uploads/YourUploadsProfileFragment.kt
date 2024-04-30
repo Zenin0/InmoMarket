@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentYourUploadsProfileBinding
 import com.isanz.inmomarket.rv.propertyItem.PropertyItemListAdapter
+import com.isanz.inmomarket.utils.entities.Property
 import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 
 
@@ -21,8 +22,7 @@ class YourUploadsProfileFragment : Fragment(), OnItemClickListener {
     private lateinit var favoritesProfileViewModel: YourUploadsProfileViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         mBinging = FragmentYourUploadsProfileBinding.inflate(inflater, container, false)
         favoritesProfileViewModel = YourUploadsProfileViewModel()
@@ -31,33 +31,46 @@ class YourUploadsProfileFragment : Fragment(), OnItemClickListener {
 
     override fun onResume() {
         super.onResume()
+        refreshRecyclerView()
+    }
+
+    private fun refreshRecyclerView() {
         setupRecyclerView()
     }
 
     override fun onItemClicked(propertyId: String) {
+        navigateToProperty(propertyId)
+    }
+
+    private fun navigateToProperty(propertyId: String) {
         val bundle = Bundle().apply {
             putString("propertyId", propertyId)
         }
-        this.findNavController().navigate(R.id.action_navigation_profile_to_navigation_property,
-            bundle
-        )
+        this.findNavController()
+            .navigate(R.id.action_navigation_profile_to_navigation_property, bundle)
     }
-
 
     private fun setupRecyclerView() {
         val adapter = PropertyItemListAdapter(this)
         mBinging.favoritesRecyclerView.adapter = adapter
         adapter.attachToRecyclerView(mBinging.favoritesRecyclerView)
         mBinging.favoritesRecyclerView.layoutManager = LinearLayoutManager(context)
+        observeParcelas(adapter)
+    }
+
+    private fun observeParcelas(adapter: PropertyItemListAdapter) {
         favoritesProfileViewModel.listParcelas.observe(viewLifecycleOwner) { parcelas ->
-            adapter.submitList(parcelas)
-            if (parcelas.isEmpty()) {
-                mBinging.emptyTextView.visibility = View.VISIBLE
-            } else {
-                mBinging.emptyTextView.visibility = View.GONE
-            }
-            mBinging.favoritesProgressBar.visibility = View.GONE
+            updateRecyclerView(parcelas, adapter)
         }
     }
 
+    private fun updateRecyclerView(parcelas: List<Property>, adapter: PropertyItemListAdapter) {
+        adapter.submitList(parcelas)
+        if (parcelas.isEmpty()) {
+            mBinging.emptyTextView.visibility = View.VISIBLE
+        } else {
+            mBinging.emptyTextView.visibility = View.GONE
+        }
+        mBinging.favoritesProgressBar.visibility = View.GONE
+    }
 }

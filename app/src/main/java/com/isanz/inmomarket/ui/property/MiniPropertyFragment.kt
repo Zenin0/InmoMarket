@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentMiniPropertyBinding
+import com.isanz.inmomarket.utils.entities.Property
 import kotlinx.coroutines.launch
 
 class MiniPropertyFragment : DialogFragment() {
@@ -22,6 +23,10 @@ class MiniPropertyFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         propertyId = arguments?.getString("propertyId")
         viewModel = PropertyViewModel()
+        setUpProperty()
+    }
+
+    private fun setUpProperty() {
         lifecycleScope.launch {
             setUp(propertyId)
         }
@@ -37,10 +42,18 @@ class MiniPropertyFragment : DialogFragment() {
     private suspend fun setUp(propertyId: String?) {
         val property = viewModel.retrieveProperty(propertyId!!)
         if (property != null) {
-            mBinding.tvProperty.text = property.tittle
-            "Price: ${property.price} €".also { mBinding.tvPrice.text = it }
-            Glide.with(this).load(property.listImagesUri[0]).into(mBinding.ivProperty)
+            setPropertyDetails(property)
+            setOverlayClickListener(propertyId)
         }
+    }
+
+    private fun setPropertyDetails(property: Property) {
+        mBinding.tvProperty.text = property.tittle
+        "Price: ${property.price} €".also { mBinding.tvPrice.text = it }
+        Glide.with(this).load(property.listImagesUri[0]).into(mBinding.ivProperty)
+    }
+
+    private fun setOverlayClickListener(propertyId: String) {
         mBinding.vOverlay.setOnClickListener {
             val bundle = Bundle().apply {
                 putString("propertyId", propertyId)
@@ -52,16 +65,17 @@ class MiniPropertyFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
+        setDialogLayout()
+    }
+
+    private fun setDialogLayout() {
         dialog?.window?.setLayout(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
         )
     }
 
-
     override fun onResume() {
         super.onResume()
-        lifecycleScope.launch {
-            setUp(propertyId)
-        }
+        setUpProperty()
     }
 }

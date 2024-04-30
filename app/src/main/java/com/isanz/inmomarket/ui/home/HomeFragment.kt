@@ -15,6 +15,7 @@ import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentHomeBinding
 import com.isanz.inmomarket.rv.propertyItem.PropertyItemListAdapter
 import com.isanz.inmomarket.ui.dialog.SettingsDialogFragment
+import com.isanz.inmomarket.utils.entities.Property
 import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 
 class HomeFragment : Fragment(), OnItemClickListener {
@@ -34,36 +35,58 @@ class HomeFragment : Fragment(), OnItemClickListener {
     }
 
     private fun setUpView() {
-        MobileAds.initialize(requireContext()) {}
+        initializeMobileAds()
+        loadAdRequest()
+        checkAndShowBiometricLoginPopUp()
+        setupRecyclerView(homeViewModel)
+    }
 
+    private fun initializeMobileAds() {
+        MobileAds.initialize(requireContext()) {}
+    }
+
+    private fun loadAdRequest() {
         val adRequest = AdRequest.Builder().build()
         mBinding.adView.loadAd(adRequest)
+    }
+
+    private fun checkAndShowBiometricLoginPopUp() {
         val sharedPref =
             requireContext().getSharedPreferences("settings_preferences", Context.MODE_PRIVATE)
         if (sharedPref.getBoolean("biometricLoginPopUp", true)) {
             SettingsDialogFragment().show(childFragmentManager, "SettingsDialogFragment")
             sharedPref.edit().putBoolean("biometricLoginPopUp", false).apply()
         }
-
-        setupRecyclerView(homeViewModel)
     }
 
     private fun setupRecyclerView(homeViewModel: HomeViewModel) {
         val adapter = PropertyItemListAdapter(this)
         mBinding.rvHome.adapter = adapter
         mBinding.rvHome.layoutManager = LinearLayoutManager(context)
+        observeParcelas(homeViewModel, adapter)
+    }
+
+    private fun observeParcelas(homeViewModel: HomeViewModel, adapter: PropertyItemListAdapter) {
         homeViewModel.listParcelas.observe(viewLifecycleOwner) { parcelas ->
-            adapter.submitList(parcelas)
-            if (parcelas.isEmpty()) {
-                mBinding.emptyTextView.visibility = View.VISIBLE
-            } else {
-                mBinding.emptyTextView.visibility = View.GONE
-            }
-            mBinding.progressBar.visibility = View.GONE
+            updateRecyclerView(parcelas, adapter)
         }
     }
 
+    private fun updateRecyclerView(parcelas: List<Property>, adapter: PropertyItemListAdapter) {
+        adapter.submitList(parcelas)
+        if (parcelas.isEmpty()) {
+            mBinding.emptyTextView.visibility = View.VISIBLE
+        } else {
+            mBinding.emptyTextView.visibility = View.GONE
+        }
+        mBinding.progressBar.visibility = View.GONE
+    }
+
     override fun onItemClicked(propertyId: String) {
+        navigateToProperty(propertyId)
+    }
+
+    private fun navigateToProperty(propertyId: String) {
         val bundle = Bundle().apply {
             putString("propertyId", propertyId)
         }

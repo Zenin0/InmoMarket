@@ -28,32 +28,44 @@ class AddFragment : Fragment() {
 
 
     private lateinit var mBinding: FragmentAddBinding
-
     private lateinit var db: FirebaseFirestore
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-
         mBinding = FragmentAddBinding.inflate(inflater, container, false)
-        val root: View = mBinding.root
         db = InmoMarket.getDb()
+        setupImageListAdapter()
+        initializePlaces()
+        setupAddressClickListener()
+        setUpButtons()
+        setUpDrawables()
+        return mBinding.root
+    }
 
+    private fun setupImageListAdapter() {
         val adapter = ImageListAdapter()
         mBinding.rvImages.adapter = adapter
+    }
+
+    private fun initializePlaces() {
         if (!Places.isInitialized()) {
             Places.initialize(requireContext(), Constants.API_GOOGLE)
         }
+    }
+
+    private fun setupAddressClickListener() {
         mBinding.tieAddress.setOnClickListener {
-            val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS)
-            val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-                .build(requireContext())
-            startActivityForResult(intent, Constants.REQUEST_CODE_AUTOCOMPLETE)
+            launchPlaceAutocomplete()
         }
-        setUpButtons()
-        setUpDrawables()
-        return root
+    }
+
+    private fun launchPlaceAutocomplete() {
+        val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS)
+        val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+            .build(requireContext())
+        startActivityForResult(intent, Constants.REQUEST_CODE_AUTOCOMPLETE)
     }
 
     private fun setUpDrawables() {
@@ -114,12 +126,7 @@ class AddFragment : Fragment() {
                         images.add(it.toString())
                         if (images.size == listImagesUri.size) {
                             addViewModel.save(
-                                tittle,
-                                description,
-                                location,
-                                images,
-                                extras,
-                                price.toDouble()
+                                tittle, description, location, images, extras, price.toDouble()
                             )
                             updateUI()
                         }
@@ -201,27 +208,39 @@ class AddFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == Constants.REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
-            val clipData = data?.clipData
-            val imageUris = mutableListOf<String>()
-
-            if (clipData != null) {
-                for (i in 0 until clipData.itemCount) {
-                    val uri = clipData.getItemAt(i).uri
-                    imageUris.add(uri.toString())
-                }
-            } else {
-                val uri = data?.data
-                if (uri != null) {
-                    imageUris.add(uri.toString())
-                }
-            }
-            val adapter = (mBinding.rvImages.adapter as? ImageListAdapter)
-            adapter?.submitList(imageUris)
-            mBinding.rvImages.visibility = View.VISIBLE
+            handleImagePickResult(data)
         } else if (requestCode == Constants.REQUEST_CODE_AUTOCOMPLETE && resultCode == Activity.RESULT_OK) {
-            val place = Autocomplete.getPlaceFromIntent(data!!)
-            mBinding.tieAddress.setText(place.address)
-
+            handlePlaceAutocompleteResult(data!!)
         }
+    }
+
+    private fun handleImagePickResult(data: Intent?) {
+        val imageUris = extractImageUrisFromIntent(data)
+        val adapter = (mBinding.rvImages.adapter as? ImageListAdapter)
+        adapter?.submitList(imageUris)
+        mBinding.rvImages.visibility = View.VISIBLE
+    }
+
+    private fun extractImageUrisFromIntent(data: Intent?): MutableList<String> {
+        val clipData = data?.clipData
+        val imageUris = mutableListOf<String>()
+
+        if (clipData != null) {
+            for (i in 0 until clipData.itemCount) {
+                val uri = clipData.getItemAt(i).uri
+                imageUris.add(uri.toString())
+            }
+        } else {
+            val uri = data?.data
+            if (uri != null) {
+                imageUris.add(uri.toString())
+            }
+        }
+        return imageUris
+    }
+
+    private fun handlePlaceAutocompleteResult(data: Intent) {
+        val place = Autocomplete.getPlaceFromIntent(data)
+        mBinding.tieAddress.setText(place.address)
     }
 }

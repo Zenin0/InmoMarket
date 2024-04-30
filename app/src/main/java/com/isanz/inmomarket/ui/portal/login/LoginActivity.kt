@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,8 @@ import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -55,21 +58,26 @@ class LoginActivity : AppCompatActivity() {
         }
         startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == 0 || result.resultCode == Activity.RESULT_OK) {
-                    val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                    try {
-                        val account = task.getResult(ApiException::class.java)!!
-                        firebaseAuthWithGoogle(account.idToken!!)
-                    } catch (e: ApiException) {
-                        Log.w(TAG, "Google sign in failed", e)
-                    }
-                } else {
-                    // Handle the case where the result code is not RESULT_OK
-                    Toast.makeText(this, "Google sign in was not completed.", Toast.LENGTH_SHORT).show()
-                }
+                handleActivityResult(result)
             }
         setUpButtons()
     }
+
+    private fun handleActivityResult(result: ActivityResult) {
+        if (result.resultCode == 0 || result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            try {
+                val account = task.getResult(ApiException::class.java)!!
+                firebaseAuthWithGoogle(account.idToken!!)
+            } catch (e: ApiException) {
+                Log.w(TAG, "Google sign in failed", e)
+            }
+        } else {
+            // Handle the case where the result code is not RESULT_OK
+            Toast.makeText(this, "Google sign in was not completed.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
     private fun setUpButtons() {
         setContentView(mBinding.root)
@@ -168,23 +176,24 @@ class LoginActivity : AppCompatActivity() {
 
     private fun signInUserWithEmail(email: String, password: String) {
         val result = checkFields(email, password)
-        if (result.second.not()) {
-            return
-        } else {
+        if (result.second) {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val user = auth.currentUser
-                    goToMain(user)
-                } else {
-                    Toast.makeText(
-                        baseContext,
-                        "Authentication failed.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                }
+                handleSignIn(task)
             }
         }
+    }
 
+    private fun handleSignIn(task: Task<AuthResult>) {
+        if (task.isSuccessful) {
+            val user = auth.currentUser
+            goToMain(user)
+        } else {
+            Toast.makeText(
+                baseContext,
+                "Authentication failed.",
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
     }
 
     private fun checkFields(email: String, password: String): Pair<String, Boolean> {

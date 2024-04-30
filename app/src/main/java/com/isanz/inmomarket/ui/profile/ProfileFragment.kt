@@ -23,6 +23,7 @@ import com.isanz.inmomarket.ui.portal.login.LoginActivity
 import com.isanz.inmomarket.utils.Constants
 import kotlinx.coroutines.launch
 
+@Suppress("DEPRECATION")
 class ProfileFragment : Fragment() {
 
     private lateinit var mBinding: FragmentProfileBinding
@@ -47,26 +48,33 @@ class ProfileFragment : Fragment() {
         }
         setUpDrawer()
         setUpTabs()
-        setUpButtons()
+        setUpProfileImagePicker()
     }
 
-    private fun setUpButtons() {
+    private fun setUpProfileImagePicker() {
         mBinding.profileLayout.ivProfile.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, Constants.REQUEST_CODE_PICK_IMAGES)
+            launchImagePicker()
         }
+    }
+
+    private fun launchImagePicker() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, Constants.REQUEST_CODE_PICK_IMAGES)
     }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Constants.REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK && data != null) {
-            val imageUri = data.data
+            handleImagePicked(data.data)
+        }
+    }
+
+    private fun handleImagePicked(imageUri: Uri?) {
+        if (imageUri != null) {
             loadImage(mBinding.profileLayout.ivProfile, imageUri.toString())
-            if (imageUri != null) {
-                profileViewModel.updateUserProfilePhoto(imageUri)
-            }
+            profileViewModel.updateUserProfilePhoto(imageUri)
         }
     }
 
@@ -138,7 +146,6 @@ class ProfileFragment : Fragment() {
         val user = profileViewModel.retrieveProfile()
         loadImage(mBinding.profileLayout.ivProfile, user.photoUrl!!)
         mBinding.profileLayout.tvName.text = user.displayName
-
     }
 
     private fun loadImage(view: ImageView, url: String) {
