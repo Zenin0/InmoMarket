@@ -41,43 +41,43 @@
 
 ### Home Screen
 
-<img src="images/home_screen.png" width="300" height="600">
+<img src="images/home_screen.png" width="300" height="700">
 
 ### Property detail Screen
 
-<img src="images/property_screen.png" width="300" height="600">
+<img src="images/property_screen.png" width="300" height="700">
 
 ### Chat Screen
 
-<img src="images/chat_screen.png" width="300" height="600">
+<img src="images/chat_screen.png" width="300" height="700">
 
 ### Messages Screen
 
-<img src="images/conversations_screen.png" width="300" height="600">
+<img src="images/conversations_screen.png" width="300" height="700">
 
 ### Search Screen
 
-<img src="images/search_before_screen.png" width="300" height="600">
+<img src="images/search_before_screen.png" width="300" height="700">
 
-<img src="images/search_after_screen.png" width="300" height="600">
+<img src="images/search_after_screen.png" width="300" height="700">
 
 ### Add Property Screen
 
-<img src="images/add_screen.png" width="300" height="600">
+<img src="images/add_screen.png" width="300" height="700">
 
 ### Profile Screen
 
-<img src="images/profile_favorites_screen.png" width="300" height="600">
+<img src="images/profile_favorites_screen.png" width="300" height="700">
 
-<img src="images/profile_uploads_screen.png" width="300" height="600">
+<img src="images/profile_uploads_screen.png" width="300" height="700">
 
 ### Drawer Screen
 
-<img src="images/drawer_screen.png" width="300" height="600">
+<img src="images/drawer_screen.png" width="300" height="700">
 
 ### Settings Screen
 
-<img src="images/settings_screen.png" width="300" height="600">
+<img src="images/settings_screen.png" width="300" height="700">
 
 
 </p><br>
