@@ -41,43 +41,65 @@
 
 ### Home Screen
 
-<img src="images/home_screen.png" width="300" height="700">
+<div align="center">
+  <img src="images/home_screen.png" width="300" height="700">
+</div>
 
 ### Property detail Screen
 
-<img src="images/property_screen.png" width="300" height="700">
+<div align="center">
+  <img src="images/property_screen.png" width="300" height="700">
+</div>
 
 ### Chat Screen
 
-<img src="images/chat_screen.png" width="300" height="700">
+<div align="center">
+  <img src="images/chat_screen.png" width="300" height="700">
+</div>
 
 ### Messages Screen
 
-<img src="images/conversations_screen.png" width="300" height="700">
+<div align="center">
+  <img src="images/conversations_screen.png" width="300" height="700">
+</div>
 
 ### Search Screen
 
-<img src="images/search_before_screen.png" width="300" height="700">
+<div align="center">
+  <img src="images/search_before_screen.png" width="300" height="700">
+</div>
 
-<img src="images/search_after_screen.png" width="300" height="700">
+<div align="center">
+  <img src="images/search_after_screen.png" width="300" height="700">
+</div>
 
 ### Add Property Screen
 
-<img src="images/add_screen.png" width="300" height="700">
+<div align="center">
+  <img src="images/add_screen.png" width="300" height="700">
+</div>
 
 ### Profile Screen
 
-<img src="images/profile_favorites_screen.png" width="300" height="700">
+<div align="center">
+  <img src="images/profile_favorites_screen.png" width="300" height="700">
+</div>
 
-<img src="images/profile_uploads_screen.png" width="300" height="700">
+<div align="center">
+  <img src="images/profile_uploads_screen.png" width="300" height="700">
+</div>
 
 ### Drawer Screen
 
-<img src="images/drawer_screen.png" width="300" height="700">
+<div align="center">
+  <img src="images/drawer_screen.png" width="300" height="700">
+</div>
 
 ### Settings Screen
 
-<img src="images/settings_screen.png" width="300" height="700">
+<div align="center">
+  <img src="images/settings_screen.png" width="300" height="700">
+</div>
 
 
 </p><br>
