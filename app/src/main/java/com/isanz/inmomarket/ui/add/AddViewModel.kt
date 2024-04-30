@@ -1,9 +1,11 @@
 package com.isanz.inmomarket.ui.add
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.isanz.inmomarket.InmoMarket
+import com.isanz.inmomarket.utils.Constants
 import com.isanz.inmomarket.utils.entities.Property
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -19,8 +21,7 @@ class AddViewModel : ViewModel() {
         images: List<String>,
         extras: HashMap<String, Int>,
         price: Double,
-    ): String {
-        var result = ""
+    ) {
         val property = Property(
             tittle = tittle,
             description = description,
@@ -30,18 +31,14 @@ class AddViewModel : ViewModel() {
             extras = extras,
             price = price,
 
-        )
+            )
 
         viewModelScope.launch {
             try {
-                db.collection("properties").add(property).addOnSuccessListener {
-                    result = "com.isanz.inmomarket.utils.entities.Property added successfully"
-                }.await().id
+                db.collection("properties").add(property).addOnSuccessListener {}.await().id
             } catch (e: Exception) {
-                result = "An error occurred"
-                e.message ?: "An error occurred"
+                Log.e(Constants.TAG, "save:failure", e)
             }
         }
-        return result
     }
 }

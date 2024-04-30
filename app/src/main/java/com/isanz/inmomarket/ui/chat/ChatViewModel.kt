@@ -37,8 +37,16 @@ class ChatViewModel : ViewModel() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun sendMessage(text: String, chatId: String, senderId: String) {
         val message = createMessage(text, senderId)
-        database.getReference("chatMessages").child(chatId).push().setValue(message)
-        database.getReference("chats").child(chatId).child("lastMessage").setValue(message)
+        try {
+            database.getReference("chatMessages").child(chatId).push().setValue(message)
+        } catch (e: Exception) {
+            Log.e(TAG, "saveMessageToChatMessage:failure", e)
+        }
+        try {
+            database.getReference("chats").child(chatId).child("lastMessage").setValue(message)
+        } catch (e: Exception) {
+            Log.e(TAG, "saveMessageToChats:failure", e)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -83,12 +91,16 @@ class ChatViewModel : ViewModel() {
     private suspend fun getUsersFromChat(chat: Conversation?): List<User> {
         val users = emptyList<User>().toMutableList()
         for (memberId in chat?.membersId ?: emptyList()) {
-            val userRef = Firebase.firestore.collection("users").document(memberId)
-            val userSnapshot = userRef.get().await()
-            val user = userSnapshot.toObject(User::class.java)
-            if (user != null) {
-                user.uid = userSnapshot.id
-                users.add(user)
+            try {
+                val userRef = Firebase.firestore.collection("users").document(memberId)
+                val userSnapshot = userRef.get().await()
+                val user = userSnapshot.toObject(User::class.java)
+                if (user != null) {
+                    user.uid = userSnapshot.id
+                    users.add(user)
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "getUsersFromChat:failure", e)
             }
         }
         return users.toList()

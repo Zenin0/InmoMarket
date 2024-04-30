@@ -142,43 +142,60 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun signInGoogle() {
-        val signInIntent = GoogleSignIn.getClient(
-            this,
-            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build()
-        ).signInIntent
-        startForResult.launch(signInIntent)
+        try {
+            val signInIntent = GoogleSignIn.getClient(
+                this,
+                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id)).requestEmail()
+                    .build()
+            ).signInIntent
+            startForResult.launch(signInIntent)
+        } catch (e: Exception) {
+            Log.e(TAG, "Google sign in failed", e)
+        }
 
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         Log.d(TAG, "ID Token: $idToken")
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
-            if (task.isSuccessful) {
-                Log.d(TAG, "signInWithCredential:success")
-                val user = auth.currentUser
-                val profileUpdates = UserProfileChangeRequest.Builder()
-                    .setDisplayName(user!!.email.toString().split("@")[0].substring(0, 8)).build()
+        try {
+            auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "signInWithCredential:success")
+                    val user = auth.currentUser
+                    val profileUpdates = UserProfileChangeRequest.Builder()
+                        .setDisplayName(user!!.email.toString().split("@")[0].substring(0, 8))
+                        .build()
 
-                user.updateProfile(profileUpdates).addOnCompleteListener { taskProf ->
-                    if (taskProf.isSuccessful) {
-                        saveUserToFirestore(user)
-                        goToMain(user)
+                    user.updateProfile(profileUpdates).addOnCompleteListener { taskProf ->
+                        if (taskProf.isSuccessful) {
+                            saveUserToFirestore(user)
+                            goToMain(user)
+                        }
                     }
+                } else {
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Log.w(TAG, "signInWithCredential:failure", task.exception)
-                Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
             }
+        } catch (e: Exception) {
+            Log.w(TAG, "signInWithCredential:failure", e)
+            Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun signInUserWithEmail(email: String, password: String) {
         val result = checkFields(email, password)
         if (result.second) {
-            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
-                handleSignIn(task)
+            try {
+                auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        handleSignIn(task)
+                    }
+            } catch (e: Exception) {
+                Log.w(TAG, "signInWithEmailAndPassword:failure", e)
+                Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -225,13 +242,17 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun saveUserToFirestore(user: FirebaseUser?) {
-        user?.let {
-            val userMap = hashMapOf(
-                "email" to user.email,
-                "displayName" to user.displayName,
-                "photoUrl" to user.photoUrl
-            )
-            db.collection("users").document(user.uid).set(userMap)
+        try {
+            user?.let {
+                val userMap = hashMapOf(
+                    "email" to user.email,
+                    "displayName" to user.displayName,
+                    "photoUrl" to user.photoUrl
+                )
+                db.collection("users").document(user.uid).set(userMap)
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Error saving user to Firestore", e)
         }
     }
 
@@ -263,6 +284,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private suspend fun setImage(view: ImageView) {
-        Glide.with(this).load(viewModel.getImageRandom()).centerCrop().into(view)
+        try {
+            Glide.with(this).load(viewModel.getImageRandom()).centerCrop().into(view)
+        } catch (e: Exception) {
+            Log.w(TAG, "Error loading image", e)
+        }
     }
 }

@@ -1,12 +1,14 @@
 package com.isanz.inmomarket.ui.profile
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.isanz.inmomarket.InmoMarket
+import com.isanz.inmomarket.utils.Constants
 import com.isanz.inmomarket.utils.entities.User
 import kotlinx.coroutines.tasks.await
 
@@ -15,31 +17,53 @@ class ProfileViewModel : ViewModel() {
     private val db = InmoMarket.getDb()
 
     suspend fun retrieveProfile(): User {
-        val userId = InmoMarket.getAuth().currentUser!!.uid
-        return getUserFromDb(userId)
+        return try {
+            val userId = InmoMarket.getAuth().currentUser!!.uid
+            getUserFromDb(userId)
+        } catch (e: Exception) {
+            Log.e(Constants.TAG, "retrieveProfile:failure", e)
+            User()
+        }
     }
 
     private suspend fun getUserFromDb(userId: String): User {
-        val user = db.collection("users").document(userId).get().await()
-        return user.toObject(User::class.java)!!
+        return try {
+            val user = db.collection("users").document(userId).get().await()
+            user.toObject(User::class.java)!!
+        } catch (e: Exception) {
+            Log.e(Constants.TAG, "getUserFromDb:failure", e)
+            User()
+        }
     }
 
     fun updateUserProfilePhoto(imageUri: Uri) {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        uploadImageToStorage(userId, imageUri)
+        try {
+            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+            uploadImageToStorage(userId, imageUri)
+        } catch (e: Exception) {
+            Log.e(Constants.TAG, "updateUserProfilePhoto:failure", e)
+        }
     }
 
     private fun uploadImageToStorage(userId: String, imageUri: Uri) {
-        val storageRef = FirebaseStorage.getInstance().getReference("/images/$userId")
-        storageRef.putFile(imageUri).addOnSuccessListener {
-            updateProfilePhotoUrlInDb(userId, storageRef)
+        try {
+            val storageRef = FirebaseStorage.getInstance().getReference("/images/$userId")
+            storageRef.putFile(imageUri).addOnSuccessListener {
+                updateProfilePhotoUrlInDb(userId, storageRef)
+            }
+        } catch (e: Exception) {
+            Log.e(Constants.TAG, "uploadImageToStorage:failure", e)
         }
     }
 
     private fun updateProfilePhotoUrlInDb(userId: String, storageRef: StorageReference) {
-        storageRef.downloadUrl.addOnSuccessListener { uri ->
-            val db = FirebaseFirestore.getInstance()
-            db.collection("users").document(userId).update("photoUrl", uri.toString())
+        try {
+            storageRef.downloadUrl.addOnSuccessListener { uri ->
+                val db = FirebaseFirestore.getInstance()
+                db.collection("users").document(userId).update("photoUrl", uri.toString())
+            }
+        } catch (e: Exception) {
+            Log.e(Constants.TAG, "updateProfilePhotoUrlInDb:failure", e)
         }
     }
 

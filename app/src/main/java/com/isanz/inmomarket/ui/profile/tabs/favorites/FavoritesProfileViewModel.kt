@@ -23,7 +23,7 @@ class FavoritesProfileViewModel : ViewModel() {
             try {
                 listenForFavorites()
             } catch (e: Exception) {
-                Log.w(ContentValues.TAG, "Listen failed.", e)
+                Log.w(ContentValues.TAG, "listenFavorites:failure.", e)
             }
         }
     }
@@ -35,19 +35,23 @@ class FavoritesProfileViewModel : ViewModel() {
                 return@addSnapshotListener
             }
 
-            if (snapshot != null) {
-                val properties = mutableListOf<Property>()
-                val currentUserId = InmoMarket.getAuth().currentUser!!.uid
-                for (document in snapshot.documents) {
-                    if (document.exists()) {
-                        val property = document.toObject(Property::class.java)
-                        property?.id = document.id
-                        if (property?.favorites!!.contains(currentUserId)) {
-                            property.let { properties.add(it) }
+            try {
+                if (snapshot != null) {
+                    val properties = mutableListOf<Property>()
+                    val currentUserId = InmoMarket.getAuth().currentUser!!.uid
+                    for (document in snapshot.documents) {
+                        if (document.exists()) {
+                            val property = document.toObject(Property::class.java)
+                            property?.id = document.id
+                            if (property?.favorites!!.contains(currentUserId)) {
+                                property.let { properties.add(it) }
+                            }
                         }
                     }
+                    _listfavorites.postValue(properties)
                 }
-                _listfavorites.postValue(properties)
+            } catch (e: Exception) {
+                Log.w(ContentValues.TAG, "listenForFavorites:failure.", e)
             }
         }
     }

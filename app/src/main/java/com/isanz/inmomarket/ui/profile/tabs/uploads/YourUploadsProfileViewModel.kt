@@ -24,7 +24,7 @@ class YourUploadsProfileViewModel : ViewModel() {
             try {
                 listenForParcelasUpdates()
             } catch (e: Exception) {
-                Log.w(ContentValues.TAG, "Listen failed.", e)
+                Log.w(ContentValues.TAG, "listenForParcelasUpdates:failure", e)
             }
         }
     }
@@ -32,27 +32,31 @@ class YourUploadsProfileViewModel : ViewModel() {
     private suspend fun listenForParcelasUpdates() = withContext(Dispatchers.IO) {
         db.collection("properties").addSnapshotListener { snapshot, e ->
             if (e != null) {
-                Log.w(ContentValues.TAG, "Listen failed.", e)
+                Log.w(ContentValues.TAG, "listenForParcelasUpdates:failure", e)
                 return@addSnapshotListener
             }
 
-            if (snapshot != null) {
-                val properties = mutableListOf<Property>()
-                val currentUserId = InmoMarket.getAuth().currentUser!!.uid
-                for (document in snapshot.documents) {
-                    if (document.exists()) {
-                        val property = document.toObject(Property::class.java)
-                        property?.id = document.id
-                        if (property?.userId == currentUserId) {
-                            property.let { properties.add(it) }
+            try {
+                if (snapshot != null) {
+                    val properties = mutableListOf<Property>()
+                    val currentUserId = InmoMarket.getAuth().currentUser!!.uid
+                    for (document in snapshot.documents) {
+                        if (document.exists()) {
+                            val property = document.toObject(Property::class.java)
+                            property?.id = document.id
+                            if (property?.userId == currentUserId) {
+                                property.let { properties.add(it) }
+                            }
                         }
                     }
+                    _listParcelas.postValue(properties)
+                } else {
+                    Log.d(ContentValues.TAG, "Current data: null")
                 }
-                _listParcelas.postValue(properties)
-            } else {
-                Log.d(ContentValues.TAG, "Current data: null")
+            } catch (e: Exception) {
+                Log.w(ContentValues.TAG, "listenForparcelasUpdates:failure", e)
             }
         }
-    }
 
+    }
 }

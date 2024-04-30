@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -149,7 +150,12 @@ class ProfileFragment : Fragment() {
     }
 
     private fun loadImage(view: ImageView, url: String) {
-        Glide.with(view.context).load(url).circleCrop().into(view)
+        try {
+            Glide.with(view.context).load(url).circleCrop().into(view)
+        } catch (e: Exception) {
+            Log.e(Constants.TAG, "loadImage:failure", e)
+            e.printStackTrace()
+        }
     }
 
 }

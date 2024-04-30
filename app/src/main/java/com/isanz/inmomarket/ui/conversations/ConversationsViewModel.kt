@@ -1,6 +1,7 @@
 package com.isanz.inmomarket.ui.conversations
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +12,7 @@ import com.google.firebase.ktx.Firebase
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import com.isanz.inmomarket.InmoMarket
+import com.isanz.inmomarket.utils.Constants
 import com.isanz.inmomarket.utils.entities.Conversation
 
 class ConversationsViewModel : ViewModel() {
@@ -49,6 +51,7 @@ class ConversationsViewModel : ViewModel() {
     }
 
     fun retrieveConversations() {
+        try {
         val chatsRef = database.getReference("chats")
         val messageListener = object : ValueEventListener {
             @RequiresApi(Build.VERSION_CODES.O)
@@ -63,5 +66,8 @@ class ConversationsViewModel : ViewModel() {
             }
         }
         chatsRef.addValueEventListener(messageListener)
+        } catch (e: Exception) {
+            Log.e(Constants.TAG, "retrieveConversations:failure", e)
+        }
     }
 }

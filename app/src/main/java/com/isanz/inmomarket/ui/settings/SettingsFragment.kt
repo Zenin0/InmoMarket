@@ -82,11 +82,15 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setUpChangePasswordButton() {
-        mBinding.btnChangePassword.setOnClickListener {
-            InmoMarket.getAuth().currentUser?.let {
-                InmoMarket.getAuth().sendPasswordResetEmail(it.email!!)
+        try {
+            mBinding.btnChangePassword.setOnClickListener {
+                InmoMarket.getAuth().currentUser?.let {
+                    InmoMarket.getAuth().sendPasswordResetEmail(it.email!!)
+                }
+                Toast.makeText(requireContext(), "Email sent", Toast.LENGTH_SHORT).show()
             }
-            Toast.makeText(requireContext(), "Email sent", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

@@ -31,7 +31,7 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun logError(e: Exception) {
-        Log.w(TAG, "Listen failed.", e)
+        Log.w(TAG, "listenForParcelas:failure", e)
     }
 
     private suspend fun listenForParcelasUpdates() = withContext(Dispatchers.IO) {

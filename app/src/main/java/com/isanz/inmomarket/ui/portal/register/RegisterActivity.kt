@@ -1,7 +1,6 @@
 package com.isanz.inmomarket.ui.portal.register
 
 import android.app.Activity
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -65,7 +64,7 @@ class RegisterActivity : AppCompatActivity() {
                 val account = task.getResult(ApiException::class.java)!!
                 firebaseAuthWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
-                Log.w(TAG, "Google sign in failed", e)
+                Log.w(Constants.TAG, "Google sign in failed", e)
             }
         }
     }
@@ -101,30 +100,39 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
-            if (task.isSuccessful) {
-                val user = auth.currentUser
-                val profileUpdates = UserProfileChangeRequest.Builder()
-                    .setDisplayName(user!!.email.toString().split("@")[0].substring(0, 8)).build()
-                user.updateProfile(profileUpdates).addOnCompleteListener { taskProf ->
-                    if (taskProf.isSuccessful) {
-                        saveUserToFirestore(user)
-                        goToMain(user)
+        try {
+            auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    val profileUpdates = UserProfileChangeRequest.Builder()
+                        .setDisplayName(user!!.email.toString().split("@")[0].substring(0, 8))
+                        .build()
+                    user.updateProfile(profileUpdates).addOnCompleteListener { taskProf ->
+                        if (taskProf.isSuccessful) {
+                            saveUserToFirestore(user)
+                            goToMain(user)
+                        }
                     }
+                } else {
+                    Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
             }
+        } catch (e: ApiException) {
+            Log.w(Constants.TAG, "googleSign:failure", e)
         }
     }
 
     private fun createUserWithEmail(email: String, password: String) {
         val result = checkFields(email, password)
         if (result.second) {
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    handleUserCreation(task)
-                }
+            try {
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        handleUserCreation(task)
+                    }
+            } catch (e: Exception) {
+                Log.w(Constants.TAG, "createUserWithEmail:failure", e)
+            }
         }
     }
 
@@ -182,13 +190,17 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun saveUserToFirestore(user: FirebaseUser?) {
-        user?.let {
-            val userMap = hashMapOf(
-                "email" to user.email,
-                "displayName" to user.displayName,
-                "photoUrl" to user.photoUrl
-            )
-            db.collection("users").document(user.uid).set(userMap)
+        try {
+            user?.let {
+                val userMap = hashMapOf(
+                    "email" to user.email,
+                    "displayName" to user.displayName,
+                    "photoUrl" to user.photoUrl
+                )
+                db.collection("users").document(user.uid).set(userMap)
+            }
+        } catch (e: Exception) {
+            Log.w(Constants.TAG, "saveUserToFirestore:failure", e)
         }
     }
 
