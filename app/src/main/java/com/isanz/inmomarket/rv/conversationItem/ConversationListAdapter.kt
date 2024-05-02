@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.R
+import com.isanz.inmomarket.rv.propertyItem.PropertyItemViewModel
 import com.isanz.inmomarket.utils.entities.Conversation
 import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 import kotlinx.coroutines.CoroutineScope
@@ -23,7 +25,9 @@ import java.time.format.DateTimeFormatter
 class ConversationListAdapter(private val listener: OnItemClickListener) :
     ListAdapter<Conversation, ConversationListAdapter.ConversationViewHolder>(ChatDiffCallback()) {
 
-    private val viewModel = ConversationViewModel()
+    private val conversationViewModel: ConversationViewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(ConversationViewModel::class.java)
+    }
 
 
     class ConversationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -43,7 +47,7 @@ class ConversationListAdapter(private val listener: OnItemClickListener) :
     override fun onBindViewHolder(holder: ConversationViewHolder, position: Int) {
         val conversation = getItem(position)
         CoroutineScope(Dispatchers.Main).launch {
-            val users = viewModel.getUsersInConversation(conversation.membersId)
+            val users = conversationViewModel.getUsersInConversation(conversation.membersId)
             val myId = InmoMarket.getAuth().currentUser?.uid
             val otherUser = users.find { it.uid != myId }
             if (otherUser != null) {

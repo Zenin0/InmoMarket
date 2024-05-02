@@ -25,19 +25,20 @@ import kotlinx.coroutines.launch
 class PropertyFragment : Fragment() {
 
     private var propertyId: String? = null
-    private lateinit var viewModel: PropertyViewModel
     private lateinit var mBinding: FragmentPropertyBinding
+    private val propertyViewModel: PropertyViewModel by lazy {
+        ViewModelProvider(this)[PropertyViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         propertyId = arguments?.getString("propertyId")
-        viewModel = ViewModelProvider(this)[PropertyViewModel::class.java]
 
     }
 
     private fun setUpButtons(property: Property) {
         mBinding.btnChat.setOnClickListener {
-            viewModel.createChat(
+            propertyViewModel.createChat(
                 InmoMarket.getAuth().currentUser!!.uid, property.userId
             ) { chatId ->
                 val bundle = Bundle().apply {
@@ -60,12 +61,12 @@ class PropertyFragment : Fragment() {
             }
         }
 
-        viewModel.getIfFavorite(property, updateFavoriteIcon)
+        propertyViewModel.getIfFavorite(property, updateFavoriteIcon)
         val rotateAnimation =
             AnimationUtils.loadAnimation(mBinding.ibFavorite.context, R.anim.rotate)
         mBinding.ibFavorite.setOnClickListener {
             it.startAnimation(rotateAnimation)
-            viewModel.alterFavorite(property, updateFavoriteIcon)
+            propertyViewModel.alterFavorite(property, updateFavoriteIcon)
         }
 
     }
@@ -80,7 +81,7 @@ class PropertyFragment : Fragment() {
     }
 
     private suspend fun setUpView(propertyId: String?) {
-        val property = viewModel.retrieveProperty(propertyId!!)
+        val property = propertyViewModel.retrieveProperty(propertyId!!)
         if (property != null) {
             mBinding.tvProperty.text = property.tittle
             mBinding.tvDescription.text = property.description
@@ -104,7 +105,7 @@ class PropertyFragment : Fragment() {
                     setCurrentIndicator(position)
                 }
             })
-            val user = viewModel.retrieveProfile(property.userId)
+            val user = propertyViewModel.retrieveProfile(property.userId)
             mBinding.tvProfile.text = user.displayName
             Glide.with(this).load(user.photoUrl).circleCrop().into(mBinding.ivProfile)
             loadExtras(property)

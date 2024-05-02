@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -42,14 +43,16 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityLoginBinding
     private lateinit var startForResult: ActivityResultLauncher<Intent>
     private lateinit var db: FirebaseFirestore
-    private lateinit var viewModel: PortalViewModel
+    private val portalViewModel: PortalViewModel by lazy {
+        ViewModelProvider(this)[PortalViewModel::class.java]
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         mBinding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        viewModel = PortalViewModel()
         this.auth = InmoMarket.getAuth()
         this.db = FirebaseFirestore.getInstance()
         val sharedPref = this.getSharedPreferences("settings_preferences", Context.MODE_PRIVATE)
@@ -285,7 +288,7 @@ class LoginActivity : AppCompatActivity() {
 
     private suspend fun setImage(view: ImageView) {
         try {
-            Glide.with(this).load(viewModel.getImageRandom()).centerCrop().into(view)
+            Glide.with(this).load(portalViewModel.getImageRandom()).centerCrop().into(view)
         } catch (e: Exception) {
             Log.w(TAG, "Error loading image", e)
         }

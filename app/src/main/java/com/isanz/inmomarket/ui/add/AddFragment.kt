@@ -29,6 +29,9 @@ class AddFragment : Fragment() {
 
     private lateinit var mBinding: FragmentAddBinding
     private lateinit var db: FirebaseFirestore
+    private val addViewModel: AddViewModel by lazy {
+        ViewModelProvider(this)[AddViewModel::class.java]
+    }
 
 
     override fun onCreateView(
@@ -89,11 +92,11 @@ class AddFragment : Fragment() {
         }
 
         mBinding.btnSave.setOnClickListener {
-            save(addViewModel = ViewModelProvider(this)[AddViewModel::class.java])
+            save()
         }
     }
 
-    private fun save(addViewModel: AddViewModel) {
+    private fun save() {
         val tittle = mBinding.tieTittle.text.toString()
         val description = mBinding.tieDescription.text.toString()
         val location = mBinding.tieAddress.text.toString()

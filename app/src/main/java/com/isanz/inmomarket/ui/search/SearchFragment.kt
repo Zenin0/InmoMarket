@@ -33,14 +33,15 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var searchViewModel: SearchViewModel
     private var allowUbication: Boolean = false
+    private val searchViewModel: SearchViewModel by lazy {
+        ViewModelProvider(this)[SearchViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
-        searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
         setUpMap()
         return view
     }

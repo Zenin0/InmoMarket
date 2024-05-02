@@ -7,20 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.databinding.FragmentSettingsBinding
+import com.isanz.inmomarket.ui.home.HomeViewModel
 
 class SettingsFragment : Fragment() {
 
     private lateinit var mBinding: FragmentSettingsBinding
-    private lateinit var mViewModel: SettingsViewModel
+    private val settingsViewModel: SettingsViewModel by lazy {
+        ViewModelProvider(this)[SettingsViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         mBinding = FragmentSettingsBinding.inflate(layoutInflater)
-        mViewModel = SettingsViewModel()
         setUpView()
         return mBinding.root
     }
@@ -67,7 +70,7 @@ class SettingsFragment : Fragment() {
 
     private fun setUpCloseAccountButton() {
         mBinding.btnCloseAccount.setOnClickListener {
-            mViewModel.closeAccount()
+            settingsViewModel.closeAccount()
         }
     }
 

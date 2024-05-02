@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.isanz.inmomarket.R
@@ -17,7 +18,9 @@ import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 class ConversationsFragment : Fragment(), OnItemClickListener {
 
     private lateinit var mBinding: FragmentConversationsBinding
-    private val viewModel: ConversationsViewModel by viewModels()
+    private val conversationsViewModel: ConversationsViewModel by lazy {
+        ViewModelProvider(this)[ConversationsViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -29,7 +32,7 @@ class ConversationsFragment : Fragment(), OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
-        viewModel.retrieveConversations()
+        conversationsViewModel.retrieveConversations()
     }
 
     private fun setUpRecyclerView() {
@@ -45,7 +48,7 @@ class ConversationsFragment : Fragment(), OnItemClickListener {
     }
 
     private fun observeConversations(adapter: ConversationListAdapter) {
-        viewModel.listConversations.observe(viewLifecycleOwner) { conversations ->
+        conversationsViewModel.listConversations.observe(viewLifecycleOwner) { conversations ->
             updateRecyclerView(conversations, adapter)
         }
     }
