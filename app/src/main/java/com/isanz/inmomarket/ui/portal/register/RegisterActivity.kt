@@ -12,6 +12,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -40,7 +41,9 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityRegisterBinding
     private lateinit var startForResult: ActivityResultLauncher<Intent>
     private lateinit var db: FirebaseFirestore
-    private lateinit var viewModel: PortalViewModel
+    private val portalViewModel: PortalViewModel by lazy {
+        ViewModelProvider(this)[PortalViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +52,6 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(mBinding.root)
         db = InmoMarket.getDb()
         auth = InmoMarket.getAuth()
-        viewModel = PortalViewModel()
         startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 handleActivityResult(result)
@@ -222,6 +224,6 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private suspend fun setImage(view: ImageView) {
-        Glide.with(this).load(viewModel.getImageRandom()).centerCrop().into(view)
+        Glide.with(this).load(portalViewModel.getImageRandom()).centerCrop().into(view)
     }
 }

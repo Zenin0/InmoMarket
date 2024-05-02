@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -16,13 +17,14 @@ import kotlinx.coroutines.launch
 class MiniPropertyFragment : DialogFragment() {
 
     private var propertyId: String? = null
-    private lateinit var viewModel: PropertyViewModel
     private lateinit var mBinding: FragmentMiniPropertyBinding
+    private val propertyViewModel: PropertyViewModel by lazy {
+        ViewModelProvider(this)[PropertyViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         propertyId = arguments?.getString("propertyId")
-        viewModel = PropertyViewModel()
         setUpProperty()
     }
 
@@ -40,7 +42,7 @@ class MiniPropertyFragment : DialogFragment() {
     }
 
     private suspend fun setUp(propertyId: String?) {
-        val property = viewModel.retrieveProperty(propertyId!!)
+        val property = propertyViewModel.retrieveProperty(propertyId!!)
         if (property != null) {
             setPropertyDetails(property)
             setOverlayClickListener(propertyId)

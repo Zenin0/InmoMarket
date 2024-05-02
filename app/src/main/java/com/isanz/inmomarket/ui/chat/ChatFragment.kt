@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,16 +21,17 @@ class ChatFragment : Fragment() {
 
 
     private lateinit var mBinding: FragmentChatBinding
-    private lateinit var viewModel: ChatViewModel
     private lateinit var idChat: String
     private lateinit var recipientId: String
+    private val chatViewModel: ChatViewModel by lazy {
+        ViewModelProvider(this)[ChatViewModel::class.java]
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         idChat = requireArguments().getString("idChat")!!
         recipientId = InmoMarket.getAuth().currentUser?.uid!!
-        viewModel = ChatViewModel()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -49,7 +51,7 @@ class ChatFragment : Fragment() {
     }
 
     private fun setUpOtherUser() = lifecycleScope.launch {
-        val users = viewModel.getUsersInConversation(idChat).await()
+        val users = chatViewModel.getUsersInConversation(idChat).await()
         val otherUser = users.find { it.uid != InmoMarket.getAuth().currentUser!!.uid }
         mBinding.tvNameChat.text = otherUser?.displayName
         otherUser?.photoUrl?.let { loadImage(it) }
@@ -61,11 +63,11 @@ class ChatFragment : Fragment() {
         mBinding.recyclerView.layoutManager = layoutManager
         mBinding.recyclerView.adapter = adapter
         observeMessages(adapter)
-        viewModel.retrieveMessages(idChat)
+        chatViewModel.retrieveMessages(idChat)
     }
 
     private fun observeMessages(adapter: ChatListAdapter) {
-        viewModel.messageList.observe(viewLifecycleOwner) { messages ->
+        chatViewModel.messageList.observe(viewLifecycleOwner) { messages ->
             adapter.submitList(messages) {
                 val lastPosition = messages.size - 1
                 if (lastPosition >= 0) {
@@ -92,7 +94,7 @@ class ChatFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun sendMessage() {
         val text = mBinding.tieMessage.text.toString()
-        viewModel.sendMessage(text, idChat, recipientId)
+        chatViewModel.sendMessage(text, idChat, recipientId)
         mBinding.tieMessage.text?.clear()
     }
 

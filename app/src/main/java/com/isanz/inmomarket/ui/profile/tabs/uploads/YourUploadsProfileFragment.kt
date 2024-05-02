@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.isanz.inmomarket.R
@@ -18,14 +19,14 @@ class YourUploadsProfileFragment : Fragment(), OnItemClickListener {
 
 
     private lateinit var mBinging: FragmentYourUploadsProfileBinding
-
-    private lateinit var favoritesProfileViewModel: YourUploadsProfileViewModel
+    private val yourUploadsProfileViewModel: YourUploadsProfileViewModel by lazy {
+        ViewModelProvider(this)[YourUploadsProfileViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         mBinging = FragmentYourUploadsProfileBinding.inflate(inflater, container, false)
-        favoritesProfileViewModel = YourUploadsProfileViewModel()
         return mBinging.root
     }
 
@@ -59,7 +60,7 @@ class YourUploadsProfileFragment : Fragment(), OnItemClickListener {
     }
 
     private fun observeParcelas(adapter: PropertyItemListAdapter) {
-        favoritesProfileViewModel.listParcelas.observe(viewLifecycleOwner) { parcelas ->
+        yourUploadsProfileViewModel.listParcelas.observe(viewLifecycleOwner) { parcelas ->
             updateRecyclerView(parcelas, adapter)
         }
     }

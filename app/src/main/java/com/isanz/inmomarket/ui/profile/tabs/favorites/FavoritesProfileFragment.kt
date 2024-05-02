@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentFavoritesProfileBinding
 import com.isanz.inmomarket.rv.propertyItem.PropertyItemListAdapter
+import com.isanz.inmomarket.ui.search.SearchViewModel
 import com.isanz.inmomarket.utils.entities.Property
 import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 
@@ -18,13 +20,14 @@ class FavoritesProfileFragment : Fragment(), OnItemClickListener {
 
 
     private lateinit var mBinging: FragmentFavoritesProfileBinding
-    private lateinit var favoritesProfileViewModel: FavoritesProfileViewModel
+    private val favoritesProfileViewModel: FavoritesProfileViewModel by lazy {
+        ViewModelProvider(this)[FavoritesProfileViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         mBinging = FragmentFavoritesProfileBinding.inflate(inflater, container, false)
-        favoritesProfileViewModel = FavoritesProfileViewModel()
         setupRecyclerView()
         return mBinging.root
     }

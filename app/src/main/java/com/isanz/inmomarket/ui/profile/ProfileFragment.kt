@@ -30,7 +30,6 @@ class ProfileFragment : Fragment() {
     private lateinit var mBinding: FragmentProfileBinding
     private lateinit var navView: NavigationView
     private lateinit var drawerLayout: DrawerLayout
-
     private val profileViewModel: ProfileViewModel by lazy {
         ViewModelProvider(this)[ProfileViewModel::class.java]
     }
