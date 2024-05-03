@@ -16,9 +16,9 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/go_back"
         android:src="@drawable/ic_arrow_back"
+        app:layout_constraintBottom_toBottomOf="@id/tvFilters"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvFilters"
-        app:layout_constraintBottom_toBottomOf="@id/tvFilters"/>
+        app:layout_constraintTop_toTopOf="@id/tvFilters" />
 
 
     <TextView
@@ -36,11 +36,11 @@
         android:id="@+id/tvPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
         android:layout_marginStart="@dimen/common_margin"
         android:layout_marginTop="@dimen/common_margin"
         android:text="@string/prompt_price"
         android:textSize="@dimen/text_subtitle"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvFilters" />
 
@@ -57,12 +57,12 @@
     <TextView
         android:id="@+id/tvSquareMeters"
         android:layout_width="wrap_content"
-        android:textStyle="bold"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/common_margin"
         android:layout_marginTop="@dimen/common_margin"
         android:text="@string/prompt_square_meters"
         android:textSize="@dimen/text_subtitle"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rSPrice" />
 
@@ -83,48 +83,48 @@
         android:layout_marginStart="@dimen/common_margin"
         android:layout_marginTop="@dimen/common_margin"
         android:text="@string/prompt_rooms"
-        android:textStyle="bold"
         android:textSize="@dimen/text_subtitle"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rSSqureMeters" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilRooms"
+        android:id="@+id/tiRoomsMin"
+        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_margin"
-        app:layout_constraintBottom_toBottomOf="@id/tilBaths"
-        app:layout_constraintEnd_toStartOf="@id/tilBaths"
+        android:layout_marginStart="@dimen/common_margin"
+        android:layout_marginEnd="@dimen/common_margin"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tiRoomsMax"
         app:layout_constraintTop_toBottomOf="@id/tvRooms">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tieRooms"
+        <AutoCompleteTextView
+            android:id="@+id/actRoomsMin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:hint="@string/prompt_from"
-            android:inputType="number" />
+            android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilBaths"
+        android:id="@+id/tiRoomsMax"
+        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_margin"
-        app:layout_constraintBottom_toBottomOf="@id/tilRooms"
+        android:layout_marginStart="@dimen/common_margin"
+        android:layout_marginEnd="@dimen/common_margin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tilRooms"
-        app:layout_constraintTop_toBottomOf="@id/tvRooms">
+        app:layout_constraintTop_toBottomOf="@id/tvRooms"
+        app:layout_constraintStart_toEndOf="@id/tiRoomsMin">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tieBaths"
+        <AutoCompleteTextView
+            android:id="@+id/actRoomsMax"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:hint="@string/prompt_to"
-            android:inputType="number" />
+            android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

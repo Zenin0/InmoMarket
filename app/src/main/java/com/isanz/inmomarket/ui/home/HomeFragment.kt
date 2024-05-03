@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -27,6 +28,10 @@ class HomeFragment : Fragment(), OnItemClickListener {
     private lateinit var mBinding: FragmentHomeBinding
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var sideSheet: FrameLayout
+    private lateinit var roomsMinAdapter: ArrayAdapter<String>
+    private lateinit var roomsMaxAdapter: ArrayAdapter<String>
+    private var minRooms = 0f
+    private var maxRooms = Float.MAX_VALUE
     private val homeViewModel: HomeViewModel by lazy {
         ViewModelProvider(this)[HomeViewModel::class.java]
     }
@@ -100,15 +105,20 @@ class HomeFragment : Fragment(), OnItemClickListener {
         val maxPrice = mBinding.filterLayout.rSPrice.values[1]
         val minMeters = mBinding.filterLayout.rSSqureMeters.values[0]
         val maxMeters = mBinding.filterLayout.rSSqureMeters.values[1]
+        val minRooms = mBinding.filterLayout.actRoomsMin.text.toString().toFloatOrNull() ?: 0f
+        val maxRooms = mBinding.filterLayout.actRoomsMax.text.toString().toFloatOrNull() ?: Float.MAX_VALUE
 
         return parcelas?.filter {
-            it.price.toFloat() in minPrice..maxPrice && it.extras["squareMeters"]!!.toFloat() in minMeters..maxMeters
+            it.price.toFloat() in minPrice..maxPrice &&
+                    it.extras["squareMeters"]!!.toFloat() in minMeters..maxMeters &&
+                    it.extras["rooms"]!!.toFloat() in minRooms..maxRooms
         } ?: emptyList()
     }
 
     private fun enableFiltersListeners(parcelas: List<Property>?, adapter: PropertyItemListAdapter) {
         updatePriceFilter(parcelas)
         updateMetersFilter(parcelas)
+        updateRoomsFilter(parcelas)
 
         mBinding.filterLayout.rSPrice.addOnChangeListener { _, _, _ ->
             val filteredParcelas = filterParcelas(parcelas)
@@ -119,10 +129,39 @@ class HomeFragment : Fragment(), OnItemClickListener {
             val filteredParcelas = filterParcelas(parcelas)
             updateRecyclerView(filteredParcelas, adapter)
         }
+
+        mBinding.filterLayout.actRoomsMin.setOnItemClickListener { _, _, position, _ ->
+            val selectedMin = roomsMinAdapter.getItem(position)?.toInt() ?: 0
+            val updatedMaxOptions = (selectedMin..maxRooms.toInt()).map { it.toString() }
+            roomsMaxAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, updatedMaxOptions)
+            mBinding.filterLayout.actRoomsMax.setAdapter(roomsMaxAdapter)
+            val filteredParcelas = filterParcelas(parcelas)
+            updateRecyclerView(filteredParcelas, adapter)
+        }
+
+        mBinding.filterLayout.actRoomsMax.setOnItemClickListener { _, _, position, _ ->
+            val selectedMax = roomsMaxAdapter.getItem(position)?.toInt() ?: Int.MAX_VALUE
+            val updatedMinOptions = (minRooms.toInt()..selectedMax).map { it.toString() }
+            roomsMinAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, updatedMinOptions)
+            mBinding.filterLayout.actRoomsMin.setAdapter(roomsMinAdapter)
+            val filteredParcelas = filterParcelas(parcelas)
+            updateRecyclerView(filteredParcelas, adapter)
+        }
+    }
+
+
+    private fun updateRoomsFilter(parcelas: List<Property>?) {
+        minRooms = (parcelas?.mapNotNull { it.extras["rooms"] }?.minOrNull()?.toFloat() ?: 0f)
+        maxRooms = (parcelas?.mapNotNull { it.extras["rooms"] }?.maxOrNull()?.toFloat() ?: 0f)
+
+        roomsMinAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, (minRooms.toInt()..maxRooms.toInt()).map { it.toString() })
+        roomsMaxAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, (minRooms.toInt()..maxRooms.toInt()).map { it.toString() })
+
+        mBinding.filterLayout.actRoomsMin.setAdapter(roomsMinAdapter)
+        mBinding.filterLayout.actRoomsMax.setAdapter(roomsMaxAdapter)
     }
 
     private fun updateMetersFilter(parcelas: List<Property>?) {
-
         val minMeters = (parcelas?.mapNotNull { it.extras["squareMeters"] }?.minOrNull()?.toFloat() ?: 0f)
         val maxMeters = (parcelas?.mapNotNull { it.extras["squareMeters"] }?.maxOrNull()?.toFloat() ?: 0f)
 

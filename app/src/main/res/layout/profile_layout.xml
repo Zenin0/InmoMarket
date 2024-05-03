@@ -62,16 +62,6 @@
         app:layout_constraintTop_toBottomOf="@id/llTitle"
         app:layout_constraintVertical_bias="0" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_marginStart="@dimen/common_margin"
-        android:layout_marginBottom="@dimen/common_margin"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/ivProfile"
-        app:layout_constraintEnd_toEndOf="@id/ivProfile"
-        android:src="@drawable/ic_mode_edit"
-        android:contentDescription="@string/edit_profile_image" />
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"

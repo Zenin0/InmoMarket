@@ -87,4 +87,5 @@
     <string name="prompt_min_price">Minimun Price</string>
     <string name="prompt_from">From</string>
     <string name="prompt_to">To</string>
+    <string name="action_sign_in_github">Sign in with Github</string>
 </resources>
