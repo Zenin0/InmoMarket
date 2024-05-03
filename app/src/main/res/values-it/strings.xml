@@ -81,4 +81,12 @@
     <string name="bimetric_pop_up_dialog">L\'accesso biometrico è disponibile! Vuoi abilitarlo?</string>
     <string name="bring_me_there">Portami lì!</string>
     <string name="cancel">Annulla</string>
+    <string name="filter_button">Pulsante di filtro</string>
+    <string name="filters">Filtri</string>
+    <string name="prompt_min_price">Prezzo minimo</string>
+    <string name="prompt_from">Da</string>
+    <string name="prompt_to">A</string>
+    <string name="action_sign_in_github">Accedi con Github</string>
+    <string name="clear_filters">Cancella filtri</string>
+
 </resources>

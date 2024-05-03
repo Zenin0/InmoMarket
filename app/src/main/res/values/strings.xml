@@ -82,4 +82,11 @@
     <string name="bring_me_there">Bring me there!</string>
     <string name="cancel">Cancel</string>
     <string name="date" translatable="false">Monday 25 of 4</string>
+    <string name="filter_button">Filter Button</string>
+    <string name="filters">Filters</string>
+    <string name="prompt_min_price">Minimun Price</string>
+    <string name="prompt_from">From</string>
+    <string name="prompt_to">To</string>
+    <string name="action_sign_in_github">Sign in with Github</string>
+    <string name="clear_filters">Clear filters</string>
 </resources>
