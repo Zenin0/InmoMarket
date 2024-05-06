@@ -89,4 +89,8 @@
     <string name="prompt_to">To</string>
     <string name="action_sign_in_github">Sign in with Github</string>
     <string name="clear_filters">Clear filters</string>
+    <string name="no_user_loged">No user is currently logged in. Please log in first.</string>
+    <string name="login_use_biometric">Log in using your biometric credential</string>
+    <string name="biometric_login">Biometric login</string>
+    <string name="use_account_password">Use account password</string>
 </resources>

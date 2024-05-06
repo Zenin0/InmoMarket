@@ -103,9 +103,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showBiometricPrompt() {
-        val promptInfo = BiometricPrompt.PromptInfo.Builder().setTitle("Biometric login")
-            .setSubtitle("Log in using your biometric credential")
-            .setNegativeButtonText("Use account password").build()
+        val promptInfo = BiometricPrompt.PromptInfo.Builder().setTitle(getString(R.string.biometric_login))
+            .setSubtitle(getString(R.string.login_use_biometric))
+            .setNegativeButtonText(getString(R.string.use_account_password)).build()
 
         val biometricPrompt = BiometricPrompt(this,
             ContextCompat.getMainExecutor(this),
@@ -121,14 +121,11 @@ class LoginActivity : AppCompatActivity() {
                     super.onAuthenticationSucceeded(result)
                     val currentUser = FirebaseAuth.getInstance().currentUser
                     if (currentUser != null) {
-                        Toast.makeText(
-                            applicationContext, "Authentication succeeded!", Toast.LENGTH_SHORT
-                        ).show()
                         goToMain(currentUser)
                     } else {
                         Toast.makeText(
                             applicationContext,
-                            "No user is currently logged in. Please log in first.",
+                            getString(R.string.no_user_loged),
                             Toast.LENGTH_SHORT
                         ).show()
                     }

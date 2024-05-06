@@ -88,5 +88,10 @@
     <string name="prompt_to">À</string>
     <string name="action_sign_in_github">Se connecter avec Github</string>
     <string name="clear_filters">Effacer les filtres</string>
+    <string name="no_user_loged">Aucun utilisateur n'est actuellement connecté. Veuillez d'abord vous connecter.</string>
+    <string name="login_use_biometric">Connectez-vous avec vos informations biométriques</string>
+    <string name="biometric_login">Connexion biométrique</string>
+    <string name="use_account_password">Utiliser le mot de passe du compte</string>
+
 
 </resources>
