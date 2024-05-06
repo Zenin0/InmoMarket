@@ -88,10 +88,8 @@
     <string name="prompt_to">A</string>
     <string name="action_sign_in_github">Accedi con Github</string>
     <string name="clear_filters">Cancella filtri</string>
-    <string name="no_user_loged">Al momento non c\'è nessun utente connesso. Effettua prima l'accesso.</string>
+    <string name="no_user_loged">Al momento non c\'è nessun utente connesso. Effettua prima l\'accesso.</string>
     <string name="login_use_biometric">Accedi utilizzando le tue credenziali biometriche</string>
     <string name="biometric_login">Accesso biometrico</string>
     <string name="use_account_password">Utilizza la password dell\'account</string>
-
-
 </resources>

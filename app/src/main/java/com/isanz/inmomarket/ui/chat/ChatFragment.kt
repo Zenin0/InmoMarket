@@ -84,7 +84,9 @@ class ChatFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setUpButtons() {
         mBinding.fabSendMessage.setOnClickListener {
-            sendMessage()
+            lifecycleScope.launch {
+                sendMessage()
+            }
         }
         mBinding.ibBack.setOnClickListener {
             navigateBack()
@@ -92,7 +94,7 @@ class ChatFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun sendMessage() {
+    private suspend fun sendMessage() {
         val text = mBinding.tieMessage.text.toString()
         chatViewModel.sendMessage(text, idChat, recipientId)
         mBinding.tieMessage.text?.clear()

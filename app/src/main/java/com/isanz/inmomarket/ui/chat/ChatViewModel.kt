@@ -22,6 +22,7 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.coroutines.resume
@@ -35,17 +36,15 @@ class ChatViewModel : ViewModel() {
     val messageList: LiveData<List<Message>> get() = _messageList
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun sendMessage(text: String, chatId: String, senderId: String) {
+    suspend fun sendMessage(text: String, chatId: String, senderId: String) {
         val message = createMessage(text, senderId)
         try {
-            database.getReference("chatMessages").child(chatId).push().setValue(message)
+            withContext(Dispatchers.IO) {
+                database.getReference("chatMessages").child(chatId).push().setValue(message).await()
+                database.getReference("chats").child(chatId).child("lastMessage").setValue(message).await()
+            }
         } catch (e: Exception) {
-            Log.e(TAG, "saveMessageToChatMessage:failure", e)
-        }
-        try {
-            database.getReference("chats").child(chatId).child("lastMessage").setValue(message)
-        } catch (e: Exception) {
-            Log.e(TAG, "saveMessageToChats:failure", e)
+            Log.e(TAG, "sendMessage:failure", e)
         }
     }
 
