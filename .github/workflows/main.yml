@@ -3,21 +3,48 @@ name: CI
 on: [pull_request, push]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        api-level: [21, 23, 29]
     steps:
-    - uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v4
 
-    - name: Run Gradle command
-      uses: Raul6469/android-gradle-action@2.0.0
-      with:
-        # The gradle command you wish to run (required)
-        # Here, `./gradlew test` will be run
-        script: build
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
 
-        # In some cases, you may need to provide
-        # Android licence agreement id
-        # You can find it on your own machine under `$ANDROID_HOME/license`,
-        # and add the file content as a GitHub secret named `$ANDROID_LICENCE`.
-        android-licence: ${{ secrets.ANDROID_LICENCE }}
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v3
+        
+      - name: AVD cache
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
+      - name: create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
+
+      - name: run tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: ./gradlew connectedCheck
