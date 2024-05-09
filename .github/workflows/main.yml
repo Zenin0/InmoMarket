@@ -1,17 +1,23 @@
-name: Build
+name: CI
+
 on: [pull_request, push]
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Install JDK 17
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y openjdk-17-jdk
-          echo "org.gradle.java.home=/usr/lib/jvm/java-17-openjdk-amd64" >> gradle.properties
-      
-      - name: Checkout the code
-        uses: actions/checkout@v2
 
-      - name: Build the app
-        run: ./gradlew build
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run Gradle command
+      uses: Raul6469/android-gradle-action@2.0.0
+      with:
+        # The gradle command you wish to run (required)
+        # Here, `./gradlew test` will be run
+        script: build
+
+        # In some cases, you may need to provide
+        # Android licence agreement id
+        # You can find it on your own machine under `$ANDROID_HOME/license`,
+        # and add the file content as a GitHub secret named `$ANDROID_LICENCE`.
+        android-licence: ${{ secrets.ANDROID_LICENCE }}
