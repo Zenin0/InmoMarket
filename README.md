@@ -112,8 +112,6 @@
 * ![Android Studio](https://img.shields.io/badge/Android_Studio-3DDC84?style=for-the-badge&logo=android-studio&logoColor=white)
 * ![Material Design](https://img.shields.io/badge/Material_Design-757575?style=for-the-badge&logo=material-design&logoColor=white)
 
-
-
 ### Tecnologías usadas
 * ![Retrofit](https://img.shields.io/badge/Retrofit-0095D5?style=for-the-badge&logo=retrofit&logoColor=white)
 * ![Glide](https://img.shields.io/badge/Glide-0095D5?style=for-the-badge&logo=glide&logoColor=white)
@@ -131,7 +129,7 @@
 
 ¡La contribuciones son gratamente aceptadas!
 
-¡Si tiene alguna idea o similar házmelo saber en ![Feature](https://github.com/Zenin0/InmoMarket/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=)!
+¡Si tiene alguna idea o similar házmelo saber en [Feature](https://github.com/Zenin0/InmoMarket/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=Addon)
 
 
 
