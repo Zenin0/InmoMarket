@@ -24,3 +24,10 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+
+    - name: Check build status
+      run: |
+        if [ $? -ne 0 ]; then
+          git revert HEAD --no-edit
+          git push origin main
+        fi
