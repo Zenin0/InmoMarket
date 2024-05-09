@@ -2,7 +2,6 @@ package com.isanz.inmomarket.ui.search
 
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -79,12 +78,7 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
                 requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            requestPermissions(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ), Constants.LOCATION_PERMISSION_REQUEST_CODE
-            )
+
             return
         }
         enableUserLocation()
@@ -103,9 +97,24 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    @SuppressLint("MissingPermission")
     private fun enableUserLocation() {
         if (allowUbication) {
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissions(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ), Constants.LOCATION_PERMISSION_REQUEST_CODE
+                )
+                return
+            }
             mMap.isMyLocationEnabled = true
             mMap.isMyLocationEnabled = true
             setMapLocationToUserLocation()
@@ -117,6 +126,22 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setMapLocationToUserLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ), Constants.LOCATION_PERMISSION_REQUEST_CODE
+            )
+            return
+        }
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             if (location != null) {
                 val currentLatLng = LatLng(location.latitude, location.longitude)
