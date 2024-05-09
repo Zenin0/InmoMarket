@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "651308898588",
+    "firebase_url": "https://inmomarket0-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "inmomarket0",
+    "storage_bucket": "inmomarket0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651308898588:android:4d9b158e6defdd690a42d9",
+        "android_client_info": {
+          "package_name": "com.isanz.inmomarket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "651308898588-72kmmfb3pi3mb3agsche88fha6d7169e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.isanz.inmomarket",
+            "certificate_hash": "d44084486d7ae0fa0ed29c2772598e59c28dcbc6"
+          }
+        },
+        {
+          "client_id": "651308898588-nnjsmahilh4tp3b36nlc7rqbcpkf4pfo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAugzv-mtfuP6wy_SZDuI23OqBzEm0zEOA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "651308898588-nnjsmahilh4tp3b36nlc7rqbcpkf4pfo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-6042452064546418~3210724257"
+    }
+  ],
+  "configuration_version": "1"
+}
