@@ -6,13 +6,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.QuerySnapshot
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.utils.entities.Property
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class FavoritesProfileViewModel : ViewModel() {
+class FavoritesProfileViewModel(private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel() {
 
     val db = InmoMarket.getDb()
     private val _listfavorites = MutableLiveData<MutableList<Property>>()
@@ -28,31 +31,47 @@ class FavoritesProfileViewModel : ViewModel() {
         }
     }
 
-    private suspend fun listenForFavorites() = withContext(Dispatchers.IO) {
+    private suspend fun listenForFavorites() = withContext(dispatcher) {
         db.collection("properties").addSnapshotListener { snapshot, e ->
             if (e != null) {
-                Log.w(ContentValues.TAG, "Listen failed.", e)
+                logFailure(e)
                 return@addSnapshotListener
             }
 
             try {
-                if (snapshot != null) {
-                    val properties = mutableListOf<Property>()
-                    val currentUserId = InmoMarket.getAuth().currentUser!!.uid
-                    for (document in snapshot.documents) {
-                        if (document.exists()) {
-                            val property = document.toObject(Property::class.java)
-                            property?.id = document.id
-                            if (property?.favorites!!.contains(currentUserId)) {
-                                property.let { properties.add(it) }
-                            }
-                        }
-                    }
-                    _listfavorites.postValue(properties)
-                }
+                snapshot?.let {
+                    handleSnapshot(it)
+                } ?: logNullData()
             } catch (e: Exception) {
-                Log.w(ContentValues.TAG, "listenForFavorites:failure.", e)
+                logFailure(e)
             }
+        }
+    }
+
+    private fun logFailure(e: Exception) {
+        Log.w(ContentValues.TAG, "Listen failed.", e)
+    }
+
+    private fun logNullData() {
+        Log.d(ContentValues.TAG, "Current data: null")
+    }
+
+    private fun handleSnapshot(snapshot: QuerySnapshot) {
+        val properties = mutableListOf<Property>()
+        val currentUserId = InmoMarket.getAuth().currentUser!!.uid
+        for (document in snapshot.documents) {
+            if (document.exists()) {
+                handleDocument(document, currentUserId, properties)
+            }
+        }
+        _listfavorites.postValue(properties)
+    }
+
+    private fun handleDocument(document: DocumentSnapshot, currentUserId: String, properties: MutableList<Property>) {
+        val property = document.toObject(Property::class.java)
+        property?.id = document.id
+        if (property?.favorites!!.contains(currentUserId)) {
+            property.let { properties.add(it) }
         }
     }
 }

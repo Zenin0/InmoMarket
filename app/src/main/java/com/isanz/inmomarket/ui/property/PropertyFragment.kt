@@ -80,37 +80,41 @@ class PropertyFragment : Fragment() {
         return mBinding.root
     }
 
-    private suspend fun setUpView(propertyId: String?) {
-        val property = propertyViewModel.retrieveProperty(propertyId!!)
-        if (property != null) {
-            mBinding.tvProperty.text = property.tittle
-            mBinding.tvDescription.text = property.description
-            "${property.location.split(",")[0]}, ${property.location.split(",")[1]}, ${
-                property.location.split(
-                    ","
-                )[2].split(" ")[1]
-            }".also { mBinding.tvAddress.text = it }
+    private fun setUpView(propertyId: String?) {
+        propertyViewModel.retrieveProperty(propertyId!!) { property ->
+            if (property != null) {
+                mBinding.tvProperty.text = property.tittle
+                mBinding.tvDescription.text = property.description
+                "${property.location.split(",")[0]}, ${property.location.split(",")[1]}, ${
+                    property.location.split(
+                        ","
+                    )[2].split(" ")[1]
+                }".also { mBinding.tvAddress.text = it }
 
-            (property.price.toInt().toString() + "€").also { mBinding.tvPrice.text = it }
-            val imageList = property.listImagesUri
-            val adapter = CarouselAdapter(imageList)
-            this.mBinding.vpProperty.adapter = adapter
+                (property.price.toInt().toString() + "€").also { mBinding.tvPrice.text = it }
+                val imageList = property.listImagesUri
+                val adapter = CarouselAdapter(imageList)
+                this.mBinding.vpProperty.adapter = adapter
 
-            setupIndicators(imageList.size)
+                setupIndicators(imageList.size)
 
-            this.mBinding.vpProperty.registerOnPageChangeCallback(object :
-                ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    setCurrentIndicator(position)
+                this.mBinding.vpProperty.registerOnPageChangeCallback(object :
+                    ViewPager2.OnPageChangeCallback() {
+                    override fun onPageSelected(position: Int) {
+                        super.onPageSelected(position)
+                        setCurrentIndicator(position)
+                    }
+                })
+                propertyViewModel.retrieveProfile(property.userId) { user ->
+                    if (user != null) {
+                        mBinding.tvProfile.text = user.displayName
+                        Glide.with(this).load(user.photoUrl).circleCrop().into(mBinding.ivProfile)
+                    }
                 }
-            })
-            val user = propertyViewModel.retrieveProfile(property.userId)
-            mBinding.tvProfile.text = user.displayName
-            Glide.with(this).load(user.photoUrl).circleCrop().into(mBinding.ivProfile)
-            loadExtras(property)
-            setUpButtons(property)
-            mBinding.progressBar.visibility = View.GONE
+                loadExtras(property)
+                setUpButtons(property)
+                mBinding.progressBar.visibility = View.GONE
+            }
         }
     }
 

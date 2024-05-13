@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentFavoritesProfileBinding
 import com.isanz.inmomarket.rv.propertyItem.PropertyItemListAdapter
-import com.isanz.inmomarket.ui.search.SearchViewModel
 import com.isanz.inmomarket.utils.entities.Property
 import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 

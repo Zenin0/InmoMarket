@@ -41,11 +41,12 @@ class MiniPropertyFragment : DialogFragment() {
         return mBinding.root
     }
 
-    private suspend fun setUp(propertyId: String?) {
-        val property = propertyViewModel.retrieveProperty(propertyId!!)
-        if (property != null) {
-            setPropertyDetails(property)
-            setOverlayClickListener(propertyId)
+    private fun setUp(propertyId: String?) {
+        propertyViewModel.retrieveProperty(propertyId!!) { property ->
+            if (property != null) {
+                setPropertyDetails(property)
+                setOverlayClickListener(propertyId)
+            }
         }
     }
 

@@ -16,7 +16,7 @@ class ViewPagerAdapter(fragmentActivity: FragmentActivity) :
         return when (position) {
             0 -> FavoritesProfileFragment()
             1 -> YourUploadsProfileFragment()
-            else -> throw IllegalStateException("Invalid position")
+            else -> error("Invalid position")
         }
     }
 }

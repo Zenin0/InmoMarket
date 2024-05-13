@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.R
-import com.isanz.inmomarket.rv.propertyItem.PropertyItemViewModel
 import com.isanz.inmomarket.utils.entities.Conversation
 import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 import kotlinx.coroutines.CoroutineScope

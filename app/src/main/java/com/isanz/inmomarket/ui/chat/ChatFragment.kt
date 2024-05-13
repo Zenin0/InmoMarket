@@ -1,11 +1,9 @@
 package com.isanz.inmomarket.ui.chat
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -34,7 +32,7 @@ class ChatFragment : Fragment() {
         recipientId = InmoMarket.getAuth().currentUser?.uid!!
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -43,7 +41,7 @@ class ChatFragment : Fragment() {
         return mBinding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun setUpView() {
         setUpOtherUser()
         setUpButtons()
@@ -81,7 +79,7 @@ class ChatFragment : Fragment() {
         Glide.with(this).load(imageUri).circleCrop().into(mBinding.ivProfileChat)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun setUpButtons() {
         mBinding.fabSendMessage.setOnClickListener {
             lifecycleScope.launch {
@@ -93,8 +91,7 @@ class ChatFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun sendMessage() {
+    private fun sendMessage() {
         val text = mBinding.tieMessage.text.toString()
         chatViewModel.sendMessage(text, idChat, recipientId)
         mBinding.tieMessage.text?.clear()

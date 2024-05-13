@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.databinding.FragmentSettingsBinding
-import com.isanz.inmomarket.ui.home.HomeViewModel
 
 class SettingsFragment : Fragment() {
 

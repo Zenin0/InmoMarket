@@ -1,13 +1,19 @@
 package com.isanz.inmomarket.rv.propertyItem
 
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -16,12 +22,6 @@ import com.isanz.inmomarket.R
 import com.isanz.inmomarket.rv.extraItem.ExtraListAdapter
 import com.isanz.inmomarket.utils.entities.Property
 import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
-import androidx.recyclerview.widget.ItemTouchHelper
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
-import androidx.core.content.ContextCompat
 
 class PropertyItemListAdapter(private val listener: OnItemClickListener) :
     ListAdapter<Property, PropertyItemListAdapter.PropertyViewHolder>((PropertyItemDiffCallback())) {
@@ -56,14 +56,9 @@ class PropertyItemListAdapter(private val listener: OnItemClickListener) :
     }
 
     private fun setUpImage(holder: PropertyViewHolder, property: Property) {
-        holder.view.viewTreeObserver.addOnPreDrawListener(object :
-            ViewTreeObserver.OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                holder.view.viewTreeObserver.removeOnPreDrawListener(this)
-                loadImage(holder, property)
-                return true
-            }
-        })
+        OneShotPreDrawListener.add(holder.image) {
+            loadImage(holder, property)
+        }
     }
 
     private fun loadImage(holder: PropertyViewHolder, property: Property) {

@@ -27,7 +27,7 @@ class ConversationsViewModel : ViewModel() {
     private val userId = InmoMarket.getAuth().currentUser!!.uid
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun sortConversations(conversations: MutableList<Conversation>): List<Conversation> {
+    fun sortConversations(conversations: List<Conversation>): List<Conversation> {
         return conversations.sortedByDescending {
             if (it.lastMessage.messageDate.isNotBlank() && it.lastMessage.messageTime.isNotBlank()) {
                 val dateTimeStr = "${it.lastMessage.messageDate} ${it.lastMessage.messageTime}"
@@ -62,7 +62,7 @@ class ConversationsViewModel : ViewModel() {
             }
 
             override fun onCancelled(error: com.google.firebase.database.DatabaseError) {
-
+                Log.w(Constants.TAG, "retrieveConversations:onCancelled", error.toException())
             }
         }
         chatsRef.addValueEventListener(messageListener)

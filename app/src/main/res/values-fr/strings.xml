@@ -92,6 +92,7 @@
     <string name="login_use_biometric">Connectez-vous avec vos informations biométriques</string>
     <string name="biometric_login">Connexion biométrique</string>
     <string name="use_account_password">Utiliser le mot de passe du compte</string>
+    <string name="authentication_failed">Authentification échouée</string>
 
 
 </resources>

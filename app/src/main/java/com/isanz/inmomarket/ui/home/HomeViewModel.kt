@@ -10,11 +10,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.utils.entities.Property
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel() {
 
     private val _listParcelas = MutableLiveData<List<Property>>()
     val listParcelas: LiveData<List<Property>> = _listParcelas
@@ -34,7 +35,7 @@ class HomeViewModel : ViewModel() {
         Log.w(TAG, "listenForParcelas:failure", e)
     }
 
-    private suspend fun listenForParcelasUpdates() = withContext(Dispatchers.IO) {
+    private suspend fun listenForParcelasUpdates() = withContext(dispatcher) {
         db.collection("properties").addSnapshotListener { snapshot, e ->
             if (e != null) {
                 logError(e)
