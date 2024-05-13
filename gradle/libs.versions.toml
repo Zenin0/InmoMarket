@@ -1,5 +1,5 @@
 [versions]
-agp = "8.3.2"
+agp = "8.4.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -25,7 +25,7 @@ glide = "5.0.0-rc01"
 firebaseStorageKtx = "20.3.0"
 firebaseStorage = "21.0.0"
 firebaseCrashlytics = "19.0.0"
-gradle = "8.1.4"
+gradle = "8.4.0"
 firebaseCrashlyticsGradle = "2.9.9"
 kotlinxCoroutinesAndroid = "1.8.1-Beta"
 kotlinxCoroutinesPlayServices = "1.8.1-Beta"
@@ -67,7 +67,7 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle" }
 firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
-kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
+kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version = "1.8.1" }
 androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
 androidx-transition = { group = "androidx.transition", name = "transition", version = "1.5.0" }
 places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places" }
@@ -75,11 +75,10 @@ play-services-maps = { group = "com.google.android.gms", name = "play-services-m
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
-play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "playServicesAds" }
-mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockitoCore" }
+play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version = "23.1.0" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version = "5.12.0" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigationTesting" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-

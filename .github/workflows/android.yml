@@ -27,7 +27,7 @@ jobs:
 
     - name: Check build status
       run: |
-        if [ $? -ne 0 ]; then
+        if [ $? -ne 0 ] && [ "${{ github.event_name }}" == "push" ]; then
           git revert HEAD --no-edit
           git push origin main
         fi
