@@ -92,5 +92,6 @@
     <string name="login_use_biometric">Melden Sie sich mit Ihrem biometrischen Ausweis an</string>
     <string name="biometric_login">Biometrische Anmeldung</string>
     <string name="use_account_password">Konto-Passwort verwenden</string>
+    <string name="authentication_failed">Authentifizierung fehlgeschlagen</string>
 
 </resources>

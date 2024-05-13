@@ -1,12 +1,11 @@
 package com.isanz.inmomarket.ui.chat
 
 import android.content.ContentValues.TAG
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -17,47 +16,53 @@ import com.google.firebase.ktx.Firebase
 import com.isanz.inmomarket.utils.entities.Conversation
 import com.isanz.inmomarket.utils.entities.Message
 import com.isanz.inmomarket.utils.entities.User
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class ChatViewModel : ViewModel() {
+class ChatViewModel(private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel() {
 
     private val database: FirebaseDatabase = Firebase.database
     private val _messageList = MutableLiveData<List<Message>>()
     val messageList: LiveData<List<Message>> get() = _messageList
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun sendMessage(text: String, chatId: String, senderId: String) {
-        val message = createMessage(text, senderId)
-        try {
-            withContext(Dispatchers.IO) {
+    private val _messageSentStatus = MutableLiveData<Boolean>()
+
+    fun sendMessage(text: String, chatId: String, senderId: String) {
+        viewModelScope.launch(dispatcher) {
+            val message = createMessage(text, senderId)
+            try {
                 database.getReference("chatMessages").child(chatId).push().setValue(message).await()
-                database.getReference("chats").child(chatId).child("lastMessage").setValue(message).await()
+                database.getReference("chats").child(chatId).child("lastMessage").setValue(message)
+                    .await()
+                _messageSentStatus.postValue(true)
+            } catch (e: Exception) {
+                Log.e(TAG, "sendMessage:failure", e)
+                _messageSentStatus.postValue(false)
             }
-        } catch (e: Exception) {
-            Log.e(TAG, "sendMessage:failure", e)
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun createMessage(text: String, senderId: String): Message {
-        val current = LocalDateTime.now()
-        val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        val current = Calendar.getInstance().time
+        val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val timeFormatter = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
         return Message(
             message = text,
             senderId = senderId,
-            messageDate = current.format(dateFormatter),
-            messageTime = current.format(timeFormatter)
+            messageDate = dateFormatter.format(current),
+            messageTime = timeFormatter.format(current)
         )
     }
 

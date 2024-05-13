@@ -62,6 +62,7 @@ class SettingsViewModel : ViewModel() {
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
+                    Log.e(Constants.TAG, "deleteChats:onCancelled", databaseError.toException())
                 }
             })
         } catch (e: Exception) {

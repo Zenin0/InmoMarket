@@ -3,6 +3,7 @@ package com.isanz.inmomarket.ui.profile
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -10,19 +11,23 @@ import com.google.firebase.storage.StorageReference
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.utils.Constants
 import com.isanz.inmomarket.utils.entities.User
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class ProfileViewModel : ViewModel() {
 
     private val db = InmoMarket.getDb()
 
-    suspend fun retrieveProfile(): User {
-        return try {
-            val userId = InmoMarket.getAuth().currentUser!!.uid
-            getUserFromDb(userId)
-        } catch (e: Exception) {
-            Log.e(Constants.TAG, "retrieveProfile:failure", e)
-            User()
+    fun retrieveProfile(callback: (User?) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val userId = InmoMarket.getAuth().currentUser!!.uid
+                val user = getUserFromDb(userId)
+                callback(user)
+            } catch (e: Exception) {
+                Log.e(Constants.TAG, "retrieveProfile:failure", e)
+                callback(User())
+            }
         }
     }
 

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -103,9 +104,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showBiometricPrompt() {
-        val promptInfo = BiometricPrompt.PromptInfo.Builder().setTitle(getString(R.string.biometric_login))
-            .setSubtitle(getString(R.string.login_use_biometric))
-            .setNegativeButtonText(getString(R.string.use_account_password)).build()
+        val promptInfo =
+            BiometricPrompt.PromptInfo.Builder().setTitle(getString(R.string.biometric_login))
+                .setSubtitle(getString(R.string.login_use_biometric))
+                .setNegativeButtonText(getString(R.string.use_account_password)).build()
 
         val biometricPrompt = BiometricPrompt(this,
             ContextCompat.getMainExecutor(this),
@@ -176,12 +178,13 @@ class LoginActivity : AppCompatActivity() {
                     }
                 } else {
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(baseContext,
+                        getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show()
                 }
             }
         } catch (e: Exception) {
             Log.w(TAG, "signInWithCredential:failure", e)
-            Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(baseContext, getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -275,15 +278,18 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    @Suppress("DEPRECATION")
     private fun goToRegister() {
         val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.slide_out_right, R.anim.slide_in_left)
+        } else {
+            overridePendingTransition(R.anim.slide_out_right , R.anim.slide_in_left)
+        }
         finish()
     }
 
-    private suspend fun setImage(view: ImageView) {
+    private fun setImage(view: ImageView) {
         try {
             Glide.with(this).load(portalViewModel.getImageRandom()).centerCrop().into(view)
         } catch (e: Exception) {

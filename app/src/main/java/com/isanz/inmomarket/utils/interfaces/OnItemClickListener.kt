@@ -1,5 +1,5 @@
 package com.isanz.inmomarket.utils.interfaces
 
-interface OnItemClickListener {
+fun interface OnItemClickListener {
     fun onItemClicked(propertyId: String)
 }

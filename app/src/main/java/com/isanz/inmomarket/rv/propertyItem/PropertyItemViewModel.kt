@@ -17,7 +17,7 @@ class PropertyItemViewModel : ViewModel() {
     fun getIfFavorite(property: Property, callback: (Boolean) -> Unit) {
         val docRef = getDocumentReference(property)
         docRef.get().addOnSuccessListener { document ->
-            val isFavorite = checkIfFavorite(document.get("favorites") as? List<*>)
+            val isFavorite = checkIfFavorite(document["favorites"] as? List<*>)
             callback(isFavorite)
         }
     }
@@ -30,7 +30,7 @@ class PropertyItemViewModel : ViewModel() {
         viewModelScope.launch {
             val docRef = getDocumentReference(property)
             docRef.get().addOnSuccessListener { document ->
-                val favorites = document.get("favorites") as? List<*>
+                val favorites = document["favorites"] as? List<*>
                 if (checkIfFavorite(favorites)) {
                     removeFavorite(docRef, updateFavoriteIcon)
                 } else {

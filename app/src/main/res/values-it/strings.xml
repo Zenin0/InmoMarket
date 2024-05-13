@@ -92,4 +92,5 @@
     <string name="login_use_biometric">Accedi utilizzando le tue credenziali biometriche</string>
     <string name="biometric_login">Accesso biometrico</string>
     <string name="use_account_password">Utilizza la password dell\'account</string>
+    <string name="authentication_failed">Autenticazione fallita</string>
 </resources>

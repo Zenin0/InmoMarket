@@ -35,7 +35,7 @@ class PropertyViewModel : ViewModel() {
         try {
             val docRef = db.collection("properties").document(property.id!!)
             docRef.get().addOnSuccessListener { document ->
-                val favorites = document.get("favorites") as? List<*>
+                val favorites = document["favorites"] as? List<*>
                 if (favorites != null && favorites.contains(user!!.uid)) {
                     callback(true)
                 } else {
@@ -55,7 +55,7 @@ class PropertyViewModel : ViewModel() {
             try {
                 val docRef = db.collection("properties").document(property.id!!)
                 docRef.get().addOnSuccessListener { document ->
-                    val favorites = document.get("favorites") as? List<*>
+                    val favorites = document["favorites"] as? List<*>
                     if (favorites != null && favorites.contains(user!!.uid)) {
                         updateFavoriteIcon(false)
                         docRef.update("favorites", FieldValue.arrayRemove(user.uid))
@@ -81,27 +81,35 @@ class PropertyViewModel : ViewModel() {
         }
     }
 
-    suspend fun retrieveProperty(propertyId: String): Property? {
-        return try {
-            val document = db.collection("properties").document(propertyId).get().await()
-            if (document.exists()) {
-                val property = document.toObject(Property::class.java)
-                property?.id = document.id
-                property
-            } else {
-                null
+    fun retrieveProperty(propertyId: String, callback: (Property?) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val document = db.collection("properties").document(propertyId).get().await()
+                if (document.exists()) {
+                    val property = document.toObject(Property::class.java)
+                    property?.id = document.id
+                    callback(property)
+                } else {
+                    callback(null)
+                }
+            } catch (e: Exception) {
+                Log.e(Constants.TAG, "retrieveProperty:failure", e)
+                callback(null)
             }
-        } catch (e: Exception) {
-            Log.e(
-                Constants.TAG, "retrieveProperty:failure", e
-            )
-            null
         }
     }
 
-    suspend fun retrieveProfile(userId: String): User {
-        val user = db.collection("users").document(userId).get().await()
-        return user.toObject(User::class.java)!!
+    fun retrieveProfile(userId: String, callback: (User?) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val userDocument = db.collection("users").document(userId).get().await()
+                val user = userDocument.toObject(User::class.java)
+                callback(user)
+            } catch (e: Exception) {
+                Log.e(Constants.TAG, "retrieveProfile:failure", e)
+                callback(null)
+            }
+        }
     }
 
     fun createChat(senderId: String, recipientId: String, callback: (String) -> Unit) {

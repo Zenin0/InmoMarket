@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -23,7 +24,7 @@ import com.isanz.inmomarket.rv.imageItem.ImageListAdapter
 import com.isanz.inmomarket.utils.Constants
 import java.util.UUID
 
-@Suppress("DEPRECATION")
+
 class AddFragment : Fragment() {
 
 
@@ -38,13 +39,17 @@ class AddFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         mBinding = FragmentAddBinding.inflate(inflater, container, false)
+        setUp()
+        return mBinding.root
+    }
+
+    private fun setUp() {
         db = InmoMarket.getDb()
         setupImageListAdapter()
         initializePlaces()
         setupAddressClickListener()
         setUpButtons()
         setUpDrawables()
-        return mBinding.root
     }
 
     private fun setupImageListAdapter() {
@@ -68,7 +73,7 @@ class AddFragment : Fragment() {
         val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS)
         val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
             .build(requireContext())
-        startActivityForResult(intent, Constants.REQUEST_CODE_AUTOCOMPLETE)
+        placeAutocompleteLauncher.launch(intent)
     }
 
     private fun setUpDrawables() {
@@ -202,20 +207,21 @@ class AddFragment : Fragment() {
             type = "image/*"
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }
-        startActivityForResult(intent, Constants.REQUEST_CODE_PICK_IMAGES)
+        imagePickerResultLauncher.launch(intent)
     }
 
-
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == Constants.REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK) {
-            handleImagePickResult(data)
-        } else if (requestCode == Constants.REQUEST_CODE_AUTOCOMPLETE && resultCode == Activity.RESULT_OK) {
-            handlePlaceAutocompleteResult(data!!)
+    private val imagePickerResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            handleImagePickResult(result.data)
         }
     }
+
+    private val placeAutocompleteLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            handlePlaceAutocompleteResult(result.data!!)
+        }
+    }
+
 
     private fun handleImagePickResult(data: Intent?) {
         val imageUris = extractImageUrisFromIntent(data)

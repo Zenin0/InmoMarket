@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -24,7 +25,6 @@ import com.isanz.inmomarket.ui.portal.login.LoginActivity
 import com.isanz.inmomarket.utils.Constants
 import kotlinx.coroutines.launch
 
-@Suppress("DEPRECATION")
 class ProfileFragment : Fragment() {
 
     private lateinit var mBinding: FragmentProfileBinding
@@ -60,14 +60,13 @@ class ProfileFragment : Fragment() {
     private fun launchImagePicker() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
-        startActivityForResult(intent, Constants.REQUEST_CODE_PICK_IMAGES)
+        imagePickerResultLauncher.launch(intent)
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Constants.REQUEST_CODE_PICK_IMAGES && resultCode == Activity.RESULT_OK && data != null) {
-            handleImagePicked(data.data)
+    private val imagePickerResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val imageUri = result.data?.data
+            handleImagePicked(imageUri)
         }
     }
 
@@ -91,7 +90,7 @@ class ProfileFragment : Fragment() {
             when (position) {
                 0 -> tab.text = getString(R.string.tab_favorites)
                 1 -> tab.text = getString(R.string.tab_your_uploads)
-                else -> throw IllegalStateException("Invalid position")
+                else -> error("Invalid position")
             }
         }.attach()
     }
@@ -140,12 +139,15 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private suspend fun setUpView() {
+    private fun setUpView() {
         navView = mBinding.navView
         drawerLayout = mBinding.drawerLayout
-        val user = profileViewModel.retrieveProfile()
-        loadImage(mBinding.profileLayout.ivProfile, user.photoUrl!!)
-        mBinding.profileLayout.tvName.text = user.displayName
+        profileViewModel.retrieveProfile { user ->
+            if (user != null) {
+                loadImage(mBinding.profileLayout.ivProfile, user.photoUrl!!)
+                mBinding.profileLayout.tvName.text = user.displayName
+            }
+        }
     }
 
     private fun loadImage(view: ImageView, url: String) {

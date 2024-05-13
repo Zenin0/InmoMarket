@@ -2,6 +2,7 @@ package com.isanz.inmomarket.ui.portal.register
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -214,16 +215,18 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    @Suppress("DEPRECATION")
     private fun goToLogin() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
-        overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.slide_in_left, R.anim.slide_out_right)
+        } else {
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+        }
         finish()
     }
 
-    private suspend fun setImage(view: ImageView) {
+    private fun setImage(view: ImageView) {
         Glide.with(this).load(portalViewModel.getImageRandom()).centerCrop().into(view)
     }
 }

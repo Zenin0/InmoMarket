@@ -8,10 +8,9 @@ import com.isanz.inmomarket.ui.home.HomeViewModel
 import com.isanz.inmomarket.ui.profile.ProfileViewModel
 import com.isanz.inmomarket.ui.search.SearchViewModel
 import com.isanz.inmomarket.ui.settings.SettingsViewModel
-import com.isanz.inmomarket.utils.Constants
 import com.isanz.inmomarket.utils.entities.Message
-import com.isanz.inmomarket.utils.entities.Property
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.lang.reflect.Method
