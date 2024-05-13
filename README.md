@@ -132,7 +132,10 @@
 ¡Si tiene alguna idea o similar házmelo saber en [Feature](https://github.com/Zenin0/InmoMarket/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=Addon)
 
 
+<!-- Code Stats -->
+## Code Stats
 
+[Code Stats](https://sonarcloud.io/project/overview?id=Zenin0_InmoMarket)
 
 <!-- LICENSE -->
 ## Licencia
