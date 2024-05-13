@@ -30,7 +30,7 @@
             android:value="ca-app-pub-6042452064546418~3210724257"/>
         <activity
             android:name=".ui.portal.register.RegisterActivity"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/Theme.InmoMarket.Auth"
             android:screenOrientation="portrait"/>
         <activity
@@ -45,7 +45,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true"
+            android:exported="false"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"/>
     </application>
