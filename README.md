@@ -143,7 +143,7 @@
 
 > [!TIP]
 > ¡Si tiene alguna idea o similar házmelo saber en [Feature](https://github.com/Zenin0/InmoMarket/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=Addon).
-> ¡También se puede apoyar económicamente [Sponsor](buymeacoffee.com/zenin0)!
+> ¡También se puede apoyar económicamente [Sponsor](https://buymeacoffee.com/zenin0)!
 
 
 <!-- Code Stats -->
