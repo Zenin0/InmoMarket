@@ -23,10 +23,12 @@
         android:theme="@style/Theme.InmoMarket"
         tools:targetApi="31">
         <meta-data
+            android:exported="false"
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:exported="false"
             android:value="ca-app-pub-6042452064546418~3210724257"/>
         <activity
             android:name=".ui.portal.register.RegisterActivity"
