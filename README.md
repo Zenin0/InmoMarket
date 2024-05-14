@@ -22,13 +22,25 @@
     <li>
       <a href="#about-the-project">Acerca del Proyecto</a>
       <ul>
-        <li><a href="#contruido-con">Contruido con</a></li>
+        <li><a href="#home-screen">Home Screen</a></li>
+        <li><a href="#property-detail-screen">Porperty Detail Screen</a></li>
+        <li><a href="#chat-screen">Chat Screen</a></li>
+        <li><a href="#messages-screen">Messages Screen</a></li>
+        <li><a href="#search-screen">Search Screen</a></li>
+        <li><a href="#add-property-screen">Add Property Screen</a></li>
+        <li><a href="#profile-screen">Profile Screen</a></li>
+        <li><a href="#drawer-screen">Drawer Screen</a></li>
+        <li><a href="#settings-screen">Search Screen</a></li>
       </ul>
+      <li>Desarrollo</a>
       <ul>
+        <li><a href="#contruido-con">Contruido con</a></li>
         <li><a href="#tecnologías-usadas">Tecnologías usadas</a></li>
       </ul>
     </li>
-    <li><a href="#license">Licencia</a></li>
+     <li><a href="#como-contribuir">Como contribuir</a></li>
+     <li><a href="#code-stats">Code Stats</a></li>
+     <li><a href="#license">Licencia</a></li>
   </ol>
 </details>
 
