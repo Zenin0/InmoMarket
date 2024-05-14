@@ -40,7 +40,7 @@
     </li>
      <li><a href="#como-contribuir">Como contribuir</a></li>
      <li><a href="#code-stats">Code Stats</a></li>
-     <li><a href="#license">Licencia</a></li>
+     <li><a href="#licencia">Licencia</a></li>
   </ol>
 </details>
 
@@ -154,4 +154,4 @@
 <!-- LICENSE -->
 ## Licencia
 
-Distribuido bajo la Licencia Creative Commons Zero. Consulte `LICENCIA` para obtener más información.
+Distribuido bajo la Licencia AGPL-3.0 license. Consulte `LICENCIA` para obtener más información.
