@@ -1,12 +1,10 @@
 package com.isanz.inmomarket.ui.profile.tabs.uploads
 
-import android.content.ContentValues
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -17,7 +15,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class YourUploadsProfileViewModel(userId: String = FirebaseAuth.getInstance().currentUser!!.uid,  private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel()  {
+class YourUploadsProfileViewModel(private val userId: String = InmoMarket.getAuth().currentUser!!.uid, private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel()  {
+
+    companion object {
+        private const val TAG = "YourUploadsProfileVM"
+    }
 
     private val _listParcelas = MutableLiveData<List<Property>>()
     val listParcelas: LiveData<List<Property>> = _listParcelas
@@ -26,14 +28,14 @@ class YourUploadsProfileViewModel(userId: String = FirebaseAuth.getInstance().cu
     init {
         viewModelScope.launch {
             try {
-                listenForParcelasUpdates(userId)
+                listenForParcelasUpdates()
             } catch (e: Exception) {
-                Log.w(ContentValues.TAG, "listenForParcelasUpdates:failure", e)
+                logFailure(e)
             }
         }
     }
 
-    private suspend fun listenForParcelasUpdates(userId: String = FirebaseAuth.getInstance().currentUser!!.uid)  {
+    private suspend fun listenForParcelasUpdates()  {
         withContext(dispatcher){
             db.collection("properties").addSnapshotListener { snapshot, e ->
                 if (e != null) {
@@ -43,7 +45,7 @@ class YourUploadsProfileViewModel(userId: String = FirebaseAuth.getInstance().cu
 
                 try {
                     snapshot?.let {
-                        handleSnapshot(it, userId)
+                        handleSnapshot(it)
                     } ?: logNullData()
                 } catch (e: Exception) {
                     logFailure(e)
@@ -53,28 +55,27 @@ class YourUploadsProfileViewModel(userId: String = FirebaseAuth.getInstance().cu
     }
 
     private fun logFailure(e: Exception) {
-        Log.w(ContentValues.TAG, "listenForParcelasUpdates:failure", e)
+        Log.w(TAG, "listenForParcelasUpdates:failure", e)
     }
 
     private fun logNullData() {
-        Log.d(ContentValues.TAG, "Current data: null")
+        Log.d(TAG, "Current data: null")
     }
 
-    private fun handleSnapshot(snapshot: QuerySnapshot, userId: String = InmoMarket.getAuth().currentUser!!.uid) {
+    private fun handleSnapshot(snapshot: QuerySnapshot) {
         val properties = mutableListOf<Property>()
         for (document in snapshot.documents) {
-            if (document.exists()) {
-                handleDocument(document, userId, properties)
-            }
+            handleDocument(document, properties)
         }
         _listParcelas.postValue(properties)
     }
 
-    private fun handleDocument(document: DocumentSnapshot, currentUserId: String, properties: MutableList<Property>) {
-        val property = document.toObject(Property::class.java)
-        property?.id = document.id
-        if (property?.userId == currentUserId) {
-            property.let { properties.add(it) }
+    private fun handleDocument(document: DocumentSnapshot, properties: MutableList<Property>) {
+        document.toObject(Property::class.java)?.apply {
+            id = document.id
+            if (userId == this@YourUploadsProfileViewModel.userId) {
+                properties.add(this)
+            }
         }
     }
 }
