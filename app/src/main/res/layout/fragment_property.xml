@@ -144,6 +144,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <LinearLayout
+                android:id="@+id/llProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
             <ImageView
                 android:id="@+id/ivProfile"
                 android:layout_width="64dp"
@@ -151,8 +158,8 @@
                 android:layout_margin="@dimen/common_margin"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ic_person"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_gravity="center_vertical"
+                />
 
             <TextView
                 android:id="@+id/tvProfile"
@@ -162,9 +169,12 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/common_margin"
                 android:text="@string/profile_user"
+                android:layout_gravity="center_vertical"
                 app:layout_constraintBottom_toBottomOf="@id/ivProfile"
                 app:layout_constraintStart_toEndOf="@id/ivProfile"
                 app:layout_constraintTop_toTopOf="@id/ivProfile" />
+
+            </LinearLayout>
 
 
             <androidx.recyclerview.widget.RecyclerView

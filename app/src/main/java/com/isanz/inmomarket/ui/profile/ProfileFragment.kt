@@ -30,6 +30,8 @@ class ProfileFragment : Fragment() {
     private lateinit var mBinding: FragmentProfileBinding
     private lateinit var navView: NavigationView
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var profileUserId: String
+
     private val profileViewModel: ProfileViewModel by lazy {
         ViewModelProvider(this)[ProfileViewModel::class.java]
     }
@@ -38,6 +40,9 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         mBinding = FragmentProfileBinding.inflate(inflater, container, false)
+        arguments?.let {
+            profileUserId = it.getString("profileId") ?: ""
+        }
         setUp()
         return mBinding.root
     }
@@ -46,9 +51,19 @@ class ProfileFragment : Fragment() {
         lifecycleScope.launch {
             setUpView()
         }
+        setUpButtons()
         setUpDrawer()
         setUpTabs()
         setUpProfileImagePicker()
+    }
+
+    private fun setUpButtons() {
+        mBinding.profileLayout.ibDrawer.setOnClickListener {
+            mBinding.drawerLayout.openDrawer(GravityCompat.START)
+        }
+        mBinding.profileLayout.ibBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun setUpProfileImagePicker() {
@@ -63,12 +78,13 @@ class ProfileFragment : Fragment() {
         imagePickerResultLauncher.launch(intent)
     }
 
-    private val imagePickerResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val imageUri = result.data?.data
-            handleImagePicked(imageUri)
+    private val imagePickerResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val imageUri = result.data?.data
+                handleImagePicked(imageUri)
+            }
         }
-    }
 
     private fun handleImagePicked(imageUri: Uri?) {
         if (imageUri != null) {
@@ -82,24 +98,24 @@ class ProfileFragment : Fragment() {
         val viewPager = mBinding.profileLayout.viewPager
 
 
-        val adapter = ViewPagerAdapter(requireActivity())
-        viewPager.adapter = adapter
+
+        if (profileUserId.isEmpty()) {
+            viewPager.adapter = ViewPagerAdapter(requireActivity())
+        } else {
+            viewPager.adapter = ViewPagerAdapter(requireActivity(), profileUserId)
+        }
 
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when (position) {
                 0 -> tab.text = getString(R.string.tab_favorites)
-                1 -> tab.text = getString(R.string.tab_your_uploads)
+                1 -> tab.text = getString(R.string.tab_uploads)
                 else -> error("Invalid position")
             }
         }.attach()
     }
 
     private fun setUpDrawer() {
-        mBinding.profileLayout.ibDrawer.setOnClickListener {
-            mBinding.drawerLayout.openDrawer(GravityCompat.START)
-        }
-
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_logout -> {
@@ -142,7 +158,28 @@ class ProfileFragment : Fragment() {
     private fun setUpView() {
         navView = mBinding.navView
         drawerLayout = mBinding.drawerLayout
+        if (profileUserId.isEmpty()) {
+            viewProfileForOther()
+        } else {
+            viewProfileForSelf()
+        }
+    }
+
+    private fun viewProfileForOther() {
+        mBinding.profileLayout.ibDrawer.visibility = View.VISIBLE
+        mBinding.profileLayout.ibBack.visibility = View.GONE
         profileViewModel.retrieveProfile { user ->
+            if (user != null) {
+                loadImage(mBinding.profileLayout.ivProfile, user.photoUrl!!)
+                mBinding.profileLayout.tvName.text = user.displayName
+            }
+        }
+    }
+
+    private fun viewProfileForSelf() {
+        mBinding.profileLayout.ibDrawer.visibility = View.GONE
+        mBinding.profileLayout.ibBack.visibility = View.VISIBLE
+        profileViewModel.retrieveProfile(profileUserId) { user ->
             if (user != null) {
                 loadImage(mBinding.profileLayout.ivProfile, user.photoUrl!!)
                 mBinding.profileLayout.tvName.text = user.displayName

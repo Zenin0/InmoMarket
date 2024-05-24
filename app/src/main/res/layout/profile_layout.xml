@@ -27,15 +27,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageButton
+        android:id="@+id/ibBack"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="@dimen/common_margin"
+        android:visibility="gone"
+        android:background="@drawable/ic_arrow_back"
+        android:importantForAccessibility="no"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_margin"
             android:text="@string/title_profile"
             android:textSize="@dimen/text_tittle"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@id/ibDrawer"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textStyle="bold" />
     </LinearLayout>
 
 
@@ -80,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:tabMode="scrollable"
-            android:text="@string/tab_your_uploads" />
+            android:text="@string/tab_uploads" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"

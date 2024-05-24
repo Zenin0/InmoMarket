@@ -18,11 +18,10 @@ class ProfileViewModel : ViewModel() {
 
     private val db = InmoMarket.getDb()
 
-    fun retrieveProfile(callback: (User?) -> Unit) {
+    fun retrieveProfile(profileUserId: String = FirebaseAuth.getInstance().currentUser!!.uid, callback: (User?) -> Unit) {
         viewModelScope.launch {
             try {
-                val userId = InmoMarket.getAuth().currentUser!!.uid
-                val user = getUserFromDb(userId)
+                val user = getUserFromDb(profileUserId)
                 callback(user)
             } catch (e: Exception) {
                 Log.e(Constants.TAG, "retrieveProfile:failure", e)

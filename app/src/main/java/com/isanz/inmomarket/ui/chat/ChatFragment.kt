@@ -11,8 +11,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.isanz.inmomarket.InmoMarket
+import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentChatBinding
 import com.isanz.inmomarket.rv.chatItem.ChatListAdapter
+import com.isanz.inmomarket.utils.entities.User
 import kotlinx.coroutines.launch
 
 class ChatFragment : Fragment() {
@@ -49,8 +51,7 @@ class ChatFragment : Fragment() {
     }
 
     private fun setUpOtherUser() = lifecycleScope.launch {
-        val users = chatViewModel.getUsersInConversation(idChat).await()
-        val otherUser = users.find { it.uid != InmoMarket.getAuth().currentUser!!.uid }
+        val otherUser = retrieveOtherUser()
         mBinding.tvNameChat.text = otherUser?.displayName
         otherUser?.photoUrl?.let { loadImage(it) }
     }
@@ -88,6 +89,27 @@ class ChatFragment : Fragment() {
         }
         mBinding.ibBack.setOnClickListener {
             navigateBack()
+        }
+        mBinding.llProfileChat.setOnClickListener {
+            navigateToProfile()
+        }
+    }
+
+
+    private suspend fun retrieveOtherUser(): User? {
+        val users = chatViewModel.getUsersInConversation(idChat).await()
+        return users.find { it.uid != InmoMarket.getAuth().currentUser!!.uid }
+    }
+
+    private fun navigateToProfile() {
+        val bundle = Bundle()
+        lifecycleScope.launch {
+            val otherUser = retrieveOtherUser()
+            bundle.putString("profileId", otherUser?.uid)
+            this@ChatFragment.findNavController().navigate(
+                R.id.action_navigation_chat_to_navigation_profile, bundle
+            )
+
         }
     }
 
