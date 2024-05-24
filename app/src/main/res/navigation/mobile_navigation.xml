@@ -34,6 +34,9 @@
             app:destination="@id/navigation_property"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <argument
+            android:name="profileId"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/navigation_search"
@@ -76,6 +79,9 @@
             app:destination="@id/navigation_chat"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_navigation_property_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
     </fragment>
     <fragment
         android:id="@+id/navigation_chat"
@@ -90,6 +96,9 @@
             app:destination="@id/navigation_messages"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_navigation_chat_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
     </fragment>
     <dialog
         android:id="@+id/navigation_mini_property"

@@ -49,6 +49,15 @@ class PropertyFragment : Fragment() {
             }
         }
 
+        mBinding.llProfile.setOnClickListener{
+            val bundle = Bundle().apply {
+                putString("profileId", property.userId)
+            }
+            this.findNavController().navigate(R.id.action_navigation_property_to_navigation_profile, bundle)
+        }
+
+
+
         mBinding.ibBack.setOnClickListener {
             this.findNavController().popBackStack()
         }

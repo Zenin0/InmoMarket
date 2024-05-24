@@ -11,16 +11,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentYourUploadsProfileBinding
 import com.isanz.inmomarket.rv.propertyItem.PropertyItemListAdapter
+import com.isanz.inmomarket.ui.profile.tabs.favorites.UploadsProfileViewModelFactory
 import com.isanz.inmomarket.utils.entities.Property
 import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 
 
-class YourUploadsProfileFragment : Fragment(), OnItemClickListener {
+class YourUploadsProfileFragment(userId: String) : Fragment(), OnItemClickListener {
 
 
     private lateinit var mBinging: FragmentYourUploadsProfileBinding
     private val yourUploadsProfileViewModel: YourUploadsProfileViewModel by lazy {
-        ViewModelProvider(this)[YourUploadsProfileViewModel::class.java]
+        val factory = UploadsProfileViewModelFactory(userId)
+        ViewModelProvider(this, factory)[YourUploadsProfileViewModel::class.java]
     }
 
     override fun onCreateView(

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import com.isanz.inmomarket.InmoMarket
@@ -15,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class FavoritesProfileViewModel(private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel() {
+class FavoritesProfileViewModel(userId: String = FirebaseAuth.getInstance().currentUser!!.uid , private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel() {
 
     val db = InmoMarket.getDb()
     private val _listfavorites = MutableLiveData<MutableList<Property>>()
@@ -24,14 +25,14 @@ class FavoritesProfileViewModel(private val dispatcher: CoroutineDispatcher = Di
     init {
         viewModelScope.launch {
             try {
-                listenForFavorites()
+                listenForFavorites(userId)
             } catch (e: Exception) {
                 Log.w(ContentValues.TAG, "listenFavorites:failure.", e)
             }
         }
     }
 
-    private suspend fun listenForFavorites() = withContext(dispatcher) {
+    private suspend fun listenForFavorites(userId: String = FirebaseAuth.getInstance().currentUser!!.uid) = withContext(dispatcher) {
         db.collection("properties").addSnapshotListener { snapshot, e ->
             if (e != null) {
                 logFailure(e)
@@ -40,7 +41,7 @@ class FavoritesProfileViewModel(private val dispatcher: CoroutineDispatcher = Di
 
             try {
                 snapshot?.let {
-                    handleSnapshot(it)
+                    handleSnapshot(it, userId)
                 } ?: logNullData()
             } catch (e: Exception) {
                 logFailure(e)
@@ -56,12 +57,11 @@ class FavoritesProfileViewModel(private val dispatcher: CoroutineDispatcher = Di
         Log.d(ContentValues.TAG, "Current data: null")
     }
 
-    private fun handleSnapshot(snapshot: QuerySnapshot) {
+    private fun handleSnapshot(snapshot: QuerySnapshot, userId: String = InmoMarket.getAuth().currentUser!!.uid) {
         val properties = mutableListOf<Property>()
-        val currentUserId = InmoMarket.getAuth().currentUser!!.uid
         for (document in snapshot.documents) {
             if (document.exists()) {
-                handleDocument(document, currentUserId, properties)
+                handleDocument(document, userId, properties)
             }
         }
         _listfavorites.postValue(properties)

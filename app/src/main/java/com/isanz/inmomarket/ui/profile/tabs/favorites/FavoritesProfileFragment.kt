@@ -15,12 +15,13 @@ import com.isanz.inmomarket.utils.entities.Property
 import com.isanz.inmomarket.utils.interfaces.OnItemClickListener
 
 
-class FavoritesProfileFragment : Fragment(), OnItemClickListener {
+class FavoritesProfileFragment(userId: String ): Fragment(), OnItemClickListener {
 
 
     private lateinit var mBinging: FragmentFavoritesProfileBinding
     private val favoritesProfileViewModel: FavoritesProfileViewModel by lazy {
-        ViewModelProvider(this)[FavoritesProfileViewModel::class.java]
+        val factory = FavoritesProfileViewModelFactory(userId)
+        ViewModelProvider(this, factory)[FavoritesProfileViewModel::class.java]
     }
 
     override fun onCreateView(

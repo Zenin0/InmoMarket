@@ -70,7 +70,7 @@
     <string name="go_back">Torna indietro</string>
     <string name="ubication_settings">Consenti ubicazione</string>
     <string name="change_password">Modifica password</string>
-    <string name="tab_your_uploads">I tuoi caricamenti</string>
+    <string name="tab_uploads">Upload</string>
     <string name="tab_favorites">Preferiti</string>
     <string name="favorites_empty">Nessun preferito trovato</string>
     <string name="no_conversations">Nessuna conversazione trovata</string>

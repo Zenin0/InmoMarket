@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -16,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class YourUploadsProfileViewModel(private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel()  {
+class YourUploadsProfileViewModel(userId: String = FirebaseAuth.getInstance().currentUser!!.uid,  private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel()  {
 
     private val _listParcelas = MutableLiveData<List<Property>>()
     val listParcelas: LiveData<List<Property>> = _listParcelas
@@ -25,14 +26,14 @@ class YourUploadsProfileViewModel(private val dispatcher: CoroutineDispatcher = 
     init {
         viewModelScope.launch {
             try {
-                listenForParcelasUpdates()
+                listenForParcelasUpdates(userId)
             } catch (e: Exception) {
                 Log.w(ContentValues.TAG, "listenForParcelasUpdates:failure", e)
             }
         }
     }
 
-    private suspend fun listenForParcelasUpdates()  {
+    private suspend fun listenForParcelasUpdates(userId: String = FirebaseAuth.getInstance().currentUser!!.uid)  {
         withContext(dispatcher){
             db.collection("properties").addSnapshotListener { snapshot, e ->
                 if (e != null) {
@@ -42,7 +43,7 @@ class YourUploadsProfileViewModel(private val dispatcher: CoroutineDispatcher = 
 
                 try {
                     snapshot?.let {
-                        handleSnapshot(it)
+                        handleSnapshot(it, userId)
                     } ?: logNullData()
                 } catch (e: Exception) {
                     logFailure(e)
@@ -59,12 +60,11 @@ class YourUploadsProfileViewModel(private val dispatcher: CoroutineDispatcher = 
         Log.d(ContentValues.TAG, "Current data: null")
     }
 
-    private fun handleSnapshot(snapshot: QuerySnapshot) {
+    private fun handleSnapshot(snapshot: QuerySnapshot, userId: String = InmoMarket.getAuth().currentUser!!.uid) {
         val properties = mutableListOf<Property>()
-        val currentUserId = InmoMarket.getAuth().currentUser!!.uid
         for (document in snapshot.documents) {
             if (document.exists()) {
-                handleDocument(document, currentUserId, properties)
+                handleDocument(document, userId, properties)
             }
         }
         _listParcelas.postValue(properties)
