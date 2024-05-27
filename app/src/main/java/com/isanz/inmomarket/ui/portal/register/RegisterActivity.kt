@@ -2,6 +2,13 @@ package com.isanz.inmomarket.ui.portal.register
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +19,6 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -26,6 +32,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.MainActivity
 import com.isanz.inmomarket.R
@@ -34,6 +41,8 @@ import com.isanz.inmomarket.ui.portal.PortalViewModel
 import com.isanz.inmomarket.ui.portal.login.LoginActivity
 import com.isanz.inmomarket.utils.Constants
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
+import java.util.Random
 
 
 class RegisterActivity : AppCompatActivity() {
@@ -144,23 +153,48 @@ class RegisterActivity : AppCompatActivity() {
             val user = auth.currentUser
             val username = user!!.email.toString().split("@")[0]
             val displayName = if (username.length >= 8) username.substring(0, 8) else username
-
-            val profileUpdates =
-                UserProfileChangeRequest.Builder().setPhotoUri(Constants.DEFAULT_IMAGE.toUri())
-                    .setDisplayName(displayName).build()
-            user.updateProfile(profileUpdates).addOnCompleteListener { taskUpdate ->
-                if (taskUpdate.isSuccessful) {
-                    saveUserToFirestore(user)
-                    goToMain(user)
-                }
-            }
-
+            val drawable = createImageForProfile(user.email.toString())
+            val bitmap = convertDrawableToBitmap(drawable)
+            val data = convertBitmapToByteArray(bitmap)
+            uploadImageToFirebase(user, data, displayName)
         } else {
-            Toast.makeText(
-                baseContext,
-                "Authentication failed.",
-                Toast.LENGTH_SHORT,
-            ).show()
+            Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun convertDrawableToBitmap(drawable: Drawable): Bitmap {
+        return (drawable as BitmapDrawable).bitmap
+    }
+
+    private fun convertBitmapToByteArray(bitmap: Bitmap): ByteArray {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        return baos.toByteArray()
+    }
+
+    private fun uploadImageToFirebase(user: FirebaseUser, data: ByteArray, displayName: String) {
+        val storageRef = FirebaseStorage.getInstance().reference
+        val imagesRef = storageRef.child("images/users/${user.uid}.jpg")
+        val uploadTask = imagesRef.putBytes(data)
+        uploadTask.addOnFailureListener {
+        }.addOnSuccessListener {
+            imagesRef.downloadUrl.addOnSuccessListener { uri ->
+                updateUserProfile(user, uri, displayName)
+            }
+        }
+    }
+
+    private fun updateUserProfile(user: FirebaseUser, uri: Uri, displayName: String) {
+        val profileUpdates = UserProfileChangeRequest.Builder()
+            .setPhotoUri(uri)
+            .setDisplayName(displayName)
+            .build()
+
+        user.updateProfile(profileUpdates).addOnCompleteListener { taskUpdate ->
+            if (taskUpdate.isSuccessful) {
+                saveUserToFirestore(user)
+                goToMain(user)
+            }
         }
     }
 
@@ -213,6 +247,29 @@ class RegisterActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+
+    private fun createImageForProfile(email: String): Drawable {
+        val firstLetter = email[0].uppercaseChar().toString()
+
+        val size = 100
+        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+
+        // Draw a circle with a random color
+        val paint = Paint()
+        val rnd = Random()
+        paint.color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
+        canvas.drawCircle((size / 2).toFloat(), (size / 2).toFloat(), (size / 2).toFloat(), paint)
+
+        // Draw the first letter of the email
+        paint.color = Color.WHITE
+        paint.textSize = 50f
+        paint.textAlign = Paint.Align.CENTER
+        canvas.drawText(firstLetter, (size / 2).toFloat(),
+            (size / 2 - (paint.descent() + paint.ascent()) / 2), paint)
+
+        return BitmapDrawable(resources, bitmap)
     }
 
     private fun goToLogin() {
