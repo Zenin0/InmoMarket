@@ -122,7 +122,7 @@ class AddFragment : Fragment() {
             for (uri in listImagesUri) {
                 val imageName = UUID.randomUUID().toString()
                 val ref =
-                    InmoMarket.getStorage().reference.child("images/${InmoMarket.getAuth().currentUser!!.uid}/$imageName")
+                    InmoMarket.getStorage().reference.child("images/property/${InmoMarket.getAuth().currentUser!!.uid}/$imageName")
                 val extras = hashMapOf(
                     "rooms" to rooms,
                     "baths" to baths,

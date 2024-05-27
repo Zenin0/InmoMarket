@@ -51,7 +51,7 @@ class ProfileViewModel : ViewModel() {
 
     private fun uploadImageToStorage(userId: String, imageUri: Uri) {
         try {
-            val storageRef = FirebaseStorage.getInstance().getReference("/images/$userId")
+            val storageRef = FirebaseStorage.getInstance().getReference("images/users/$userId.jpg")
             storageRef.putFile(imageUri).addOnSuccessListener {
                 updateProfilePhotoUrlInDb(userId, storageRef)
             }
