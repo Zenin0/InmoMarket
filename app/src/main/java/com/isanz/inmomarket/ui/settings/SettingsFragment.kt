@@ -2,14 +2,18 @@ package com.isanz.inmomarket.ui.settings
 
 import android.content.Context
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.isanz.inmomarket.InmoMarket
+import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
@@ -49,6 +53,26 @@ class SettingsFragment : Fragment() {
         setUpCloseAccountButton()
         setUpAllowUbicationButton()
         setUpChangePasswordButton()
+        setUpChangeUsernamePassword()
+    }
+
+    private fun setUpChangeUsernamePassword() {
+        mBinding.btnChangeUsername.setOnClickListener {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Change Username")
+
+            val input = EditText(requireContext())
+            input.inputType = InputType.TYPE_CLASS_TEXT
+            builder.setView(input)
+
+            builder.setPositiveButton(getString(R.string.ok)) { _, _ ->
+                val newUsername = input.text.toString()
+                settingsViewModel.changeUsername(newUsername)
+            }
+            builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
+
+            builder.show()
+        }
     }
 
     private fun setUpBiometricLoginButton() {

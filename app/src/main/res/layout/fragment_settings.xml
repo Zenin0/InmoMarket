@@ -71,25 +71,44 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sBiometricalLogin" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnChangePassword"
+    <LinearLayout
+        android:id="@+id/llChangePassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_margin"
-        android:text="@string/change_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sAllowUbication" />
+        app:layout_constraintTop_toBottomOf="@id/sAllowUbication">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnChangePassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/common_margin"
+            android:text="@string/change_password" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnChangeUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_margin"
+            android:layout_gravity="center"
+            android:text="@string/change_username" />
+
+
+
+    </LinearLayout>
 
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCloseAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/md_theme_light_error"
         android:layout_margin="@dimen/common_margin"
         android:text="@string/close_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnChangePassword" />
+        app:layout_constraintTop_toBottomOf="@id/llChangePassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
