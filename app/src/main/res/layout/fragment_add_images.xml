@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tvDescriptionImages"
         app:layout_constraintStart_toStartOf="parent" />
-    
+
     <TextView
         android:id="@+id/tvDescriptionImages"
         android:textStyle="italic"
