@@ -48,73 +48,12 @@
 
 <!-- ABOUT THE PROJECT -->
 ## Acerca del proyecto
-<br>
-<p align="center">
-
-### Home Screen
-
-<div align="center">
-  <img src="images/home_screen.png" width="300" height="700">
-</div>
-
-### Property detail Screen
-
-<div align="center">
-  <img src="images/property_screen.png" width="300" height="700">
-</div>
-
-### Chat Screen
-
-<div align="center">
-  <img src="images/chat_screen.png" width="300" height="700">
-</div>
-
-### Messages Screen
-
-<div align="center">
-  <img src="images/conversations_screen.png" width="300" height="700">
-</div>
-
-### Search Screen
-
-<div align="center">
-  <img src="images/search_before_screen.png" width="300" height="700">
-</div>
-
-<div align="center">
-  <img src="images/search_after_screen.png" width="300" height="700">
-</div>
-
-### Add Property Screen
-
-<div align="center">
-  <img src="images/add_screen.png" width="300" height="700">
-</div>
-
-### Profile Screen
-
-<div align="center">
-  <img src="images/profile_favorites_screen.png" width="300" height="700">
-</div>
-
-<div align="center">
-  <img src="images/profile_uploads_screen.png" width="300" height="700">
-</div>
-
-### Drawer Screen
-
-<div align="center">
-  <img src="images/drawer_screen.png" width="300" height="700">
-</div>
-
-### Settings Screen
-
-<div align="center">
-  <img src="images/settings_screen.png" width="300" height="700">
-</div>
+Inmomarket es una App pensada para el mundo inmobiliario de venta y compra de propiedades entre usuarios
+sin incluir trámites legales, ni pagos relacionados con el cambio de nombre, de las propiedades que
+aloja  simplemente para la comunicación y búsqueda de las propiedades de los usuarios, con un diseño
+novedoso y actualizado y facilidades en su uso básico
 
 
-</p><br>
 
 
 ### Contruido con
