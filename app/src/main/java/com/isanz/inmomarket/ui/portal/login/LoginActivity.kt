@@ -178,13 +178,18 @@ class LoginActivity : AppCompatActivity() {
                     }
                 } else {
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    Toast.makeText(baseContext,
-                        getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        baseContext, getString(R.string.authentication_failed), Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         } catch (e: Exception) {
             Log.w(TAG, "signInWithCredential:failure", e)
-            Toast.makeText(baseContext, getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                baseContext,
+                getString(R.string.authentication_failed),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -282,18 +287,18 @@ class LoginActivity : AppCompatActivity() {
         val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.slide_out_right, R.anim.slide_in_left)
+            overrideActivityTransition(
+                OVERRIDE_TRANSITION_OPEN,
+                R.anim.slide_out_right,
+                R.anim.slide_in_left
+            )
         } else {
-            overridePendingTransition(R.anim.slide_out_right , R.anim.slide_in_left)
+            overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
         }
         finish()
     }
 
     private fun setImage(view: ImageView) {
-        try {
-            Glide.with(this).load(portalViewModel.getImageRandom()).centerCrop().into(view)
-        } catch (e: Exception) {
-            Log.w(TAG, "Error loading image", e)
-        }
+        Glide.with(this).load(portalViewModel.getImageRandom()).centerCrop().into(view)
     }
 }

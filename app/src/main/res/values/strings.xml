@@ -94,4 +94,7 @@
     <string name="biometric_login">Biometric login</string>
     <string name="use_account_password">Use account password</string>
     <string name="authentication_failed">Authentication failed.</string>
+    <string name="change_username">Change username</string>
+    <string name="prompt_username">Username</string>
+    <string name="ok" translatable="false">OK</string>
 </resources>

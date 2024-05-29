@@ -93,4 +93,6 @@
     <string name="biometric_login">Accesso biometrico</string>
     <string name="use_account_password">Utilizza la password dell\'account</string>
     <string name="authentication_failed">Autenticazione fallita</string>
+    <string name="change_username">Cambia nome utente</string>
+    <string name="prompt_username">Nome utente</string>
 </resources>

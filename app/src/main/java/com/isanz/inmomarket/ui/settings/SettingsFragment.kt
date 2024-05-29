@@ -2,6 +2,7 @@ package com.isanz.inmomarket.ui.settings
 
 import android.content.Context
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.isanz.inmomarket.InmoMarket
+import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
@@ -49,6 +54,37 @@ class SettingsFragment : Fragment() {
         setUpCloseAccountButton()
         setUpAllowUbicationButton()
         setUpChangePasswordButton()
+        setUpChangeUsername()
+    }
+
+    private fun setUpChangeUsername() {
+        mBinding.btnChangeUsername.setOnClickListener {
+            val layout = TextInputLayout(requireContext())
+            val input = TextInputEditText(requireContext()).apply {
+                inputType = InputType.TYPE_CLASS_TEXT
+                hint = getString(R.string.prompt_username)
+            }
+
+            layout.addView(input)
+
+            val dialog = MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.change_username))
+                .setView(layout)
+                .setPositiveButton(getString(R.string.ok)) { _, _ ->
+                    val newUsername = input.text.toString()
+                    settingsViewModel.changeUsername(newUsername)
+                }
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                    dialog.cancel()
+                }
+                .show()
+
+            layout.layoutParams = (layout.layoutParams as ViewGroup.MarginLayoutParams).apply {
+                setMargins(50, 0, 50, 0) // Set margins as needed
+            }
+
+            dialog.show()
+        }
     }
 
     private fun setUpBiometricLoginButton() {

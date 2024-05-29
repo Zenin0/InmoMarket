@@ -69,4 +69,13 @@ class SettingsViewModel : ViewModel() {
             Log.e(Constants.TAG, "deleteChats:failure", e)
         }
     }
+
+    fun changeUsername(newUsername: String) {
+        try {
+            val userId = InmoMarket.getAuth().currentUser!!.uid
+            db.collection("users").document(userId).update("displayName", newUsername)
+        } catch (e: Exception) {
+            Log.e(Constants.TAG, "changeUsername:failure", e)
+        }
+    }
 }
