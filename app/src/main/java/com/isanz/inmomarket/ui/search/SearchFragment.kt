@@ -1,12 +1,12 @@
 package com.isanz.inmomarket.ui.search
 
-
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,9 +95,9 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 )
             )
-            return
+        } else {
+            enableUserLocation()
         }
-        enableUserLocation()
     }
 
     private fun enableUserLocation() {
@@ -108,15 +108,8 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
                     requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                requestPermissionLauncher.launch(
-                    arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    )
-                )
                 return
             }
-            mMap.isMyLocationEnabled = true
             mMap.isMyLocationEnabled = true
             setMapLocationToUserLocation()
         } else {
@@ -133,12 +126,6 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
                 requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            requestPermissionLauncher.launch(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
-            )
             return
         }
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
@@ -156,7 +143,11 @@ class SearchFragment : Fragment(), OnMapReadyCallback {
                         marker?.tag = latLongIdPairs.first
                     }
                 }
+            } else {
+                Toast.makeText(requireContext(), "Unable to get current location", Toast.LENGTH_SHORT).show()
             }
+        }.addOnFailureListener { exception ->
+            Log.e("SearchFragment", "Failed to get last location", exception)
         }
     }
 

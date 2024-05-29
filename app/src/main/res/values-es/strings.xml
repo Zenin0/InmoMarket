@@ -88,10 +88,12 @@
     <string name="prompt_to">Hasta</string>
     <string name="action_sign_in_github">Iniciar sesión con Github</string>
     <string name="clear_filters">Borrar filtros</string>
-    <string name="no_user_loged">Es ist momentan kein Benutzer angemeldet. Bitte melden Sie sich zuerst an.</string>
-    <string name="login_use_biometric">Melden Sie sich mit Ihrem biometrischen Ausweis an</string>
-    <string name="biometric_login">Biometrische Anmeldung</string>
+    <string name="no_user_loged">"No hay ningún usuario conectado actualmente. Por favor, inicia sesión primero.      "</string>
+    <string name="login_use_biometric">Inicia sesión usando tus credenciales biometricass</string>
+    <string name="biometric_login">Acceso biometrico</string>
     <string name="use_account_password">Konto-Passwort verwenden</string>
     <string name="authentication_failed">Autenticación fallida</string>
+    <string name="change_username">Cambiar nombre de usuario</string>
+    <string name="prompt_username">Nombre de usuario</string>
 
 </resources>

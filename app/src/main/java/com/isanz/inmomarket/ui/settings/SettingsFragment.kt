@@ -6,12 +6,13 @@ import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.isanz.inmomarket.InmoMarket
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentSettingsBinding
@@ -53,25 +54,36 @@ class SettingsFragment : Fragment() {
         setUpCloseAccountButton()
         setUpAllowUbicationButton()
         setUpChangePasswordButton()
-        setUpChangeUsernamePassword()
+        setUpChangeUsername()
     }
 
-    private fun setUpChangeUsernamePassword() {
+    private fun setUpChangeUsername() {
         mBinding.btnChangeUsername.setOnClickListener {
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Change Username")
-
-            val input = EditText(requireContext())
-            input.inputType = InputType.TYPE_CLASS_TEXT
-            builder.setView(input)
-
-            builder.setPositiveButton(getString(R.string.ok)) { _, _ ->
-                val newUsername = input.text.toString()
-                settingsViewModel.changeUsername(newUsername)
+            val layout = TextInputLayout(requireContext())
+            val input = TextInputEditText(requireContext()).apply {
+                inputType = InputType.TYPE_CLASS_TEXT
+                hint = getString(R.string.prompt_username)
             }
-            builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
 
-            builder.show()
+            layout.addView(input)
+
+            val dialog = MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.change_username))
+                .setView(layout)
+                .setPositiveButton(getString(R.string.ok)) { _, _ ->
+                    val newUsername = input.text.toString()
+                    settingsViewModel.changeUsername(newUsername)
+                }
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                    dialog.cancel()
+                }
+                .show()
+
+            layout.layoutParams = (layout.layoutParams as ViewGroup.MarginLayoutParams).apply {
+                setMargins(50, 0, 50, 0) // Set margins as needed
+            }
+
+            dialog.show()
         }
     }
 

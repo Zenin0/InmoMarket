@@ -54,7 +54,7 @@
     <string name="chat">Chat starten</string>
     <string name="prompt_message">Nachricht</string>
     <string name="send_message">Nachricht senden</string>
-    <string name="lorem_ipsum">Lorem Ipsum ist einfach Blindtext der Druck- und Satzindustrie. Lorem Ipsum ist seit dem 16. Jahrhundert der Standard-Blindtext der Industrie.</string>
+    <string name="lorem_ipsum">Lorem Ipsum ist einfach Blindtext der Druck- und Satzindustrie. Lorem Ipsum ist seitdem 16. Jahrhundert der Standard-Blindtext der Industrie.</string>
     <string name="login">Anmelden</string>
     <string name="label_name">Name</string>
     <string name="reset_password">Passwort zurücksetzen</string>
@@ -93,5 +93,7 @@
     <string name="biometric_login">Biometrische Anmeldung</string>
     <string name="use_account_password">Konto-Passwort verwenden</string>
     <string name="authentication_failed">Authentifizierung fehlgeschlagen</string>
+    <string name="change_username">Benutzernamen ändern</string>
+    <string name="prompt_username">Benutzername</string>
 
 </resources>
