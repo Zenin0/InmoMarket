@@ -60,10 +60,14 @@
             app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
     <fragment
-        android:id="@+id/navigation_add"
-        android:name="com.isanz.inmomarket.ui.add.AddFragment"
+        android:id="@+id/navigation_add_tittle_description"
+        android:name="com.isanz.inmomarket.ui.add.AddTittleDescriptionFragment"
         android:label="fragment_add"
-        tools:layout="@layout/fragment_add" />
+        tools:layout="@layout/fragment_add_tittle_description" >
+        <action
+            android:id="@+id/action_navigation_add_tittle_description_to_navigation_add_adress"
+            app:destination="@id/navigation_add_adress" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_property"
         android:name="com.isanz.inmomarket.ui.property.PropertyFragment"
@@ -123,6 +127,23 @@
             app:destination="@id/navigation_profile"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_pop_enter_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_add_adress"
+        android:name="com.isanz.inmomarket.ui.add.AddAdressFragment"
+        android:label="fragment_add_images"
+        tools:layout="@layout/fragment_add_images" >
+        <action
+            android:id="@+id/action_navigation_add_adress_to_navigation_add_images"
+            app:destination="@id/navigation_add_images" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_add_images"
+        android:name="com.isanz.inmomarket.ui.add.AddImagesFragment"
+        android:label="AddImagesFragment" >
+        <action
+            android:id="@+id/action_navigation_add_images_to_navigation_add_tittle_description"
+            app:destination="@id/navigation_add_tittle_description" />
     </fragment>
 
 

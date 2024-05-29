@@ -10,7 +10,7 @@ data class Property(
     var userId: String = "",
     var listImagesUri: List<String> = listOf(),
     var extras: Map<String, Int> = mapOf(),
-    val price: Double = 0.0,
+    var price: Double = 0.0,
     val favorites: List<String> = listOf()
 ) {
     override fun toString(): String {

@@ -97,4 +97,15 @@
     <string name="change_username">Change username</string>
     <string name="prompt_username">Username</string>
     <string name="ok" translatable="false">OK</string>
+    <string name="title_adress">Address</string>
+    <string name="title_adress_extras"><![CDATA[Address & Extras]]></string>
+    <string name="title_image">Images</string>
+    <string name="publish">Publish</string>
+    <string name="tittle_and_description"><![CDATA[Tittle & Description]]></string>
+    <string name="square_meters_is_required">Square meters are required</string>
+    <string name="floors_is_required">Floors are required</string>
+    <string name="price_is_required">Price is required</string>
+    <string name="images_helper">Add images to show your property, a minimium of 3 imags is required to publish your property</string>
+    <string name="tittle_helper">Fill the following fields to add more information about your property, they will be shown in the home of other users</string>
+    <string name="adress_helper">Fill the following fields to add more information about your property, address will be autocompleted with google maps</string>
 </resources>

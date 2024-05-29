@@ -7,4 +7,5 @@
     <dimen name="text_tittle">24sp</dimen>
     <dimen name="text_mid">16sp</dimen>
     <dimen name="text_subtitle">16sp</dimen>
+    <dimen name="text_size_large">32sp</dimen>
 </resources>

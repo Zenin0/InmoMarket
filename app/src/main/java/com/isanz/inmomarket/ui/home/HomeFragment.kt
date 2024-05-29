@@ -101,9 +101,16 @@ class HomeFragment : Fragment(), OnItemClickListener {
 
     private fun observeParcelas(homeViewModel: HomeViewModel, adapter: PropertyItemListAdapter) {
         homeViewModel.listParcelas.observe(viewLifecycleOwner) { parcelas ->
-            enableFiltersListeners(parcelas, adapter)
-            val filteredParcelas = filterParcelas(parcelas)
-            updateRecyclerView(filteredParcelas, adapter)
+            if (parcelas.isNullOrEmpty()) {
+                mBinding.homeLayout.btnFilter.isEnabled = false
+                mBinding.homeLayout.progressBar.visibility = View.GONE
+                mBinding.homeLayout.emptyTextView.visibility = View.VISIBLE
+            } else {
+                mBinding.homeLayout.btnFilter.isEnabled = true
+                enableFiltersListeners(parcelas, adapter)
+                val filteredParcelas = filterParcelas(parcelas)
+                updateRecyclerView(filteredParcelas, adapter)
+            }
         }
     }
 
@@ -123,7 +130,12 @@ class HomeFragment : Fragment(), OnItemClickListener {
             mBinding.filterLayout.actFloorsMax.text.toString().toFloatOrNull() ?: Float.MAX_VALUE
 
         return parcelas?.filter {
-            it.price.toFloat() in minPrice..maxPrice && it.extras["squareMeters"]!!.toFloat() in minMeters..maxMeters && it.extras["rooms"]!!.toFloat() in minRooms..maxRooms && it.extras["baths"]!!.toFloat() in minBaths..maxBaths && it.extras["floors"]!!.toFloat() in minFloors..maxFloors
+            val squareMeters = it.extras["squareMeters"]?.toFloat() ?: 0f
+            val rooms = it.extras["rooms"]?.toFloat() ?: 0f
+            val baths = it.extras["baths"]?.toFloat() ?: 0f
+            val floors = it.extras["floors"]?.toFloat() ?: 0f
+
+            it.price.toFloat() in minPrice..maxPrice && squareMeters in minMeters..maxMeters && rooms in minRooms..maxRooms && baths in minBaths..maxBaths && floors in minFloors..maxFloors
         } ?: emptyList()
     }
 

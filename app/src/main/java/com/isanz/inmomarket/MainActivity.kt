@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_search,
                 R.id.navigation_profile,
                 R.id.navigation_messages,
-                R.id.navigation_add
+                R.id.navigation_add_tittle_description
             )
         )
         navView.setupWithNavController(navController)

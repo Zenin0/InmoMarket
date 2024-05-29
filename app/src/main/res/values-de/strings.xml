@@ -95,5 +95,15 @@
     <string name="authentication_failed">Authentifizierung fehlgeschlagen</string>
     <string name="change_username">Benutzernamen ändern</string>
     <string name="prompt_username">Benutzername</string>
-
+    <string name="title_adress">Adresse</string>
+    <string name="title_adress_extras"><![CDATA[Adresse & Extras]]></string>
+    <string name="title_image">Bilder</string>
+    <string name="publish">Veröffentlichen</string>
+    <string name="tittle_and_description"><![CDATA[Titel & Beschreibung]]></string>
+    <string name="square_meters_is_required">Quadratmeter sind erforderlich</string>
+    <string name="floors_is_required">Etagen sind erforderlich</string>
+    <string name="price_is_required">Preis ist erforderlich</string>
+    <string name="images_helper">Fügen Sie Bilder hinzu, um Ihre Immobilie zu zeigen. Mindestens 3 Bilder sind erforderlich, um Ihre Immobilie zu veröffentlichen</string>
+    <string name="tittle_helper">Füllen Sie die folgenden Felder aus, um weitere Informationen zu Ihrer Immobilie hinzuzufügen. Sie werden im Zuhause anderer Benutzer angezeigt</string>
+    <string name="adress_helper">Füllen Sie die folgenden Felder aus, um weitere Informationen zu Ihrer Immobilie hinzuzufügen. Die Adresse wird automatisch mit Google Maps vervollständigt</string>
 </resources>

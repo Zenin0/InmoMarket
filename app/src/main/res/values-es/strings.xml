@@ -95,5 +95,15 @@
     <string name="authentication_failed">Autenticación fallida</string>
     <string name="change_username">Cambiar nombre de usuario</string>
     <string name="prompt_username">Nombre de usuario</string>
-
+    <string name="title_adress">Dirección</string>
+    <string name="title_adress_extras"><![CDATA[Dirección y Extras]]></string>
+    <string name="title_image">Imágenes</string>
+    <string name="publish">Publicar</string>
+    <string name="tittle_and_description"><![CDATA[Título y Descripción]]></string>
+    <string name="square_meters_is_required">Se requieren metros cuadrados</string>
+    <string name="floors_is_required">Se requieren pisos</string>
+    <string name="price_is_required">Se requiere precio</string>
+    <string name="images_helper">Agrega imágenes para mostrar tu propiedad, se requieren un mínimo de 3 imágenes para publicar tu propiedad</string>
+    <string name="tittle_helper">Completa los siguientes campos para agregar más información sobre tu propiedad, que se mostrará en la página principal de otros usuarios</string>
+    <string name="adress_helper">Completa los siguientes campos para agregar más información sobre tu propiedad, la dirección se completará automáticamente con Google Maps</string>
 </resources>
