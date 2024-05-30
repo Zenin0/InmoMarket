@@ -97,13 +97,23 @@ class AddImagesFragment : Fragment() {
     }
 
     private fun updateUI() {
-        mBinding.vLoading.visibility = View.GONE
         mBinding.pbLoading.visibility = View.GONE
-        mBinding.checkMark.visibility = View.VISIBLE
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            navigateToStart()
-        }, 2000)
+        // Set the initial visibility and alpha of the checkmark
+        mBinding.checkMark.visibility = View.VISIBLE
+        mBinding.checkMark.alpha = 0f
+
+        // Animate the alpha to 1 over 500 milliseconds
+        mBinding.checkMark.animate()
+            .alpha(1f)
+            .setDuration(500)
+            .withEndAction {
+                // After the animation ends, navigate to start with a delay
+                Handler(Looper.getMainLooper()).postDelayed({
+                    navigateToStart()
+                }, 1500)
+            }
+            .start()
     }
 
     private fun navigateToStart() {

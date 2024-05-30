@@ -17,7 +17,9 @@
             app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_navigation_home_to_navigation_settings"
-            app:destination="@id/navigation_settings" />
+            app:destination="@id/navigation_settings"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_profile"
@@ -66,7 +68,9 @@
         tools:layout="@layout/fragment_add_tittle_description" >
         <action
             android:id="@+id/action_navigation_add_tittle_description_to_navigation_add_adress"
-            app:destination="@id/navigation_add_adress" />
+            app:destination="@id/navigation_add_adress"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_property"
@@ -85,7 +89,9 @@
             app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_navigation_property_to_navigation_profile"
-            app:destination="@id/navigation_profile" />
+            app:destination="@id/navigation_profile"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_chat"
@@ -102,7 +108,9 @@
             app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_navigation_chat_to_navigation_profile"
-            app:destination="@id/navigation_profile" />
+            app:destination="@id/navigation_profile"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
     <dialog
         android:id="@+id/navigation_mini_property"
@@ -135,7 +143,9 @@
         tools:layout="@layout/fragment_add_images" >
         <action
             android:id="@+id/action_navigation_add_adress_to_navigation_add_images"
-            app:destination="@id/navigation_add_images" />
+            app:destination="@id/navigation_add_images"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_add_images"
@@ -143,7 +153,9 @@
         android:label="AddImagesFragment" >
         <action
             android:id="@+id/action_navigation_add_images_to_navigation_add_tittle_description"
-            app:destination="@id/navigation_add_tittle_description" />
+            app:destination="@id/navigation_add_tittle_description"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
 
 
