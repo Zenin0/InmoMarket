@@ -13,8 +13,6 @@
   </p>
 </div>
 
-
-
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Tabla de Contenidos</summary>
@@ -44,10 +42,10 @@
   </ol>
 </details>
 
-
-
 <!-- ABOUT THE PROJECT -->
+
 ## Acerca del proyecto
+
 Inmomarket es una innovadora aplicación diseñada específicamente para el mercado inmobiliario,
 facilitando la compra y venta de propiedades entre usuarios. Su objetivo principal es proporcionar
 una plataforma intuitiva y moderna que simplifique el proceso de búsqueda y comunicación entre
@@ -57,12 +55,8 @@ con el cambio de nombre de las propiedades.
 Además, Inmomarket pone un énfasis especial en la facilidad de uso, permitiendo que tanto compradores
 como vendedores puedan gestionar sus anuncios y comunicaciones sin complicaciones.
 La plataforma está pensada para ser accesible, eliminando barreras tecnológicas y asegurando
-que cualquier persona, independientemente de su familiaridad con las aplicaciones móviles, 
+que cualquier persona, independientemente de su familiaridad con las aplicaciones móviles,
 pueda beneficiarse de sus características.
-
-
-
-
 
 ### Contruido con
 
@@ -72,6 +66,7 @@ pueda beneficiarse de sus características.
 ![Material Design](https://img.shields.io/badge/Material_Design-757575?style=for-the-badge&logo=material-design&logoColor=white)
 
 ### Tecnologías usadas
+
 ![Retrofit](https://img.shields.io/badge/Retrofit-0095D5?style=for-the-badge&logo=retrofit&logoColor=white)
 ![Glide](https://img.shields.io/badge/Glide-0095D5?style=for-the-badge&logo=glide&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white)
@@ -81,9 +76,8 @@ pueda beneficiarse de sus características.
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 ![Gson](https://img.shields.io/badge/Gson-0095D5?style=for-the-badge&logo=gson&logoColor=white)
 
-
-
 <!-- CONTRIBUTING -->
+
 ## Como contribuir
 
 ¡La contribuciones son gratamente aceptadas!
@@ -92,13 +86,14 @@ pueda beneficiarse de sus características.
 > ¡Si tiene alguna idea o similar házmelo saber en [Feature](https://github.com/Zenin0/InmoMarket/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=Addon).
 > ¡También se puede apoyar económicamente [Sponsor](https://buymeacoffee.com/zenin0)!
 
-
 <!-- Code Stats -->
+
 ## Code Stats
 
 [Code Stats](https://sonarcloud.io/project/overview?id=Zenin0_InmoMarket)
 
 <!-- LICENSE -->
+
 ## Licencia
 
 Distribuido bajo la Licencia AGPL-3.0 license. Consulte `LICENCIA` para obtener más información.
