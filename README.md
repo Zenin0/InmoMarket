@@ -48,10 +48,18 @@
 
 <!-- ABOUT THE PROJECT -->
 ## Acerca del proyecto
-Inmomarket es una App pensada para el mundo inmobiliario de venta y compra de propiedades entre usuarios
-sin incluir trámites legales, ni pagos relacionados con el cambio de nombre, de las propiedades que
-aloja  simplemente para la comunicación y búsqueda de las propiedades de los usuarios, con un diseño
-novedoso y actualizado y facilidades en su uso básico
+Inmomarket es una innovadora aplicación diseñada específicamente para el mercado inmobiliario,
+facilitando la compra y venta de propiedades entre usuarios. Su objetivo principal es proporcionar
+una plataforma intuitiva y moderna que simplifique el proceso de búsqueda y comunicación entre
+compradores y vendedores, sin involucrarse en los trámites legales ni en los pagos relacionados
+con el cambio de nombre de las propiedades.
+
+Además, Inmomarket pone un énfasis especial en la facilidad de uso, permitiendo que tanto compradores
+como vendedores puedan gestionar sus anuncios y comunicaciones sin complicaciones.
+La plataforma está pensada para ser accesible, eliminando barreras tecnológicas y asegurando
+que cualquier persona, independientemente de su familiaridad con las aplicaciones móviles, 
+pueda beneficiarse de sus características.
+
 
 
 

@@ -108,4 +108,6 @@
     <string name="images_helper">Add images to show your property, a minimium of 3 imags is required to publish your property</string>
     <string name="tittle_helper">Fill the following fields to add more information about your property, they will be shown in the home of other users</string>
     <string name="adress_helper">Fill the following fields to add more information about your property, address will be autocompleted with google maps</string>
+    <string name="promote">Promote</string>
+    <string name="subscriptions">Subscriptions</string>
 </resources>

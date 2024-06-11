@@ -106,4 +106,6 @@
     <string name="images_helper">Aggiungi immagini per mostrare la tua proprietà, sono richieste almeno 3 immagini per pubblicare la tua proprietà</string>
     <string name="tittle_helper">Compila i seguenti campi per aggiungere ulteriori informazioni sulla tua proprietà, che verranno mostrate nella home degli altri utenti</string>
     <string name="adress_helper">Compila i seguenti campi per aggiungere ulteriori informazioni sulla tua proprietà, l\'indirizzo verrà completato automaticamente con Google Maps</string>
+    <string name="promote">Promuovere</string>
+    <string name="subscriptions">Abbonamenti</string>
 </resources>
