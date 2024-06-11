@@ -24,6 +24,7 @@ import com.isanz.inmomarket.databinding.FragmentProfileBinding
 import com.isanz.inmomarket.ui.portal.login.LoginActivity
 import com.isanz.inmomarket.utils.Constants
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 class ProfileFragment : Fragment() {
 
@@ -127,10 +128,7 @@ class ProfileFragment : Fragment() {
                 }
 
                 R.id.nav_about -> {
-                    val url = "https://github.com/Zenin0/InmoMarket"
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse(url)
-                    startActivity(intent)
+                    shareLink(Constants.GITHUB)
                 }
 
                 R.id.nav_settings -> {
@@ -139,20 +137,38 @@ class ProfileFragment : Fragment() {
                 }
 
                 R.id.nav_share -> {
-                    val sendIntent: Intent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_TEXT, "https://github.com/Zenin0/InmoMarket")
-                        type = "text/plain"
-                    }
-
-                    val shareIntent = Intent.createChooser(sendIntent, null)
-                    startActivity(shareIntent)
+                    shareLink(Constants.GITHUB)
                 }
+
+                R.id.nav_plans -> {
+                    sendToWeb(Constants.PAYMENTS[Random.nextInt(0, Constants.PAYMENTS.size)])
+                }
+
+                R.id.nav_promote -> {
+                    sendToWeb(Constants.PAYMENTS[Random.nextInt(0, Constants.PAYMENTS.size)])
+                }
+
             }
 
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
+    }
+
+    private fun shareLink(url: String) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, url)
+            type = "text/plain"
+        }
+
+        val plansIntent = Intent.createChooser(sendIntent, null)
+        startActivity(plansIntent)
+    }
+
+    private fun sendToWeb(url: String) {
+        val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(webIntent)
     }
 
     private fun setUpView() {

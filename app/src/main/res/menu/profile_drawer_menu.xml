@@ -23,4 +23,19 @@
         android:icon="@drawable/ic_share"
         android:title="@string/share" />
 
+    <group android:id="@+id/payments">
+
+        <item
+            android:id="@+id/nav_promote"
+            android:icon="@drawable/ic_trending_up"
+            android:title="@string/promote" />
+
+        <item android:id="@+id/nav_plans"
+            android:icon="@drawable/ic_payment"
+            android:title="@string/subscriptions" />
+
+    </group>
+
+
+
 </menu>

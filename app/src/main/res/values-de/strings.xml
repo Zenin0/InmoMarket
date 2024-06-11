@@ -106,4 +106,6 @@
     <string name="images_helper">Fügen Sie Bilder hinzu, um Ihre Immobilie zu zeigen. Mindestens 3 Bilder sind erforderlich, um Ihre Immobilie zu veröffentlichen</string>
     <string name="tittle_helper">Füllen Sie die folgenden Felder aus, um weitere Informationen zu Ihrer Immobilie hinzuzufügen. Sie werden im Zuhause anderer Benutzer angezeigt</string>
     <string name="adress_helper">Füllen Sie die folgenden Felder aus, um weitere Informationen zu Ihrer Immobilie hinzuzufügen. Die Adresse wird automatisch mit Google Maps vervollständigt</string>
+    <string name="promote">Fördern</string>
+    <string name="subscriptions">Abonnements</string>
 </resources>
