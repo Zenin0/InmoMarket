@@ -1,85 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
-    android:fillViewport="true"
-    android:focusable="true"
     tools:context=".ui.add.AddTittleDescriptionFragment">
 
-
-    <TextView
-        android:id="@+id/tvTittle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tittle_and_description"
-        android:textSize="@dimen/text_size_large"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/tvDescriptionImages"/>
-
-    <TextView
-        android:id="@+id/tvDescriptionImages"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/common_margin"
-        android:text="@string/tittle_helper"
-        android:textAlignment="center"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@id/tilTittle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilTittle"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_margin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:clickable="true"
+        android:fillViewport="true"
+        android:focusable="true">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tieTittle"
+        <TextView
+            android:id="@+id/tvTittle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tittle_and_description"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tvDescriptionImages"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvDescriptionImages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/common_margin"
+            android:text="@string/tittle_helper"
+            android:textAlignment="center"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toTopOf="@id/tilTittle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilTittle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/pront_title"
-            android:inputType="textAutoCorrect" />
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tieTittle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/pront_title"
+                android:inputType="textAutoCorrect" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_margin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilTittle">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tieDescription"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilDescription"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/pront_description"
-            android:inputType="textMultiLine|textAutoCorrect"
-            android:maxLines="4" />
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilTittle">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tieDescription"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/pront_description"
+                android:inputType="textMultiLine|textAutoCorrect"
+                android:maxLines="4" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnNext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_margin"
-        android:text="@string/fui_next_default"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_margin"
+            android:text="@string/fui_next_default"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

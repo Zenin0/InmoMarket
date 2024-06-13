@@ -108,4 +108,6 @@
     <string name="adress_helper">Completa los siguientes campos para agregar más información sobre tu propiedad, la dirección se completará automáticamente con Google Maps</string>
     <string name="promote">Promover</string>
     <string name="subscriptions">Suscripciones</string>
+    <string name="tittle_must_be_at_most_10_characters">El título solo puede tener 10 caracteres</string>
+    <string name="done">Hecho</string>
 </resources>

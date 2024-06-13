@@ -108,4 +108,6 @@
     <string name="adress_helper">Füllen Sie die folgenden Felder aus, um weitere Informationen zu Ihrer Immobilie hinzuzufügen. Die Adresse wird automatisch mit Google Maps vervollständigt</string>
     <string name="promote">Fördern</string>
     <string name="subscriptions">Abonnements</string>
+    <string name="tittle_must_be_at_most_10_characters">Der Titel darf höchstens 10 Zeichen haben</string>
+    <string name="done">Fertig</string>
 </resources>

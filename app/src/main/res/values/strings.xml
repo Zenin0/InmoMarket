@@ -110,4 +110,6 @@
     <string name="adress_helper">Fill the following fields to add more information about your property, address will be autocompleted with google maps</string>
     <string name="promote">Promote</string>
     <string name="subscriptions">Subscriptions</string>
+    <string name="tittle_must_be_at_most_10_characters">Tittle can only have 10 characters</string>
+    <string name="done">Done</string>
 </resources>

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.firestore.FirebaseFirestore
 import com.isanz.inmomarket.R
 import com.isanz.inmomarket.databinding.FragmentAddTittleDescriptionBinding
 import com.isanz.inmomarket.utils.entities.Property
@@ -17,7 +16,6 @@ class AddTittleDescriptionFragment : Fragment() {
 
 
     private lateinit var mBinding: FragmentAddTittleDescriptionBinding
-    private lateinit var db: FirebaseFirestore
     private val addViewModel: AddViewModel by activityViewModels()
 
 
@@ -51,6 +49,10 @@ class AddTittleDescriptionFragment : Fragment() {
         }
         if (tittle.length < 5) {
             mBinding.tieTittle.error = getString(R.string.tittle_must_be_at_least_5_characters)
+            isValid = false
+        }
+        if (tittle.length > 10) {
+            mBinding.tieTittle.error = getString(R.string.tittle_must_be_at_most_10_characters)
             isValid = false
         }
         if (description.isEmpty()) {
